@@ -41,7 +41,7 @@
     .gist .gist-file .gist-data {
       overflow: auto;
       word-wrap: normal;
-      background-color: #f8f8ff;
+      background-color: #333333;
       border-bottom: 1px solid #ddd;
       font-size: 100%;
     }
@@ -59,9 +59,9 @@
         }
 
         .gist .gist-file .gist-data .gist-line-numbers {
-          background-color: #ececec;
+          background-color: #333333;
           color: #aaa;
-          border-right: 1px solid #ddd;
+          border-right: 1px solid #000;
           text-align: right;
         }
 
@@ -70,7 +70,7 @@
             display: block;
           }
 
-.gist-syntax  { background: #ffffff; }
+.gist-syntax  { background: #399; }
 .gist-syntax .c { color: #999988; font-style: italic } /* Comment */
 .gist-syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .gist-syntax .k { color: #000000; font-weight: bold } /* Keyword */
