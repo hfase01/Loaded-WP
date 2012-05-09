@@ -16,6 +16,7 @@
 ?>
         <div id="widgets" class="grid col-300 fit gallery-meta">
         <?php responsive_widgets(); // above widgets hook ?>
+            <div class="widget-wrapper">
         
                 <div class="widget-title"><?php _e('Image Information', 'responsive'); ?></div>
                     <ul>
@@ -59,6 +60,7 @@
                     
                     </ul>
 
+            </div><!-- end of .widget-wrapper -->
         </div><!-- end of #widgets -->
 
             <?php if (!is_active_sidebar('gallery-widget')) return; ?>

@@ -1,6 +1,23 @@
 .form-table th {
 	width: 260px;
 }
+.form-table th.small-row { 
+	width: 120px; 
+}
+.socialprofile-table {
+    background: #eee;
+    border: solid 1px #fff;
+    cursor: move;
+}
+.socialprofile-dragging {
+    background: #fefefe;
+    height: 80px;
+    width: 100%;
+    border: solid 1px #ccc;
+    margin-top: .5em;
+}
+
+
 .wrap h3 {
 	margin: 30px 0 10px 0;
 }
@@ -153,7 +170,6 @@ tr.new-social-media-name, tr.social-media-custom-name{
 }
 .sidebar div.sidebar-wrap {
 	background: #fff;
-	border: 1px solid #ccc;
 	-moz-box-shadow: 0 0 5px #BBB;
 	-webkit-box-shadow: 0 0 5px #BBB;
 	box-shadow: 0 0 5px #BBB;
@@ -278,3 +294,57 @@ tr.new-social-media-name, tr.social-media-custom-name{
 .toggle-options-wrapper .toggle-all-options {
 	display: none;
 }
+
+.mysocial { background: url(../images/social/rss.png) no-repeat top left; width: 32px; height: 32px; }
+.mysocial-icon { width: 32px; height: 32px; }
+.social-audioboo{ background-image: url(../images/social/audioboo.png); } 
+.social-bebo{ background-image: url(../images/social/bebo.png); } 
+.social-behance{ background-image: url(../images/social/behance.png); } 
+.social-blogger{ background-image: url(../images/social/blogger.png); } 
+.social-buzz{ background-image: url(../images/social/buzz.png); } 
+.social-creativecommons{ background-image: url(../images/social/creativecommons.png); } 
+.social-dailybooth{ background-image: url(../images/social/dailybooth.png); } 
+.social-delicious{ background-image: url(../images/social/delicious.png); } 
+.social-designfloat{ background-image: url(../images/social/designfloat.png); } 
+.social-deviantart{ background-image: url(../images/social/deviantart.png); } 
+.social-digg{ background-image: url(../images/social/digg.png); } 
+.social-dopplr{ background-image: url(../images/social/dopplr.png); } 
+.social-dribbble{ background-image: url(../images/social/dribbble.png); } 
+.social-email{ background-image: url(../images/social/email.png); } 
+.social-ember{ background-image: url(../images/social/ember.png); } 
+.social-facebook{ background-image: url(../images/social/facebook.png); } 
+.social-flickr{ background-image: url(../images/social/flickr.png); } 
+.social-forrst{ background-image: url(../images/social/forrst.png); } 
+.social-friendfeed{ background-image: url(../images/social/friendfeed.png); } 
+.social-google{ background-image: url(../images/social/google.png); } 
+.social-gowalla{ background-image: url(../images/social/gowalla.png); } 
+.social-grooveshark{ background-image: url(../images/social/grooveshark.png); } 
+.social-hyves{ background-image: url(../images/social/hyves.png); } 
+.social-lastfm{ background-image: url(../images/social/lastfm.png); } 
+.social-linkedin{ background-image: url(../images/social/linkedin.png); } 
+.social-livejournal{ background-image: url(../images/social/livejournal.png); } 
+.social-lockerz{ background-image: url(../images/social/lockerz.png); } 
+.social-megavideo{ background-image: url(../images/social/megavideo.png); } 
+.social-myspace{ background-image: url(../images/social/myspace.png); } 
+.social-piano{ background-image: url(../images/social/piano.png); } 
+.social-playfire{ background-image: url(../images/social/playfire.png); } 
+.social-playstation{ background-image: url(../images/social/playstation.png); } 
+.social-reddit{ background-image: url(../images/social/reddit.png); } 
+.social-rss{ background-image: url(../images/social/rss.png); } 
+.social-skype{ background-image: url(../images/social/skype.png); } 
+.social-socialvibe{ background-image: url(../images/social/socialvibe.png); } 
+.social-soundcloud{ background-image: url(../images/social/soundcloud.png); } 
+.social-spotify{ background-image: url(../images/social/spotify.png); } 
+.social-steam{ background-image: url(../images/social/steam.png); } 
+.social-stumbleupon{ background-image: url(../images/social/stumbleupon.png); } 
+.social-technorati{ background-image: url(../images/social/technorati.png); } 
+.social-tumblr{ background-image: url(../images/social/tumblr.png); } 
+.social-twitpic{ background-image: url(../images/social/twitpic.png); } 
+.social-twitter{ background-image: url(../images/social/twitter.png); } 
+.social-typepad{ background-image: url(../images/social/typepad.png); } 
+.social-vimeo{ background-image: url(../images/social/vimeo.png); } 
+.social-wakoopa{ background-image: url(../images/social/wakoopa.png); } 
+.social-wordpress{ background-image: url(../images/social/wordpress.png); } 
+.social-xing{ background-image: url(../images/social/xing.png); } 
+.social-yahoo{ background-image: url(../images/social/yahoo.png); } 
+.social-youtube{ background-image: url(../images/social/youtube.png); } 

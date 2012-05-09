@@ -89,7 +89,7 @@
 
 <?php 
 /**
- * Display Adsense advertising for single post pages 
+ * Display Adsense advertising
  * See graphene_adsense() function in functions.php
 */ 
 graphene_adsense(); ?>

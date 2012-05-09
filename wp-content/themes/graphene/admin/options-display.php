@@ -45,7 +45,15 @@ function graphene_options_display() {
 								<?php _e( 'Check this to show a random header image (random image taken from the available default header images).', 'graphene' ); ?><br />
                                 <?php _e( '<strong>Note:</strong> only works on pages where a specific header image is not defined.', 'graphene' ); ?></span>
                         </td>
-                    </tr class="non-essential-option">
+                    </tr>
+                    <tr class="non-essential-option">
+                        <th scope="row">
+                            <label for="header_img_height"><?php _e( 'Header image height', 'graphene' ); ?></label>
+                        </th>
+                        <td>
+                        	<input type="text" name="graphene_settings[header_img_height]" id="header_img_height" value="<?php echo $graphene_settings['header_img_height']; ?>" size="3" /> px
+                        </td>
+                    </tr>
                     
                     <tr class="non-essential-option">
                         <th scope="row">
@@ -82,33 +90,33 @@ function graphene_options_display() {
                             <div class="column-options">
                             	<p>                           
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="one-column" <?php checked( $graphene_settings['column_mode'], 'one-column' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="one_column" <?php checked( $graphene_settings['column_mode'], 'one_column' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-onecolumn.png" alt="<?php _e( 'One column', 'graphene' ); ?>" title="<?php _e( 'One column', 'graphene' ); ?>" />                                
                                 </label>
                                 </p>
                                 
                                 <p>
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="two-col-left" <?php checked( $graphene_settings['column_mode'], 'two-col-left' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="two_col_left" <?php checked( $graphene_settings['column_mode'], 'two_col_left' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-twocolumnsleft.png" alt="<?php _e( 'Two columns (with sidebar right)', 'graphene' ); ?>" title="<?php _e( 'Two columns (with sidebar right)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="two-col-right" <?php checked( $graphene_settings['column_mode'], 'two-col-right' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="two_col_right" <?php checked( $graphene_settings['column_mode'], 'two_col_right' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-twocolumnsright.png" alt="<?php _e( 'Two columns (with sidebar left)', 'graphene' ); ?>" title="<?php _e( 'Two columns (with sidebar left)', 'graphene' ); ?>" />
                                 </label>
                                 </p>
                                 
                                 <p>
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="three-col-left" <?php checked( $graphene_settings['column_mode'], 'three-col-left' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="three_col_left" <?php checked( $graphene_settings['column_mode'], 'three_col_left' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnsleft.png" alt="<?php _e( 'Three columns (with two sidebars right)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with two sidebars right)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="three-col-right" <?php checked( $graphene_settings['column_mode'], 'three-col-right' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="three_col_right" <?php checked( $graphene_settings['column_mode'], 'three_col_right' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnsright.png" alt="<?php _e( 'Three columns (with two sidebars left)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with two sidebars left)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[column_mode]" value="three-col-center" <?php checked( $graphene_settings['column_mode'], 'three-col-center' ); ?>/>
+                                    <input type="radio" name="graphene_settings[column_mode]" value="three_col_center" <?php checked( $graphene_settings['column_mode'], 'three_col_center' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnscenter.png" alt="<?php _e( 'Three columns (with sidebars left and right)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with sidebars left and right)', 'graphene' ); ?>" />
                                 </label>      
                                 </p>                            
@@ -127,33 +135,33 @@ function graphene_options_display() {
                             <div class="column-options">
                             	<p>                           
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="one-column" <?php checked( $graphene_settings['bbp_column_mode'], 'one-column' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="one_column" <?php checked( $graphene_settings['bbp_column_mode'], 'one_column' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-onecolumn.png" alt="<?php _e( 'One column', 'graphene' ); ?>" title="<?php _e( 'One column', 'graphene' ); ?>" />                                
                                 </label>
                                 </p>
                                 
                                 <p>
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="two-col-left" <?php checked( $graphene_settings['bbp_column_mode'], 'two-col-left' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="two_col_left" <?php checked( $graphene_settings['bbp_column_mode'], 'two_col_left' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-twocolumnsleft.png" alt="<?php _e( 'Two columns (with sidebar right)', 'graphene' ); ?>" title="<?php _e( 'Two columns (with sidebar right)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="two-col-right" <?php checked( $graphene_settings['bbp_column_mode'], 'two-col-right' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="two_col_right" <?php checked( $graphene_settings['bbp_column_mode'], 'two_col_right' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-twocolumnsright.png" alt="<?php _e( 'Two columns (with sidebar left)', 'graphene' ); ?>" title="<?php _e( 'Two columns (with sidebar left)', 'graphene' ); ?>" />
                                 </label>
                                 </p>
                                 
                                 <p>
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three-col-left" <?php checked( $graphene_settings['bbp_column_mode'], 'three-col-left' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three_col_left" <?php checked( $graphene_settings['bbp_column_mode'], 'three_col_left' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnsleft.png" alt="<?php _e( 'Three columns (with two sidebars right)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with two sidebars right)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three-col-right" <?php checked( $graphene_settings['bbp_column_mode'], 'three-col-right' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three_col_right" <?php checked( $graphene_settings['bbp_column_mode'], 'three_col_right' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnsright.png" alt="<?php _e( 'Three columns (with two sidebars left)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with two sidebars left)', 'graphene' ); ?>" />
                                 </label>
                                 <label>
-                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three-col-center" <?php checked( $graphene_settings['bbp_column_mode'], 'three-col-center' ); ?>/>
+                                    <input type="radio" name="graphene_settings[bbp_column_mode]" value="three_col_center" <?php checked( $graphene_settings['bbp_column_mode'], 'three_col_center' ); ?>/>
                                     <img src="<?php echo get_template_directory_uri(); ?>/admin/images/template-threecolumnscenter.png" alt="<?php _e( 'Three columns (with sidebars left and right)', 'graphene' ); ?>" title="<?php _e( 'Three columns (with sidebars left and right)', 'graphene' ); ?>" />
                                 </label>      
                                 </p>                            
@@ -199,11 +207,11 @@ function graphene_options_display() {
                         <td>
                         	<div class="width-wrap">
                             	<?php _e( 'Content', 'graphene' ); ?><br />
-                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][two-col][content]" id="column_width_2col_content" value="<?php echo $graphene_settings['column_width']['two-col']['content']; ?>" /> px
+                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][two_col][content]" id="column_width_2col_content" value="<?php echo $graphene_settings['column_width']['two_col']['content']; ?>" /> px
                             </div>
                         	<div class="width-wrap">
                             	<?php _e( 'Sidebar', 'graphene' ); ?><br />
-                        		<input type="text" class="code" size="8" name="graphene_settings[column_width][two-col][sidebar]" id="column_width_2col_sidebar" value="<?php echo $graphene_settings['column_width']['two-col']['sidebar']; ?>" /> px
+                        		<input type="text" class="code" size="8" name="graphene_settings[column_width][two_col][sidebar]" id="column_width_2col_sidebar" value="<?php echo $graphene_settings['column_width']['two_col']['sidebar']; ?>" /> px
                             </div>
                         </td>
                     </tr>
@@ -222,15 +230,15 @@ function graphene_options_display() {
                         <td>
                         	<div class="width-wrap">
                             	<?php _e( 'Left sidebar', 'graphene' ); ?><br />
-                        		<input type="text" class="code" size="8" name="graphene_settings[column_width][three-col][sidebar_left]" id="column_width_sidebar_left" value="<?php echo $graphene_settings['column_width']['three-col']['sidebar_left']; ?>" /> px
+                        		<input type="text" class="code" size="8" name="graphene_settings[column_width][three_col][sidebar_left]" id="column_width_sidebar_left" value="<?php echo $graphene_settings['column_width']['three_col']['sidebar_left']; ?>" /> px
                             </div>
                             <div class="width-wrap">
                             	<?php _e( 'Content', 'graphene' ); ?><br />
-                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][three-col][content]" id="column_width_content" value="<?php echo $graphene_settings['column_width']['three-col']['content']; ?>" /> px
+                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][three_col][content]" id="column_width_content" value="<?php echo $graphene_settings['column_width']['three_col']['content']; ?>" /> px
                             </div>
                             <div class="width-wrap">
                             	<?php _e( 'Right sidebar', 'graphene' ); ?><br />
-                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][three-col][sidebar_right]" id="column_width_sidebar_right" value="<?php echo $graphene_settings['column_width']['three-col']['sidebar_right']; ?>" /> px
+                            	<input type="text" class="code" size="8" name="graphene_settings[column_width][three_col][sidebar_right]" id="column_width_sidebar_right" value="<?php echo $graphene_settings['column_width']['three_col']['sidebar_right']; ?>" /> px
                             </div>
                         </td>
                     </tr>
@@ -376,9 +384,21 @@ function graphene_options_display() {
                 <p><?php _e("When you've got the perfect combination, you can even share it with fellow Graphene theme users through the <a href=\"http://forum.khairul-syahir.com/\">Support Forum</a>.", 'graphene' ); ?></p>
             	<p><?php _e( '<strong>Note:</strong> The previews work best on modern Gecko- and Webkit-based browsers, such as Mozilla Firefox and Google Chrome.', 'graphene' ); ?></p>
                 <p><?php _e( '<strong>Note:</strong> To reset any of the colours to their default value, just click on "Clear" beside the colour field and save the settings. The theme will automatically revert the value to the default colour.', 'graphene' ); ?></p>
+                
+                <h4><?php _e( 'Colour presets', 'graphene' ); ?></h4>
+                <p>
+					<?php _e( 'These are some colour presets that you may use, either as is or tweak them further to your liking.', 'graphene' ); ?>
+                </p>
+                <?php /* These colour presets are handled using javascript. See graphene/admin/js/admin.js */ ?>
+                <select class="colour-presets" name="graphene_settings[colour_preset]">
+                	<option value="default" <?php selected( $graphene_settings['colour_preset'], 'default' ); ?>><?php _e( 'Default', 'graphene' ); ?></option>
+                    <option value="dream-magnet" <?php selected( $graphene_settings['colour_preset'], 'dream-magnet' ); ?>><?php _e( 'Dream Magnet', 'graphene' ); ?></option>
+                    <option value="curiosity-killed" <?php selected( $graphene_settings['colour_preset'], 'curiosity-killed' ); ?>><?php _e( 'Curiosity Killed', 'graphene' ); ?></option>
+                </select>
+                
             	<h4><?php _e( 'Content area', 'graphene' ); ?></h4>
                 <table class="form-table">
-                	<?php 
+                	<?php                                                 
 						$colour_opts = array(
 							'bg_content_wrapper' => array( 'title' => __( 'Main content wrapper background', 'graphene' ) ),
 							'bg_content' => array( 'title' => __( 'Post and pages content background', 'graphene' ) ),
@@ -386,19 +406,18 @@ function graphene_options_display() {
 							'bg_post_top_border' => array( 'title' => __( 'Post and pages top border', 'graphene' ) ),
 							'bg_post_bottom_border' => array( 'title' => __( 'Post and pages bottom border', 'graphene' ) ),
 						);
-						
-						$counter = 1;
+												
 						foreach ( $colour_opts as $key => $colour_opt) :
 					?>
                     <tr>
                         <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
                         <td>
-                        	<input type="text" class="code color-<?php echo $counter; ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
                         	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
                         </td>
                     </tr>
-                    <?php $counter++; endforeach; ?>
+                    <?php endforeach; ?>
                 </table>
                 
                 <h4><?php _e( 'Widgets', 'graphene' ); ?></h4>
@@ -416,6 +435,7 @@ function graphene_options_display() {
 							'bg_widget_title_textshadow' => array( 'title' => __( 'Widget title text shadow colour', 'graphene' ) ),
 							'bg_widget_header_bottom' => array( 'title' => __( 'Widget header gradient bottom colour', 'graphene' ) ),
 							'bg_widget_header_top' => array( 'title' => __( 'Widget header gradient top colour', 'graphene' ) ),
+							'bg_widget_box_shadow' => array( 'title' => __( 'Widget box shadow', 'graphene' ) ),
 						);
 
 						foreach ( $colour_opts as $key => $colour_opt) :
@@ -423,12 +443,12 @@ function graphene_options_display() {
                     <tr>
                         <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
                         <td>
-                        	<input type="text" class="code color-<?php echo $counter.' '.str_replace( '_', '-', $key); ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
                         	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
                         </td>
                     </tr>
-                    <?php $counter++; endforeach; ?>
+                    <?php endforeach; ?>
                     
                 </table>
                 
@@ -449,18 +469,18 @@ function graphene_options_display() {
                     <tr>
                         <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
                         <td>
-                        	<input type="text" class="code color-<?php echo $counter.' '.str_replace( '_', '-', $key); ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
                         	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
                         </td>
                     </tr>
-                    <?php $counter++; endforeach; ?>
+                    <?php endforeach; ?>
                     
                 </table>
                 
                 <h4><?php _e( 'Block buttons', 'graphene' ); ?></h4>
                 <table class="form-table">
-                	<tr>
+                	<tr class="colour-preview">
                     	<th scope="row"><?php _e( 'Block button preview', 'graphene' ); ?></th>
                         <td><a class="block-button" href="#"><?php _e( 'Button label', 'graphene' ); ?></a></td>
                     </tr>
@@ -469,6 +489,7 @@ function graphene_options_display() {
 							'bg_button' => array( 'title' => __( 'Button background colour', 'graphene' ) ),
 							'bg_button_label' => array( 'title' => __( 'Button label colour', 'graphene' ) ),
 							'bg_button_label_textshadow' => array( 'title' => __( 'Button label text shadow', 'graphene' ) ),
+							'bg_button_box_shadow' => array( 'title' => __( 'Button box shadow', 'graphene' ) ),
 						);
 
 						foreach ( $colour_opts as $key => $colour_opt) :
@@ -476,12 +497,12 @@ function graphene_options_display() {
                     <tr>
                         <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
                         <td>
-                        	<input type="text" class="code color-<?php echo $counter.' '.str_replace( '_', '-', $key); ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
                         	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
                         </td>
                     </tr>
-                    <?php $counter++; endforeach; ?>
+                    <?php endforeach; ?>
                     
                 </table>
                 
@@ -494,10 +515,10 @@ function graphene_options_display() {
                 	<?php 
 						$colour_opts = array(
 							'bg_archive_left' => array( 'title' => __( 'Archive background gradient left colour', 'graphene' ) ),
-                            'bg_archive_right' => array( 'title' => __( 'Archive background gradient right colour', 'graphene' ) ),
+                                                        'bg_archive_right' => array( 'title' => __( 'Archive background gradient right colour', 'graphene' ) ),
 							'bg_archive_label' => array( 'title' => __( 'Archive label colour', 'graphene' ) ),
 							'bg_archive_text' => array( 'title' => __( 'Archive text colour', 'graphene' ) ),
-                            'bg_archive_textshadow' => array( 'title' => __( 'Archive label and text shadow colour', 'graphene' ) ),
+                                                        'bg_archive_textshadow' => array( 'title' => __( 'Archive label and text shadow colour', 'graphene' ) ),
 						);
 
 						foreach ( $colour_opts as $key => $colour_opt) :
@@ -505,13 +526,81 @@ function graphene_options_display() {
                     <tr>
                         <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
                         <td>
-                        	<input type="text" class="code color-<?php echo $counter.' '.str_replace( '_', '-', $key); ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
                         	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
                         </td>
                     </tr>
-                    <?php $counter++; endforeach; ?>
+                    <?php endforeach; ?>
                     
+                </table>
+                
+                <h4><?php _e( 'Comments area', 'graphene' ); ?></h4>
+                <table class="form-table">
+                	<?php 
+						$colour_opts = array(
+							'bg_comments' => array( 'title' => __( 'Comments background', 'graphene' ) ),
+							'comments_text_colour' => array( 'title' => __( 'Comments text', 'graphene' ) ),
+							'threaded_comments_border' => array( 'title' => __( 'Threaded comments border', 'graphene' ) ),
+							'bg_author_comments' => array( 'title' => __( 'Author comments background', 'graphene' ) ),
+							'bg_author_comments_border' => array( 'title' => __( 'Author comments top border', 'graphene' ) ),
+							'author_comments_text_colour' => array( 'title' => __( 'Author comments text', 'graphene' ) ),
+							'bg_comment_form' => array( 'title' => __( 'Comment form background', 'graphene' ) ),
+							'comment_form_text' => array( 'title' => __( 'Comment form text', 'graphene' ) ),
+						);
+						foreach ( $colour_opts as $key => $colour_opt) :
+					?>
+                    <tr>
+                        <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
+                        <td>
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
+                
+                <h4><?php _e( 'Content text', 'graphene' ); ?></h4>
+                <table class="form-table">
+                	<tr>
+                        <th scope="row">
+                            <label for="content_font_colour"><?php _e( 'Content text', 'graphene' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" class="code color" name="graphene_settings[content_font_colour]" id="content_font_colour" value="<?php echo $graphene_settings['content_font_colour']; ?>" />
+                            <a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
+                            <div class="colorpicker" id="picker_content_font_colour"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="content_font_colour"><?php _e( 'Title text', 'graphene' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" class="code color" name="graphene_settings[title_font_colour]" id="title_font_colour" value="<?php echo $graphene_settings['title_font_colour']; ?>" />
+                            <a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
+                            <div class="colorpicker" id="picker_title_font_colour"></div>
+                        </td>
+                    </tr>
+                	<?php 
+						$colour_opts = array(
+							'link_colour_normal' => array( 'title' => __( 'Link colour (normal state )', 'graphene' ) ),
+							'link_colour_visited' => array( 'title' => __( 'Link colour (visited state )', 'graphene' ) ),
+							'link_colour_hover' => array( 'title' => __( 'Link colour (hover state )', 'graphene' ) ),
+						);
+
+						foreach ( $colour_opts as $key => $colour_opt) :
+					?>
+                    <tr>
+                        <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
+                        <td>
+                        	<input type="text" class="code color" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
+                        	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
+                            <div class="colorpicker" id="picker_<?php echo $key; ?>"></div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </table>
             </div>
         </div>
@@ -546,7 +635,7 @@ function graphene_options_display() {
                     <tr>
                         <th scope="row"><?php _e( 'Text colour:', 'graphene' ); ?></th>
                         <td><code>blue</code>, <code>navy</code>, <code>red</code>, <code>#ff0000</code></td>
-                    </tr>        
+                    </tr>
                 </table>
                 
                 <h4><?php _e( 'Header Text', 'graphene' ); ?></h4>
@@ -636,39 +725,10 @@ function graphene_options_display() {
                         </th>
                         <td><input type="text" class="code" name="graphene_settings[content_font_lineheight]" id="content_font_lineheight" value="<?php echo $graphene_settings['content_font_lineheight']; ?>" /></td>
                     </tr>
-                    <tr>
-                        <th scope="row">
-                            <label for="content_font_colour"><?php _e( 'Text colour', 'graphene' ); ?></label>
-                        </th>
-                        <td>
-                            <input type="text" class="code color-<?php echo $counter; ?>" name="graphene_settings[content_font_colour]" id="content_font_colour" value="<?php echo $graphene_settings['content_font_colour']; ?>" />
-                            <a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; $counter++; ?>"></div>
-                        </td>
-                    </tr>
                 </table>
                     
                 <h4><?php _e( 'Link Text', 'graphene' ); ?></h4>
                 <table class="form-table">
-                	<?php 
-						$colour_opts = array(
-							'link_colour_normal' => array( 'title' => __( 'Link colour (normal state )', 'graphene' ) ),
-							'link_colour_visited' => array( 'title' => __( 'Link colour (visited state )', 'graphene' ) ),
-							'link_colour_hover' => array( 'title' => __( 'Link colour (hover state )', 'graphene' ) ),
-						);
-
-						foreach ( $colour_opts as $key => $colour_opt) :
-					?>
-                    <tr>
-                        <th scope="row"><label for="<?php echo $key; ?>"><?php echo $colour_opt['title']; ?></label></th>
-                        <td>
-                        	<input type="text" class="code color-<?php echo $counter.' '.str_replace( '_', '-', $key); ?>" name="graphene_settings[<?php echo $key; ?>]" id="<?php echo $key; ?>" value="<?php echo $graphene_settings[$key]; ?>" />
-                        	<a href="#" class="clear-color"><?php _e( 'Clear', 'graphene' ); ?></a>
-                            <div class="colorpicker" id="colorpicker-<?php echo $counter; ?>"></div>
-                        </td>
-                    </tr>
-                    <?php $counter++; endforeach; ?>
-
                     <tr>
                         <th scope="row">
                             <label for="link_decoration_normal"><?php _e( 'Text decoration (normal state )', 'graphene' ); ?></label>

@@ -59,6 +59,10 @@ To use the other languages for your WordPress installation, see how you can inst
 
 If you have translated the theme to other languages than those listed above, or if you think you have a better translation, please contact me so that I can include your translation with the theme.
 
+SOCIAL MEDIA ICON CREDITS
+
+The social media iconds used in this theme is taken from the free Social Media Bookmark Icon + icon set by Benjamin Reid.
+The original link from where the social media icons are taken is http://www.nouveller.com/general/free-social-media-bookmark-icon-pack-the-ever-growing-icon-set/
 
 HEADER IMAGE CREDITS
 

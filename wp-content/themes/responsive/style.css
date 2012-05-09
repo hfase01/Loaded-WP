@@ -1,14 +1,14 @@
 /* 
 Theme Name: Responsive 
-Theme URI: http://themeid.com/responsive-theme 
-Description: Responsive WordPress Theme that features 9 page Templates such as Blog, Blog Summary and Template based layout designs: sidebar/content, sidebar/content half, content/sidebar and content/sidebar half. There is also full width page, sitemap Template as well as landing page for your PPC or any other purposes. Responsive also supports 9 widget areas and best of all this Theme is crafted with fluid proportion-based grid system of our own to adapt the design to the viewing environment. There are also Theme Options to control the content, webmaster tools, logo managament, social icons and 4 navigation menus. Everything is backed by our FREE dedicated support forums: <a href="http://themeid.com/forum">support forum</a>.
+Theme URI: http://themeid.com/responsive-theme/ 
+Description: Responsive WordPress Theme that features 9 page Templates such as Blog, Blog Summary and Template based layout designs: sidebar/content, sidebar/content half, content/sidebar and content/sidebar half. There is also full width page, sitemap Template as well as landing page for your PPC or any other purposes. Responsive also supports 9 widget areas and best of all this Theme is crafted with fluid proportion-based grid system of our own to adapt the design to the viewing environment. There are also Theme Options to control the content, webmaster tools, logo managament, social icons and 4 navigation menus. Everything is backed by our FREE dedicated support forums @ http://themeid.com/forum
 
-Version: 1.3.8 
+Version: 1.5.0
 Author: ThemeID 
 Author URI: http://themeid.com
 Tags: white, black, gray, light, custom-menu, custom-header, custom-background, one-column, two-columns, left-sidebar, right-sidebar, flexible-width, theme-options, threaded-comments, full-width-template, sticky-post, translation-ready
 
-Copyright (C) 2003-2012 ThemeID 
+Copyright (C) 2003-2012 Emil Uzelac - ThemeID 
 License: GNU General Public License, version 3 (GPLv3)
 License URI: license.txt 
 	
@@ -105,6 +105,10 @@ body {
 
 /* =Typography
 -------------------------------------------------------------- */
+p {  
+    word-wrap:break-word;
+}
+
 cite, em, dfn {
 	font-style:italic;
 }
@@ -120,7 +124,6 @@ strong {
 
 pre {
 	background:#fff;
-	border-left:4px solid #6ce26c;
 	margin-top:20px;
 	max-width:98%;
 	padding-left:1em;
@@ -254,7 +257,7 @@ a {
 
 a:hover {
 	color:#444;
-	text-decoration:underline;
+	text-decoration:none;
 }
 
 /* =Forms
@@ -277,7 +280,6 @@ label {
 
 form div {
 	clear:both;
-	margin:.5em 0;
 }
 
 input[type="text"], input[type="password"], select {
@@ -337,7 +339,7 @@ input[type='text'], input[type='password'] {
 
 /* =Buttons
 -------------------------------------------------------------- */
-button, a.button, input[type='button'], input[type='submit'] {
+button, a.button, input[type='button'], input[type='submit'], input[type='reset'] {
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
 	background-color:#eaeaea;
@@ -360,9 +362,10 @@ button, a.button, input[type='button'], input[type='submit'] {
 	text-decoration:none;
 	text-shadow:0 1px 0 #fff;
 	vertical-align:middle;
+	white-space:nowrap;
 }
 
-button:hover, a.button:hover, input[type='button']:hover, input[type='submit']:hover {
+button:hover, a.button:hover, input[type='button']:hover, input[type='submit']:hover, input[type='reset']:hover {
 	background-color:#ffffff;
 	background-image:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
 	background-image:-webkit-linear-gradient(top, #eaeaea, #ffffff);
@@ -799,7 +802,6 @@ a.black:hover {
 
 .address {
 	background-color:#f6f5ef;
-	;
 	border:1px solid #cdc9a5;
 	color:#212121;
 }
@@ -866,19 +868,17 @@ dt {
 /* =Blockquote
 -------------------------------------------------------------- */
 blockquote {
-	border:4px double #ddd;
-	border-left:none;
-	border-right:none;
+	background:#f9f9f9;
+	border:2px solid #d6d6d6;
 }
 
 blockquote p {
-	color:#999;
 	font-family:Georgia, "Times New Roman", Times, serif;
 	font-style:italic;
 	font-size:18px;
 	line-height:26px;
 	margin:20px;
-	padding:0 0 0 12px;
+	padding:0 0 10px 12px;
 }
 
 /* =Headings
@@ -886,7 +886,7 @@ blockquote p {
 h1, h2, h3, h4, h5, h6, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 	font-weight:700;
 	line-height:1em;
-	word-wrap:break-word;
+    word-wrap:break-word;
 }
 
 h1 {
@@ -990,7 +990,6 @@ option {
 }
 
 a {
-	padding:.3em 0 .1em;
 	position:relative;
 }
 
@@ -1077,25 +1076,14 @@ form div {
 	padding-top:20px;
 }
 
+#header #logo .site-name a {
+	font-weight:700;
+}
+
 #header #logo .site-description {
 	display:block;
 	font-size:14px;
-	margin:10px 33px 0 0;
-}
-
-#header #search-box {
-	float:right;
-	margin-top:10px;
-	width:30%;
-}
-
-#header #search-box input {
-	padding:4px 10px;
-}
-
-.ie7 #header #search-box {
-	margin-top:10px;
-	text-align:right;
+	margin:10px 33px 10px 0;
 }
 
 /* =Content
@@ -1147,8 +1135,8 @@ form div {
 /* =Author Meta (Author's Box)
 -------------------------------------------------------------- */
 #author-meta {
-	background:#f5f5f5;
-	border:1px solid #f9f9f9;
+	background:#f9f9f9;
+	border:1px solid #d6d6d6;
 	clear:both;
 	display:block;
 	margin-bottom:20px;
@@ -1162,6 +1150,7 @@ form div {
 
 #author-meta p {
 	margin-top:5px;
+	padding:0 5px 0 0;
 }
 
 #author-meta .about-author {
@@ -1200,46 +1189,18 @@ form div {
 .featured-title {
 	font-size: 60px;
 	letter-spacing: -1px;
-	line-height: 1;
 	margin: 0;
 	padding-top:40px;
 	text-align:center;
 }
 
 .featured-subtitle {
+	padding:0 10px;
 	text-align:center;
 }
 
 .featured-image img {
 	margin-top:44px;
-}
-
-.featured-button {
-	background:url(images/featured-button.png) 0 0 no-repeat;
-	border:none;
-	cursor:pointer;
-	display:block;
-	height:61px;
-	width:230px;
-}
-
-.featured-button a {
-	color:#fff;
-	text-decoration:none;
-}
-
-.featured-button:hover {
-	background-position:0 -61px;
-	color:#333;
-	text-decoration:none;
-}
-
-.featured-button p {
-	font-size:18px;
-	font-weight:400;
-	height:60px;
-	line-height:60px;
-	text-align:center;
 }
 
 /* =Post
@@ -1255,7 +1216,12 @@ form div {
 .post-data {
 	clear:both;
 	font-size:11px;
+	font-weight:700;
 	margin-top:20px;
+}
+
+.post-data a {
+	color:#111;
 }
 
 .post-entry {
@@ -1282,11 +1248,19 @@ form div {
 
 .read-more {
 	clear:both;
+	font-weight:700;
 }
 
 .attachment-entry {
 	clear:both;
 	text-align:center;
+}
+
+/* =bbPress
+    bbPress has its own breadcrumb lists
+-------------------------------------------------------------- */
+.bbPress .breadcrumb-list {
+	display:none;
 }
 
 /* =Symbols
@@ -1297,8 +1271,23 @@ form div {
 	margin-left:5px;
 }
 
+.form-allowed-tags {
+	font-size:10px;
+}
+
 /* =Widgets
 -------------------------------------------------------------- */
+.widget-wrapper {
+	-webkit-border-radius:6px;
+    -moz-border-radius:6px;
+	border:1px solid #d6d6d6;
+	border-radius:6px;
+	background-color:#f9f9f9;
+	font-size:13px;
+	margin:0 0 20px;
+	padding:20px;
+}
+
 #widgets {
 	margin-top:40px;
 }
@@ -1306,23 +1295,8 @@ form div {
 #widgets a {
 	display:inline-block;
 	margin:0;
-	padding:3px;
+	padding:0;
 	text-decoration:none;
-}
-
-#widgets ul, #widgets .textwidget, #widgets .tagcloud, #widgets #searchform, #widgets #calendar_wrap {
-	-webkit-border-bottom-right-radius: 6px;
-	-webkit-border-bottom-left-radius: 6px;
-	-moz-border-radius-bottomright: 6px;
-	-moz-border-radius-bottomleft: 6px;
-	border:1px solid #d6d6d6;
-	border-top:none;
-	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px;
-	background-color:#f9f9f9;
-	font-size:13px;
-	margin:0 0 20px;
-	padding:20px;
 }
 
 #widgets #s {
@@ -1330,29 +1304,12 @@ form div {
 }
 
 #widgets ul li {
-	margin-left:15px;
+	margin-left:10px;
 }
 
 #widgets ul li a {
 	display:inline;
-	color:#447bc4;
 	text-decoration:none;
-}
-
-#widgets ul li a:hover {
-}
-
-#widgets ul ul a {
-	padding:3px 0 3px 18px;
-}
-
-#widgets ul ul ul a {
-	padding:3px 0 3px 18px;
-}
-
-#widgets ul ul ul ul a {
-	border:none;
-	padding:3px 0 3px 18px;
 }
 
 #widgets .widget-title img {
@@ -1402,27 +1359,18 @@ form div {
 
 .widget_archive select, #cat {
 	display:block;
-	margin:20px 15px 0;
+	margin:0 15px 0 0;
 }
 
 /* =Titles
 -------------------------------------------------------------- */
 .widget-title, .widget-title-home h3 {
-	-webkit-border-top-left-radius: 6px;
-	-webkit-border-top-right-radius: 6px;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topright: 6px;
-	background-color:#f9f9f9;
-	border:1px solid #d6d6d6;
-	border-bottom:none;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
 	display:block;
 	font-size:24px;
 	font-weight:700;
 	line-height:23px;
 	margin:0;
-	padding:20px 20px 0 20px;
+	padding:0 0 20px 0;
 	text-align:left;
 }
 
@@ -1596,6 +1544,7 @@ form div {
 }
 
 .menu li li a {
+	background:transparent!important;
 	border:none;
 	color:#444;
 	font-size:12px;
@@ -1609,7 +1558,7 @@ form div {
 }
 
 .menu li li a:hover {
-	background:#f5f5f5;
+	background:#f5f5f5 !important;
 	background-image:none;
 	border:none;
 	color:#444;
@@ -1632,16 +1581,6 @@ form div {
 .menu > li:first-child > a, .menu li + li + li li:first-child > a {
 }
 
-.menu ul.children a, .menu .current_page_ancestor, .menu .current_page_ancestor ul a {
-	background:none;
-	background-image:none;
-	filter:none;
-}
-
-ul.sub-menu .current_page_item a {
-	background:transparent !important;
-}
-
 /* =Primary Main Menu IE Fixes (Modernizr)
 -------------------------------------------------------------- */
 .ie7 .menu ul {
@@ -1651,15 +1590,9 @@ ul.sub-menu .current_page_item a {
 /* =Sub Header Menu
 -------------------------------------------------------------- */
 .sub-header-menu {
-	-webkit-border-bottom-right-radius: 6px;
-	-webkit-border-bottom-left-radius: 6px;
-	-moz-border-radius-bottomright: 6px;
-	-moz-border-radius-bottomleft: 6px;
 	background-color:#fff;
 	border:1px solid #d6d6d6;
 	border-top:none;
-	border-bottom-right-radius: 6px;
-	border-bottom-left-radius: 6px;
 	clear:both;
 	margin:0 auto;
 }
@@ -1993,6 +1926,10 @@ ul.sub-menu .current_page_item a {
 	text-align:left;
 }
 
+.comment-body .comment-meta a {
+	font-size:11px;
+}
+
 .comment-body {
 	clear:both;
 }
@@ -2006,9 +1943,8 @@ ul.sub-menu .current_page_item a {
 }
 
 .pingback, .trackback {
-	border-bottom:1px solid #dcdcdc;
 	list-style:none;
-	margin-bottom:20px;
+	margin:20px 0;
 }
 
 .pingback cite, .trackback cite {
@@ -2066,27 +2002,27 @@ ul.sub-menu .current_page_item a {
 /* =WordPress Core
 -------------------------------------------------------------- */
 .alignnone {
-	margin:20px 20px 20px 0;
+	margin:5px 20px 20px 0;
 }
 
 .aligncenter, div.aligncenter {
 	display:block;
-	margin:20px auto 20px auto;
+	margin:5px auto;
 }
 
 .alignright {
 	float:right;
-	margin:25px 0 10px 20px;
+	margin:5px 0 20px 20px;
 }
 
 .alignleft {
 	float:left;
-	margin:25px 20px 10px 0;
+	margin:5px 20px 20px 0;
 }
 
 .aligncenter {
 	display:block;
-	margin:20px auto 20px auto;
+	margin:5px auto;
 }
 
 a img.alignright {
@@ -2095,7 +2031,7 @@ a img.alignright {
 }
 
 a img.alignnone {
-	margin:20px 20px 20px 0;
+	margin:5px 20px 20px 0;
 }
 
 a img.alignleft {
@@ -2211,6 +2147,7 @@ img.wp-post-image, img.attachment-thumbnail, img.attachment-medium, img.attachme
 }
 
 #footer a {
+	color:#333;
 	font-weight:400;
 }
 
@@ -2238,12 +2175,10 @@ img.wp-post-image, img.attachment-thumbnail, img.attachment-medium, img.attachme
 	text-align:right;
 }
 
-#footer .twitter-icon, #footer .youtube-icon, #footer .facebook-icon, #footer .linkedin-icon, #footer .rss-feed-icon, #footer .google-plus-icon, #footer .stumble-upon-icon {
-	display: inline;
-	height: 24px;
-	margin: 1px;
-	padding-left: 3px;
-	width: 24px;
+#footer .twitter-icon, #footer .youtube-icon, #footer .facebook-icon, #footer .linkedin-icon, #footer .rss-feed-icon, #footer .google-plus-icon, #footer .stumble-upon-icon, #footer .instagram-icon, #footer .pinterest-icon {
+	display:inline;
+	margin:1px;
+	padding-left:3px;
 }
 
 /* =Alignments Extras
@@ -2262,7 +2197,7 @@ img.wp-post-image, img.attachment-thumbnail, img.attachment-medium, img.attachme
 
 /* =Clearfix
 -------------------------------------------------------------- */
-.clearfix:after, #container:after {
+.clearfix:after, #container:after, .widget-wrapper:after {
 	clear:both;
 	content:"\0020";
 	display:block;
@@ -2272,15 +2207,15 @@ img.wp-post-image, img.attachment-thumbnail, img.attachment-medium, img.attachme
 	visibility:hidden;
 }
 
-.clearfix, #container {
+.clearfix, #container, .widget-wrapper {
 	display:inline-block;
 }
 
-*html .clearfix, *html #container {
+*html .clearfix, *html #container, *html .widget-wrapper {
 	height:1%;
 }
 
-.clearfix, #container {
+.clearfix, #container, .widget-wrapper {
 	display:block;
 }
 
@@ -2336,7 +2271,7 @@ BDO[DIR="rtl"] {
     body {
     }
 
-    .grid,  .grid-right {
+    .grid, .grid-right {
 	    float:none;
     }
 	
@@ -2355,7 +2290,7 @@ BDO[DIR="rtl"] {
 	    text-align:center;
     }
 
-    .grid,  .grid-right {
+    .grid, .grid-right {
 	    float:none;
     }
 
@@ -2363,11 +2298,11 @@ BDO[DIR="rtl"] {
 	    margin:20px 0 0 0;
     }
 	
-    .menu li,  .top-menu li,  .footer-menu li,  .sub-header-menu li {
+    .menu li, .top-menu, .footer-menu li, .sub-header-menu li {
 	    float:none;
 	    text-align:center;
     }
-
+	
     #footer {
 	    text-align:center;
     }
@@ -2387,7 +2322,7 @@ BDO[DIR="rtl"] {
 	    text-align:center;
     }
 
-    .grid,  .grid-right {
+    .grid, .grid-right {
 	    float:none;
     }
 	
@@ -2395,11 +2330,11 @@ BDO[DIR="rtl"] {
 	    margin:20px 0 0 0;
     }
 
-    .menu li,  .top-menu li a,  .footer-menu li,  .sub-header-menu li {
+    .menu li, .top-menu, .footer-menu li, .sub-header-menu li {
 	    float:none;
 	    text-align:center;
     }
-
+	
     #footer {
 	    text-align:center;
     }

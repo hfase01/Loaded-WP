@@ -17,7 +17,7 @@ function graphene_settings_validator( $input ){
 		
 			/* =Slider Options 
 			--------------------------------------------------------------------------------------*/
-			
+                     
 			// Slider category
 			if ( isset($input['slider_type']) && !in_array($input['slider_type'], array('latest_posts', 'random', 'posts_pages', 'categories' ) ) ){
 				unset($input['slider_type']);
@@ -40,6 +40,10 @@ function graphene_settings_validator( $input ){
 					add_settings_error('graphene_options', 2, __('ERROR: Invalid category selected for the slider categories.', 'graphene'));
 				}
 			}
+			// Exclude categories from posts listing
+			$input = graphene_validate_dropdown( $input, 'slider_exclude_categories', array('disabled', 'homepage', 'everywhere'), __('ERROR: Invalid option for the slider categories exclusion from posts listing is specified.', 'graphene') );
+			// Display posts from categories in random order
+			$input['slider_random_category_posts'] = (isset($input['slider_random_category_posts'])) ? true : false;
 			// Number of posts to display
 			if (!empty($input['slider_postcount']) && !ctype_digit($input['slider_postcount'])){
 				unset($input['slider_postcount']);
@@ -59,7 +63,7 @@ function graphene_settings_validator( $input ){
 			$input = graphene_validate_digits( $input, 'slider_trans_speed', __('ERROR: The value for slider transition speed must be an integer.', 'graphene'));
 			// Slider animation
 			$input = graphene_validate_dropdown( $input, 'slider_animation', array( 'horizontal-slide', 'vertical-slide', 'fade', 'none' ), __( 'ERROR: Invalid slider animation.', 'graphene' ) );
-                        // Slider position
+            // Slider position
 			$input['slider_position'] = (isset($input['slider_position'])) ? true : false;
 			// Slider disable switch
 			$input['slider_disable'] = (isset($input['slider_disable'])) ? true : false;
@@ -116,6 +120,20 @@ function graphene_settings_validator( $input ){
 			$input = graphene_validate_dropdown( $input, 'child_page_listing', array('hide', 'show_always', 'show_if_parent_empty'), __('ERROR: Invalid option for the child page listings.', 'graphene') );
 			
                         
+			/* = RSS Feed Options
+			--------------------------------------------------------------------------------------*/
+			
+			// Use a custom RSS feed
+			$input['use_custom_rss_feed'] = (isset($input['use_custom_rss_feed'])) ? true : false;                        
+			// Child page listing
+			if ( $input['use_custom_rss_feed'] && empty ( $input['custom_rss_feed_url'] ) ) {
+				unset($input['slider_type']);
+				add_settings_error('graphene_options', 2, __('ERROR: You must supply an URL for the custom RSS Feed.', 'graphene'));
+			} else {     
+				$input = graphene_validate_url( $input, 'custom_rss_feed_url', __('ERROR: Bad URL entered for the custom RSS Feed URL.', 'graphene') );			
+			}
+			                                                
+                        
 			/* =Widget Area Options
 			--------------------------------------------------------------------------------------*/
 			
@@ -127,35 +145,36 @@ function graphene_settings_validator( $input ){
 			/* =Top Bar Options
 			--------------------------------------------------------------------------------------*/
 			// Hide top bar
-                        $input['hide_top_bar'] = (isset($input['hide_top_bar'])) ? true : false;
-			// Hide feed icon switch
-			$input['hide_feed_icon'] = (isset($input['hide_feed_icon'])) ? true : false;
-			// Custom feed URL
-			$input = graphene_validate_url( $input, 'custom_feed_url', __('ERROR: Bad URL entered for the custom feed URL.', 'graphene') );
+            $input['hide_top_bar'] = (isset($input['hide_top_bar'])) ? true : false;
 			// Open in new window
-			$input['social_media_new_window'] = (isset($input['social_media_new_window'])) ? true : false;
-			// Twitter URL
-			$input = graphene_validate_url( $input, 'twitter_url', __('ERROR: Bad URL entered for the Twitter URL.', 'graphene') );
-			// Facebook URL
-			$input = graphene_validate_url( $input, 'facebook_url', __('ERROR: Bad URL entered for the Facebook URL.', 'graphene') );
-            /* Social media */
-			$social_media_new = ( ! empty( $input['social_media_new'] ) ) ? $input['social_media_new'] : array();
-			if ( ! empty( $social_media_new ) ){
-				$i = 0;
-				foreach ( $social_media_new as $social_medium ){
-					if ( ! empty( $social_medium['name'] ) ){
-						$slug = sanitize_title($social_medium['name'], $i);
-						$input['social_media'][$slug]['name'] = $social_medium['name'];
-						$input['social_media'][$slug]['icon'] = $social_medium['icon'];
-						$input['social_media'][$slug]['url'] = $social_medium['url'];
-                        $input['social_media'][$slug]['title'] = $social_medium['title'];
-						$input['social_media'][$slug] = graphene_validate_url( $input['social_media'][$slug], 'icon', __('ERROR: Bad URL entered for the social media icon URL.', 'graphene') );
-						$input['social_media'][$slug] = graphene_validate_url( $input['social_media'][$slug], 'url', __('ERROR: Bad URL entered for the social media URL.', 'graphene') );
-						$i++;
-					}
+			$input['social_media_new_window'] = (isset($input['social_media_new_window'])) ? true : false;			
+			/* Social profiles */
+			$social_profiles = ( ! empty( $input['social_profiles'] ) ) ? $input['social_profiles'] : array();
+		
+			if ( ! empty( $social_profiles ) ){
+				$ix = 0;
+				unset( $input['social_profiles'] );
+				foreach ( $social_profiles as $social_icon ){
+					if ( ! empty( $social_icon['type'] ) ){
+						$input['social_profiles'][$ix]['type'] = $social_icon['type'];
+						$input['social_profiles'][$ix]['name'] = $social_icon['name'];
+						$input['social_profiles'][$ix]['title'] = esc_attr( $social_icon['title'] );
+						$social_icon['url'] = esc_url_raw( $social_icon['url'] );
+						if ( empty( $social_icon['url'] ) && $social_icon['type'] != 'rss' ){
+							add_settings_error( 'graphene_options', 2, sprintf( __( 'ERROR: Bad URL entered for the %s URL.'), $social_icon['name'] ) );
+						} else {
+							$input['social_profiles'][$ix]['url'] = $social_icon['url'];
+						}
+						
+						if ( $social_icon['type'] == 'custom' ){
+							$input['social_profiles'][$ix]['icon_url'] = $social_icon['icon_url'];
+						}  
+						$ix++;
+					}                                
 				}
+			} else {
+				$input['social_profiles'] = array( 0 => false );
 			}
-			if ( empty( $input['social_media'] ) ) $input['social_media'] = $graphene_defaults['social_media'];
 			            
                         
 			/* =Social Sharing Options
@@ -165,6 +184,8 @@ function graphene_settings_validator( $input ){
 			$input['show_addthis'] = (isset($input['show_addthis'])) ? true : false;
 			// Show buttons in pages switch
 			$input['show_addthis_page'] = (isset($input['show_addthis_page'])) ? true : false;
+			// Show buttons in home and archive pages
+			$input['show_addthis_archive'] = (isset($input['show_addthis_archive'])) ? true : false;
 			// Social sharing buttons location
 			$input = graphene_validate_dropdown( $input, 'addthis_location', array('post-bottom', 'post-top', 'top-bottom'), __('ERROR: Invalid option for the social sharing buttons location.', 'graphene') );
 			// Social sharing buttons code
@@ -225,14 +246,15 @@ function graphene_settings_validator( $input ){
 			$input['light_header'] = (isset($input['light_header'])) ? true : false;
 			$input['link_header_img'] = (isset($input['link_header_img'])) ? true : false;
 			$input['featured_img_header'] = (isset($input['featured_img_header'])) ? true : false;
-			$input['use_random_header_img'] = (isset($input['use_random_header_img'])) ? true : false;			
+			$input['use_random_header_img'] = (isset($input['use_random_header_img'])) ? true : false;
+			$input = graphene_validate_digits( $input, 'header_img_height', __('ERROR: The value for the header image height must be an integer.', 'graphene') );
 			$input = graphene_validate_dropdown( $input, 'search_box_location', array('top_bar', 'nav_bar', 'disabled'), __('ERROR: Invalid option for the Search box location.', 'graphene') );
 			
 			
 			/* =Column Options
 			--------------------------------------------------------------------------------------*/
-			$input = graphene_validate_dropdown( $input, 'column_mode', array('one-column', 'two-col-left', 'two-col-right', 'three-col-left', 'three-col-right', 'three-col-center'), __('ERROR: Invalid option for the column mode.', 'graphene') );
-			$input = graphene_validate_dropdown( $input, 'bbp_column_mode', array('one-column', 'two-col-left', 'two-col-right', 'three-col-left', 'three-col-right', 'three-col-center'), __('ERROR: Invalid option for the bbPress column mode.', 'graphene') );
+			$input = graphene_validate_dropdown( $input, 'column_mode', array('one_column', 'two_col_left', 'two_col_right', 'three_col_left', 'three_col_right', 'three_col_center'), __('ERROR: Invalid option for the column mode.', 'graphene') );
+			$input = graphene_validate_dropdown( $input, 'bbp_column_mode', array('one_column', 'two_col_left', 'two_col_right', 'three_col_left', 'three_col_right', 'three_col_center'), __('ERROR: Invalid option for the bbPress column mode.', 'graphene') );
 			
 			
 			/* =Column Width Options
@@ -267,47 +289,62 @@ function graphene_settings_validator( $input ){
 			$input['hide_allowedtags'] = (isset($input['hide_allowedtags'])) ? true : false;
                         
 
-			/* =Background Colour Options
+			/* =Colour Options
 			--------------------------------------------------------------------------------------*/
-			// Content area
-			if ( empty($input['bg_content_wrapper']) ) $input['bg_content_wrapper'] = $graphene_defaults['bg_content_wrapper'];
-			if ( empty($input['bg_content']) ) $input['bg_content'] = $graphene_defaults['bg_content'];
-			if ( empty($input['bg_meta_border']) ) $input['bg_meta_border'] = $graphene_defaults['bg_meta_border'];
-			if ( empty($input['bg_post_top_border']) ) $input['bg_post_top_border'] = $graphene_defaults['bg_post_top_border'];
-			if ( empty($input['bg_post_bottom_border']) ) $input['bg_post_bottom_border'] = $graphene_defaults['bg_post_bottom_border'];
+			$colour_opts = array(
+								// Content area
+								'bg_content_wrapper',
+								'bg_content',
+								'bg_meta_border',
+								'bg_post_top_border',
+								'bg_post_bottom_border',
+								
+								// Widgets
+								'bg_widget_item',
+								'bg_widget_list',
+								'bg_widget_header_border',
+								'bg_widget_title',
+								'bg_widget_title_textshadow',
+								'bg_widget_header_bottom',
+								'bg_widget_header_top',
+								'bg_widget_box_shadow',
+								
+								// Slider
+								'bg_slider_top',
+								'bg_slider_bottom',
+								
+								// Block button
+								'bg_button',
+								'bg_button_label',
+								'bg_button_label_textshadow',
+								'bg_button_box_shadow',
+								
+								// Archive
+								'bg_archive_left',
+								'bg_archive_right',
+								'bg_archive_label',
+								'bg_archive_text',
+								'bg_archive_textshadow',
+								
+								// Comments
+								'bg_comments',
+								'comments_text_colour',
+								'threaded_comments_border',
+								'bg_author_comments',
+								'bg_author_comments_border',
+								'author_comments_text_colour',
+								'bg_comment_form',
+								'comment_form_text',
+								
+								// Text
+								'content_font_colour',
+								'title_font_colour',
+								'link_colour_normal',
+								'link_colour_visited',
+								'link_colour_hover',								
+							);
 			
-			// Widgets
-			if ( empty($input['bg_widget_item']) ) $input['bg_widget_item'] = $graphene_defaults['bg_widget_item'];
-			if ( empty($input['bg_widget_list']) ) $input['bg_widget_list'] = $graphene_defaults['bg_widget_list'];
-			if ( empty($input['bg_widget_header_border']) ) $input['bg_widget_header_border'] = $graphene_defaults['bg_widget_header_border'];
-			if ( empty($input['bg_widget_title']) ) $input['bg_widget_title'] = $graphene_defaults['bg_widget_title'];
-			if ( empty($input['bg_widget_title_textshadow']) ) $input['bg_widget_title_textshadow'] = $graphene_defaults['bg_widget_title_textshadow'];
-			if ( empty($input['bg_widget_header_bottom']) ) $input['bg_widget_header_bottom'] = $graphene_defaults['bg_widget_header_bottom'];
-			if ( empty($input['bg_widget_header_top']) ) $input['bg_widget_header_top'] = $graphene_defaults['bg_widget_header_top'];
-			
-			// Slider
-			if ( empty($input['bg_slider_top']) ) $input['bg_slider_top'] = $graphene_defaults['bg_slider_top'];
-			if ( empty($input['bg_slider_bottom']) ) $input['bg_slider_bottom'] = $graphene_defaults['bg_slider_bottom'];
-			
-			// Block button
-			if ( empty($input['bg_button']) ) $input['bg_button'] = $graphene_defaults['bg_button'];
-			if ( empty($input['bg_button_label']) ) $input['bg_button_label'] = $graphene_defaults['bg_button_label'];
-			if ( empty($input['bg_button_label_textshadow']) ) $input['bg_button_label_textshadow'] = $graphene_defaults['bg_button_label_textshadow'];
-                        
-            // Archive
-			if ( empty($input['bg_archive_left']) ) $input['bg_archive_left'] = $graphene_defaults['bg_archive_left'];
-            if ( empty($input['bg_archive_right']) ) $input['bg_archive_right'] = $graphene_defaults['bg_archive_right'];
-			if ( empty($input['bg_archive_label']) ) $input['bg_archive_label'] = $graphene_defaults['bg_archive_label'];
-			if ( empty($input['bg_archive_text']) ) $input['bg_archive_text'] = $graphene_defaults['bg_archive_text'];
-            if ( empty($input['bg_archive_textshadow']) ) $input['bg_archive_textshadow'] = $graphene_defaults['bg_archive_textshadow'];
-
-			
-			/* =Text Style Options
-			--------------------------------------------------------------------------------------*/
-			if ( empty($input['content_font_colour']) ) $input['content_font_colour'] = $graphene_defaults['content_font_colour'];
-			if ( empty($input['link_colour_normal']) ) $input['link_colour_normal'] = $graphene_defaults['link_colour_normal'];
-			if ( empty($input['link_colour_visited']) ) $input['link_colour_visited'] = $graphene_defaults['link_colour_visited'];
-			if ( empty($input['link_colour_hover']) ) $input['link_colour_hover'] = $graphene_defaults['link_colour_hover'];
+			$input = graphene_validate_colours( $input, $colour_opts );
 			
                         
 			/* =Footer Widget Display Options
@@ -354,15 +391,9 @@ function graphene_settings_validator( $input ){
 		
 		/* Only save options that have different values than the default values */
 		foreach ( $input as $key => $value ){
-			if ( $graphene_defaults[$key] === $value || $value === '' ) {
+			if ( ( $graphene_defaults[$key] === $value || $value === '' ) && $key != 'db_version' ) {
 				unset( $input[$key] );
 			}
-		}
-		
-		/* Delete the settings from database if all settings have their default values */
-		if (empty($input)){
-			delete_option('graphene_settings');
-			return false;
 		}
 		
 	} // Closes the uninstall conditional
@@ -384,7 +415,6 @@ function graphene_validate_digits( $input, $option_name, $error_message ){
 	} else {
 		$input[$option_name] = $graphene_defaults[$option_name];
 	}
-	
 	return $input;
 }
 
@@ -401,7 +431,6 @@ function graphene_validate_column_width( $input, $column_mode, $option_name, $er
 		$input['column_width'] = $graphene_defaults['column_width'];
 		$input['container_width'] = $graphene_defaults['container_width'];
 	}
-	
 	return $input;
 }
 
@@ -412,7 +441,6 @@ function graphene_validate_dropdown( $input, $option_name, $possible_values, $er
 		add_settings_error('graphene_options', 2, $error_message);
 	}
 	return $input;
-	
 }
 
 function graphene_validate_url( $input, $option_name, $error_message ) {
@@ -425,6 +453,19 @@ function graphene_validate_url( $input, $option_name, $error_message ) {
 		}	
 	}	
 	return $input;
-	
+}
+
+function graphene_validate_colours( $input, $options ) {
+	global $graphene_defaults;
+	foreach ( $options as $option ){
+		if ( ! empty( $input[$option] ) ){
+			if ( stripos( $input[$option], '#' ) !== 0 ) {
+				$input[$option] = '#' . $input[$option];
+			}	
+		} else {
+			$input[$option] = $graphene_defaults[$option];
+		}
+	}
+	return $input;
 }
 ?>

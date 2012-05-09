@@ -22,7 +22,7 @@ add_action( 'add_meta_boxes', 'graphene_add_meta_box' );
 /**
  * Add or update the options
 */
-function graphene_save_custom_meta( $post_id){
+function graphene_save_custom_meta( $post_id ){
 	
 	/** 
 	 * verify this came from our screen and with proper authorization, because
@@ -53,8 +53,9 @@ function graphene_save_custom_meta( $post_id){
 	}
 
 	/* OK, we're authenticated: saving the data */
-	update_post_meta( $post_id, '_graphene_slider_img', $_POST['graphene_slider_img']);
+	update_post_meta( $post_id, '_graphene_slider_img', $_POST['graphene_slider_img']);        
 	update_post_meta( $post_id, '_graphene_slider_imgurl', $_POST['graphene_slider_imgurl']);
+        update_post_meta( $post_id, '_graphene_slider_url', $_POST['graphene_slider_url']);
 	update_post_meta( $post_id, '_graphene_show_addthis', $_POST['graphene_show_addthis']);
         
 	/* Post-specific options */
@@ -82,6 +83,7 @@ function graphene_custom_meta( $post){
 	
 	/* Get the current settings */
 	$slider_img = ( get_post_meta( $post->ID, '_graphene_slider_img', true ) ) ? get_post_meta( $post->ID, '_graphene_slider_img', true ) : 'global';
+        $slider_url = ( get_post_meta( $post->ID, '_graphene_slider_url', true ) ) ? get_post_meta( $post->ID, '_graphene_slider_url', true ) : '';
 	$slider_imgurl = ( get_post_meta( $post->ID, '_graphene_slider_imgurl', true ) ) ? get_post_meta( $post->ID, '_graphene_slider_imgurl', true ) : '';
 	$show_addthis = ( get_post_meta( $post->ID, '_graphene_show_addthis', true ) ) ? get_post_meta( $post->ID, '_graphene_show_addthis', true ) : 'global';
         
@@ -99,10 +101,10 @@ function graphene_custom_meta( $post){
     <table class="form-table">
     	<tr>
             <th scope="row">
-                <label><?php _e( 'Slider image', 'graphene' ); ?></label>
+                <label for="graphene_slider_img"><?php _e( 'Slider image', 'graphene' ); ?></label>
             </th>
             <td>
-                <select name="graphene_slider_img">
+                <select id="graphene_slider_img" name="graphene_slider_img">
                 	<option value="global" <?php selected( $slider_img, 'global' ); ?>><?php _e( 'Use global setting', 'graphene' ); ?></option>
                     <option value="disabled" <?php selected( $slider_img, 'disabled' ); ?>><?php _e("Don't show image", 'graphene' ); ?></option>
                     <option value="featured_image" <?php selected( $slider_img, 'featured_image' ); ?>><?php _e("Featured Image", 'graphene' ); ?></option>
@@ -110,14 +112,23 @@ function graphene_custom_meta( $post){
                     <option value="custom_url" <?php selected( $slider_img, 'custom_url' ); ?>><?php _e("Custom URL", 'graphene' ); ?></option>
                 </select>
             </td>
+        </tr>        
+        <tr>
+            <th scope="row">
+                <label for="graphene_slider_imgurl"><?php _e( 'Custom slider image URL', 'graphene' ); ?></label>
+            </th>
+            <td>
+                <input type="text" id="graphene_slider_imgurl" name="graphene_slider_imgurl" value="<?php echo $slider_imgurl; ?>" size="60" /><br />
+                <span class="description"><?php _e( 'Make sure you select Custom URL in the slider image option above to use this custom url.', 'graphene' ); ?></span>                        
+            </td>
         </tr>
         <tr>
             <th scope="row">
-                <label><?php _e( 'Custom slider image URL', 'graphene' ); ?></label>
+                <label for="graphene_slider_url"><?php _e( 'Custom slider URL', 'graphene' ); ?></label>
             </th>
             <td>
-                <input type="text" name="graphene_slider_imgurl" value="<?php echo $slider_imgurl; ?>" size="60" /><br />
-                <span class="description"><?php _e( 'Make sure you select Custom URL in the slider image option above to use this custom url.', 'graphene' ); ?></span>                        
+                <input type="text" id="graphene_slider_url" name="graphene_slider_url" value="<?php echo $slider_url; ?>" size="60" /><br />
+                <span class="description"><?php _e( 'Use this to override the link that is used in the slider.', 'graphene' ); ?></span>                        
             </td>
         </tr>
     </table>
@@ -125,10 +136,10 @@ function graphene_custom_meta( $post){
     <table class="form-table">
     	<tr>
             <th scope="row">
-                <label><?php _e( 'AddThis Social Sharing button', 'graphene' ); ?></label>
+                <label for="graphene_show_addthis"><?php _e( 'AddThis Social Sharing button', 'graphene' ); ?></label>
             </th>
             <td>
-                <select name="graphene_show_addthis">
+                <select id="graphene_show_addthis" name="graphene_show_addthis">
                 	<option value="global" <?php selected( $show_addthis, 'global' ); ?>><?php _e( 'Use global setting', 'graphene' ); ?></option>
                     <option value="show" <?php selected( $show_addthis, 'show' ); ?>><?php _e("Show button", 'graphene' ); ?></option>
                     <option value="hide" <?php selected( $show_addthis, 'hide' ); ?>><?php _e("Hide button", 'graphene' ); ?></option>
@@ -139,10 +150,10 @@ function graphene_custom_meta( $post){
         <?php if ( 'post' == $post->post_type) : ?>
         <tr>
             <th scope="row">
-                <label><?php _e( 'Post date display', 'graphene' ); ?></label>
+                <label for="graphene_post_date_display"><?php _e( 'Post date display', 'graphene' ); ?></label>
             </th>
             <td>
-                <select name="graphene_post_date_display">
+                <select id="graphene_post_date_display" name="graphene_post_date_display">
                 	<option value="global" <?php selected( $post_date_display, 'global' ); ?>><?php _e( 'Use global setting', 'graphene' ); ?></option>
                     <option value="hide" <?php selected( $post_date_display, 'hide' ); ?>><?php _e( 'Hide date', 'graphene' ); ?></option>
                 </select>
@@ -156,10 +167,10 @@ function graphene_custom_meta( $post){
     <table class="form-table">
     	<tr>
             <th scope="row">
-                <label><?php _e( 'Description', 'graphene' ); ?></label>
+                <label for="graphene_nav_description"><?php _e( 'Description', 'graphene' ); ?></label>
             </th>
             <td>
-                <input type="text" name="graphene_nav_description" value="<?php echo $nav_description; ?>" size="60" /><br />
+                <input type="text" id="graphene_nav_description" name="graphene_nav_description" value="<?php echo $nav_description; ?>" size="60" /><br />
                 <span class="description"><?php _e( 'Only required if you need a description in the navigation menu and you are not using a custom menu.', 'graphene' ); ?></span>                        
             </td>
         </tr>

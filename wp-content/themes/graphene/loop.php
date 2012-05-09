@@ -98,7 +98,7 @@ if ( function_exists( 'get_post_format' ) && $post_type->name != 'page' ) {
             <p class="post-author author vcard">
 				<?php
 				/* translators: this is for the author byline, such as 'by John Doe' */
-				$author_url = '<a href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" class="url">' . get_the_author_meta( 'display_name' ) . '</a>';
+				$author_url = '<a href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" class="url" rel="author">' . get_the_author_meta( 'display_name' ) . '</a>';
 				printf( __( 'by %s', 'graphene' ), '<span class="fn nickname">' . $author_url . '</span>' );
 				?>
 			</p>
@@ -140,6 +140,10 @@ if ( function_exists( 'get_post_format' ) && $post_type->name != 'page' ) {
 					echo graphene_get_post_image( get_the_ID(), apply_filters( 'graphene_excerpt_thumbnail_size', 'thumbnail' ), 'excerpt' );	
 				}
 				?>
+                
+                <?php /* Social sharing buttons at top of post */ ?>
+				<?php if ( stripos( $graphene_settings['addthis_location'], 'top' ) !== false && $graphene_settings['show_addthis_archive'] ) { graphene_addthis( get_the_ID() ); } ?>
+                
 				<?php /* The excerpt */ ?>
 				<?php the_excerpt(); ?>
                 
@@ -167,6 +171,11 @@ if ( function_exists( 'get_post_format' ) && $post_type->name != 'page' ) {
 				?>
             </p>
             <?php endif; ?>
+            
+            <?php 
+			/* Display AddThis social sharing button */
+			if ( stripos( $graphene_settings['addthis_location'], 'bottom' ) !== false && $graphene_settings['show_addthis_archive'] ) { graphene_addthis( get_the_ID() ); } 
+			?>
 			
 			<?php do_action( 'graphene_post_footer' ); ?>
 		</div>

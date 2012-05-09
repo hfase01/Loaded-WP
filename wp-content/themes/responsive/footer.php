@@ -44,31 +44,39 @@
                 echo '<ul class="social-icons">';
 					
                 if ($options['twitter_uid']) echo '<li class="twitter-icon"><a href="' . $options['twitter_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/twitter-icon.png" alt="Twitter">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/twitter-icon.png" width="24" height="24" alt="Twitter">'
                     .'</a></li>';
 
                 if ($options['facebook_uid']) echo '<li class="facebook-icon"><a href="' . $options['facebook_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/facebook-icon.png" alt="Facebook">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/facebook-icon.png" width="24" height="24" alt="Facebook">'
                     .'</a></li>';
   
                 if ($options['linkedin_uid']) echo '<li class="linkedin-icon"><a href="' . $options['linkedin_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/linkedin-icon.png" alt="LinkedIn">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/linkedin-icon.png" width="24" height="24" alt="LinkedIn">'
                     .'</a></li>';
 					
                 if ($options['youtube_uid']) echo '<li class="youtube-icon"><a href="' . $options['youtube_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/youtube-icon.png" alt="YouTube">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/youtube-icon.png" width="24" height="24" alt="YouTube">'
                     .'</a></li>';
 					
                 if ($options['stumble_uid']) echo '<li class="stumble-upon-icon"><a href="' . $options['stumble_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/stumble-upon-icon.png" alt="YouTube">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/stumble-upon-icon.png" width="24" height="24" alt="StumbleUpon">'
                     .'</a></li>';
 					
                 if ($options['rss_uid']) echo '<li class="rss-feed-icon"><a href="' . $options['rss_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/rss-feed-icon.png" alt="RSS Feed">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/rss-feed-icon.png" width="24" height="24" alt="RSS Feed">'
                     .'</a></li>';
        
                 if ($options['google_plus_uid']) echo '<li class="google-plus-icon"><a href="' . $options['google_plus_uid'] . '">'
-                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/googleplus-icon.png" alt="Google Plus">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/googleplus-icon.png" width="24" height="24" alt="Google Plus">'
+                    .'</a></li>';
+					
+                if ($options['instagram_uid']) echo '<li class="instagram-icon"><a href="' . $options['instagram_uid'] . '">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/instagram-icon.png" width="24" height="24" alt="Instagram">'
+                    .'</a></li>';
+					
+                if ($options['pinterest_uid']) echo '<li class="pinterest-icon"><a href="' . $options['pinterest_uid'] . '">'
+                    .'<img src="' . get_stylesheet_directory_uri() . '/icons/pinterest-icon.png" width="24" height="24" alt="Pinterest">'
                     .'</a></li>';
              
                 echo '</ul><!-- end of .social-icons -->';
@@ -84,9 +92,9 @@
         <div class="grid col-300 scroll-top"><a href="#scroll-top" title="<?php esc_attr_e( 'scroll to top', 'responsive' ); ?>"><?php _e( '&uarr;', 'responsive' ); ?></a></div>
         
         <div class="grid col-300 fit powered">
-            <a href="<?php echo esc_url(__('http://themeid.com/responsive-theme','responsive')); ?>" title="<?php esc_attr_e('Responsive Theme', 'responsive'); ?>">
+            <a href="<?php echo esc_url(__('http://themeid.com/responsive-theme/','responsive')); ?>" title="<?php esc_attr_e('Responsive Theme', 'responsive'); ?>">
                     <?php printf('Responsive Theme'); ?></a>
-            powered by <a href="<?php echo esc_url(__('http://wordpress.org','responsive')); ?>" title="<?php esc_attr_e('WordPress', 'responsive'); ?>">
+            <?php esc_attr_e('powered by', 'responsive'); ?> <a href="<?php echo esc_url(__('http://wordpress.org/','responsive')); ?>" title="<?php esc_attr_e('WordPress', 'responsive'); ?>">
                     <?php printf('WordPress'); ?></a>
         </div><!-- end .powered -->
         

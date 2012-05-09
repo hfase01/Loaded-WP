@@ -1,21 +1,19 @@
 <?php
-$search_term = substr($_SERVER['REQUEST_URI'],1);
+$search_term = untrailingslashit(substr($_SERVER['REQUEST_URI'],1));
 $search_term = urldecode(stripslashes($search_term));
 $find = array("'.html'", "'.+/'", "'[-/_]'");
 $replace = " ";
 $search_term = trim(preg_replace($find, $replace, $search_term));
-$search_term_q = preg_replace('/ /', '%20', $search_term);
 
 // Sanitise the search term
 global $wpdb;
-$search_term_q = esc_js( $wpdb->escape( urlencode( strip_tags( $search_term_q ) ) ) );
+$search_term_q = esc_js( $wpdb->escape( urlencode( strip_tags( $search_term ) ) ) );
 
 $redirect_location = get_home_url().'?s='.$search_term_q.'&search_404=1';
 get_header();
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function($){
-		// $(location).attr('href', '<?php echo $redirect_location; ?>');
 		window.location.replace("<?php echo $redirect_location; ?>");
     });
 </script>

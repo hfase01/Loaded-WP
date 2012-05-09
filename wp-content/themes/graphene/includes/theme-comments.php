@@ -33,7 +33,8 @@ if (!function_exists( 'graphene_comment' ) ) :
                             	<?php /* translators: %1$s is the comment date, %2$s is the comment time */ ?>
 								<?php printf( __( '%1$s at %2$s', 'graphene' ), get_comment_date(), get_comment_time() ); ?>
 								<span class="timezone"><?php echo '(UTC '.get_option( 'gmt_offset' ).')'; ?></span>
-								<?php edit_comment_link(__( 'Edit comment','graphene' ),' | ','' ); ?>
+                                <?php edit_comment_link(__( 'Edit comment','graphene' ),' (',') ' ); ?>
+                                <span class="comment-permalink"><a href="<?php echo get_comment_link(); ?>"><?php _e( 'Link to this comment', 'graphene' ); ?></a></span>
                             	<?php do_action( 'graphene_comment_metadata' ); ?>    
                             </p>
 							<p class="comment-reply-link">
@@ -101,11 +102,12 @@ function graphene_comment_form_fields(){
 
 // The comment field textarea
 function graphene_comment_textarea(){
-	echo 
+	$html =  
 		'<p class="comment-form-message clearfix">
 			<label class="graphene_form_label">' . __( 'Message:', 'graphene' ) . ' <span class="required">*</span></label>
 			<textarea name="comment" id="comment" cols="40" rows="10" class="graphene-form-field" aria-required="true"></textarea>
 		 </p>';
+	echo apply_filters( 'graphene_comment_textarea', $html );
 	
 	do_action( 'graphene_comment_textarea' );
 }
@@ -155,7 +157,7 @@ function graphene_comment_count( $type = 'comments', $oneText = '', $moreText = 
  * @package Graphene
  * @since Graphene 1.3
 */
-function graphene_get_comment_count( $type = 'comments' ){
+function graphene_get_comment_count( $type = 'comments', $only_approved_comments = true ){
 	if( $type == 'comments' ) :
 		$typeSql = 'comment_type = ""';
 	elseif( $type == 'pings' ) :
@@ -167,7 +169,8 @@ function graphene_get_comment_count( $type = 'comments' ){
 	endif;
 	
 	$typeSql = apply_filters( 'graphene_comments_typesql', $typeSql, $type );
-
+        $approvedSql = $only_approved_comments ? ' AND comment_approved="1"' : '';
+        
 	global $wpdb;
 
     $result = $wpdb->get_var( '
@@ -176,8 +179,7 @@ function graphene_get_comment_count( $type = 'comments' ){
         FROM
             '.$wpdb->comments.'
         WHERE
-            '.$typeSql.' AND
-            comment_approved="1" AND
+            '.$typeSql.$approvedSql.' AND           
             comment_post_ID= '.get_the_ID() );
 	
 	return $result;

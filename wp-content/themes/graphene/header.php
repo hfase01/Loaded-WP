@@ -16,7 +16,7 @@ global $graphene_settings;
     <title><?php wp_title( '' ); ?></title>
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" /> 
     <?php wp_head(); ?>
-</head><?php flush(); ?>
+</head>
 <body <?php body_class(); ?>>
 
 <?php if (!get_theme_mod('background_image', false) && !get_theme_mod('background_color', false)) : ?>
@@ -29,17 +29,10 @@ global $graphene_settings;
     
     <?php if ($graphene_settings['hide_top_bar'] != true) : ?>
         <div id="top-bar">
-        
-        	<?php do_action('graphene_before_feed_icon'); ?>
-
-            <div id="rss" class="clearfix gutter-left">
-                <?php if ($graphene_settings['hide_feed_icon'] != true) : ?>
-                    <?php $custom_feed_url = ($graphene_settings['custom_feed_url']) ? $graphene_settings['custom_feed_url'] : get_bloginfo('rss2_url'); ?>
-                    <a href="<?php echo $custom_feed_url; ?>" title="<?php printf(esc_attr__("Subscribe to %s's RSS feed", 'graphene'), get_bloginfo('name')); ?>" class="rss_link" <?php if ( $graphene_settings['social_media_new_window'] ) { echo 'target="_blank"'; } ?>><span><?php _e('Subscribe to RSS feed', 'graphene'); ?></span></a>
-                <?php endif; ?>
-                <?php do_action('graphene_feed_icon'); ?>
-            </div>
-            
+                <?php do_action('graphene_before_feed_icon'); ?>
+				<div id="profiles" class="clearfix gutter-left">
+                    <?php do_action('graphene_social_profiles'); ?>
+                </div>
             <?php
             /**
              * Retrieves our custom search form.
@@ -174,12 +167,12 @@ global $graphene_settings;
         <?php
         
             /* Sidebar2 on the left side? */
-            if ( in_array( graphene_column_mode(), array( 'three-col-right', 'three-col-center', 'two-col-right' ) ) ){
+            if ( in_array( graphene_column_mode(), array( 'three_col_right', 'three_col_center', 'two_col_right' ) ) ){
                 get_sidebar( 'two' );
             }
 			
 			/* Sidebar1 on the left side? */            
-            if ( in_array( graphene_column_mode(), array( 'three-col-right' ) ) ){
+            if ( in_array( graphene_column_mode(), array( 'three_col_right' ) ) ){
                 get_sidebar();                
             }
         

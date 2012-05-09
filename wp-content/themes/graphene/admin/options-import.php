@@ -1,7 +1,7 @@
 <?php 
 function graphene_export_options(){
     
-    global $graphene_settings;
+    global $graphene_settings, $graphene_defaults;
     
     ob_clean();
 	
@@ -18,8 +18,17 @@ function graphene_export_options(){
 	if ( $authorised) {
     
 		$name = 'graphene_options.txt';
-		$data = json_encode( $graphene_settings);
-		$size = strlen( $data);
+		
+		$data = $graphene_settings;
+		/* Only export options that have different values than the default values - disabled for now
+		foreach ( $data as $key => $value ){
+			if ( $graphene_defaults[$key] === $value || $value === '' ) {
+				unset( $data[$key] );
+			}
+		}
+		*/
+		$data = json_encode( $data );
+		$size = strlen( $data );
 	
 		header( 'Content-Type: text/plain' );
 		header( 'Content-Disposition: attachment; filename="'.$name.'"' );
@@ -135,7 +144,7 @@ function graphene_import_file() {
 				if ($data !== FALSE){
 					$settings = json_decode($data, true);
 					// try to read the settings array
-					if (isset($settings['slider_disable'])){
+					if (isset($settings['db_version'])){
 						$settings = array_merge($graphene_settings, $settings);
 						update_option('graphene_settings', $settings);
 						echo '<p>'. __('Options import completed', 'graphene').'<br />';

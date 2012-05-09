@@ -19,11 +19,14 @@
 
         <div id="content-blog" class="grid col-620">
 <?php
-    $limit = get_option('posts_per_page');
-    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-    query_posts('showposts=' . $limit . '&paged=' . $paged);
-    $wp_query->is_archive = true; $wp_query->is_home = false;
-    ?> 
+    if ( get_query_var('paged') )
+	    $paged = get_query_var('paged');
+	elseif ( get_query_var('page') ) 
+	    $paged = get_query_var('page');
+	else 
+		$paged = 1;
+		query_posts("post_type=post&paged=$paged"); 
+?> 
      
 <?php if (have_posts()) : ?>
 

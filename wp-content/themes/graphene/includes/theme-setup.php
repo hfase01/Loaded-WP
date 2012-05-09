@@ -6,18 +6,10 @@ if ( ! function_exists( 'graphene_db_init' ) ) :
 	function graphene_db_init(){
 		global $graphene_settings, $graphene_defaults;
 		
-		/* Run DB updater if $graphene_settings does not exist in db */
-		if ( get_option( 'graphene_ga_code' ) === '' ){
-			
-			// Updates the database for much older version, when Settings API was not yet implemented
-			include( get_template_directory() . '/admin/db-updater.php' );
-			graphene_update_db();
-			$graphene_settings = array_merge( $graphene_defaults, get_option( 'graphene_settings', array() ) );
-		
-		} 
-		
-		/* Delete DB Version from the database. This value is now included in the $graphene_defaults array */
-		delete_option( 'graphene_dbversion' );
+		/* Run DB updater if needed */
+                include( get_template_directory() . '/admin/db-updater.php' );
+                graphene_update_db();
+                $graphene_settings = array_merge( $graphene_defaults, get_option( 'graphene_settings', array() ) );        
 	}
 endif;
 add_action( 'init', 'graphene_db_init' );
@@ -36,10 +28,10 @@ function graphene_get_content_width(){
 	$column_mode = graphene_column_mode();
 	$diff = 0;
 	
-	if ( strpos( $column_mode, 'two-col' ) === 0 )
-		$diff = $graphene_settings['column_width']['two-col']['content'] - graphene_grid_width( '', 11 );
-	if ( strpos( $column_mode, 'three-col' ) === 0 )
-		$diff = $graphene_settings['column_width']['three-col']['content'] - graphene_grid_width( '', 8 );
+	if ( strpos( $column_mode, 'two_col' ) === 0 )
+		$diff = $graphene_settings['column_width']['two_col']['content'] - graphene_grid_width( '', 11 );
+	if ( strpos( $column_mode, 'three_col' ) === 0 )
+		$diff = $graphene_settings['column_width']['three_col']['content'] - graphene_grid_width( '', 8 );
 
 	return graphene_grid_width( -($gutter * 2) + $diff, 16, 11, 8 );
 }
@@ -64,10 +56,10 @@ function graphene_setup() {
 		$frontpage_id = ( get_option( 'show_on_front' ) == 'posts' ) ? NULL : get_option( 'page_on_front' );
 		$column_mode = graphene_column_mode( $frontpage_id );
 		
-		if ( strpos( $column_mode, 'two-col' ) === 0 )
-			$column_mode = 'two-col';
-		elseif ( strpos( $column_mode, 'three-col' ) === 0 )
-			$column_mode = 'three-col';
+		if ( strpos( $column_mode, 'two_col' ) === 0 )
+			$column_mode = 'two_col';
+		elseif ( strpos( $column_mode, 'three_col' ) === 0 )
+			$column_mode = 'three_col';
 		else 
 			$column_mode = NULL;
 			
@@ -97,7 +89,7 @@ function graphene_setup() {
 	add_theme_support( 'post-thumbnails' );
 	
 	// Add supported post formats
-	add_theme_support( 'post-formats', array( 'status', 'audio', 'image', 'video' ) );
+	add_theme_support( 'post-formats', array( 'status', 'link', 'audio', 'image', 'video' ) );
 
 	// Make theme available for translation
 	load_theme_textdomain( 'graphene', get_template_directory() . '/languages' );
@@ -112,18 +104,31 @@ function graphene_setup() {
 	// Add support for custom background
 	add_custom_background();
 
-	// Add support for custom header
-	define( 'HEADER_TEXTCOLOR', apply_filters( 'graphene_header_textcolor', '000000' ) );
-	// The %s is a placeholder for the theme template directory URI.
-	define( 'HEADER_IMAGE', apply_filters( 'graphene_header_image', '%s/images/headers/flow.jpg' ) );
-	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'graphene_header_image_width', graphene_grid_width( $graphene_settings['gutter_width'] * 2, 16 ) ) );
-	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'graphene_header_image_height', 198 ) );
-	define( 'NO_HEADER_TEXT', apply_filters( 'graphene_header_text', false ) );
-	set_post_thumbnail_size( HEADER_IMAGE_WIDTH, HEADER_IMAGE_HEIGHT, true );
+	/* Add support for custom header */
+	$args = array(
+		'width'               => apply_filters( 'graphene_header_image_width', graphene_grid_width( $graphene_settings['gutter_width'] * 2, 16 ) ),
+		'height'              => apply_filters( 'graphene_header_image_height', $graphene_settings['header_img_height'] ),
+		'default-image'       => apply_filters( 'graphene_header_image', '%s/images/headers/flow.jpg' ),
+		'header-text'		  => apply_filters( 'graphene_header_text', true ),
+		'default-text-color'  => apply_filters( 'graphene_header_textcolor', '000000' ),
+		'wp-head-callback'    => '',
+		'admin-head-callback' => 'graphene_admin_header_style',
+	);
 
-	// Add a way for the custom header to be styled in the admin panel that controls
-	// custom headers. See graphene_admin_header_style(), below.
-	add_custom_image_header( '', 'graphene_admin_header_style' );
+	$args = apply_filters( 'p2_custom_header_args', $args );
+
+	if ( function_exists( 'get_custom_header' ) ) {
+		add_theme_support( 'custom-header', $args );
+	} else {
+		// Compat: Versions of WordPress prior to 3.4.
+		define( 'HEADER_TEXTCOLOR',    $args['default-text-color'] );
+		define( 'HEADER_IMAGE',        $args['default-image'] );
+		define( 'HEADER_IMAGE_WIDTH',  $args['width'] );
+		define( 'HEADER_IMAGE_HEIGHT', $args['height'] );
+		define( 'NO_HEADER_TEXT', ! $args['header-text'] );
+		add_custom_image_header( $args['wp-head-callback'], $args['admin-head-callback'] );
+	}
+	set_post_thumbnail_size( $args['width'], $args['height'], true );
 
 	// Register default custom headers packaged with the theme. %s is a placeholder for the theme template directory URI.
 	register_default_headers( graphene_get_default_headers() );
@@ -175,28 +180,39 @@ if ( ! function_exists( 'graphene_admin_header_style' ) ) :
 /**
  * Styles the header image displayed on the Appearance > Header admin panel.
 */
-function graphene_admin_header_style(){ ?>
+function graphene_admin_header_style(){ 
+	global $graphene_settings;
+	?>
 	<style type="text/css">
 	.appearance_page_custom-header #headimg {
 		min-height: 0;
 	}
-    #headimg #name{
+    #headimg h1 {
 		position: relative;
-		top: 65px;
-		left: 38px;
-		width: 852px;
+		top: 110px;
+		left: <?php echo graphene_grid_width( '', 1 ) + $graphene_settings['gutter_width'] * 2; ?>px;
+		width: <?php echo (graphene_grid_width( -5, 13 ) + $graphene_settings['gutter_width'] * 13); ?>px;
+		margin: 0 <?php echo $graphene_settings['gutter_width']; ?>px;
 		font: bold 28px "Trebuchet MS";
 		text-decoration: none;
     }
-    #headimg #desc{
+	#headimg h1 a {
+		text-decoration: none;
+	}
+    #headimg #desc {
         color: #000;
         border-bottom: none;
         position: relative;
-        top: 50px;
-        width: 852px;
-        left: 38px;
+        top: 110px;
+        width: <?php echo graphene_grid_width( -5, 13 ) + $graphene_settings['gutter_width'] * 13; ?>px;
+		margin: 0 <?php echo $graphene_settings['gutter_width']; ?>px;
+        left: <?php echo graphene_grid_width( '', 1 ) + $graphene_settings['gutter_width'] * 2; ?>px;
         font: 18px arial;
     }
+	#headimg {
+		background-position: center top;
+		background-repeat: no-repeat;
+	}
     </style>
     
 	<?php

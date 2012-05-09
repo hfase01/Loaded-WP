@@ -3,7 +3,7 @@
  * Add admin feature pointers
 */
 function graphene_feature_pointers() {
-	if ( ! strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options' ) ) return;
+	if ( ! strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options' ) ) return;
 	
     $pointer_content = '<h3>' . esc_js( __( 'Where are all the options?!', 'graphene' ) ) . '</h3>';
     $pointer_content .= '<p>' . esc_js( __( "We've decided to clean things up!", 'graphene' ) ) . '</p>';

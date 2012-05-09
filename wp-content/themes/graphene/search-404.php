@@ -15,10 +15,10 @@
         <div class="entry-content clearfix">
         <p>
         <?php /* translators: %s is the search term */ ?>
-        <?php printf( __( "I've done a courtesy search for the term %s for you. See if you can find what you're looking for in the list below:", 'graphene' ), '<code>' . get_search_query() . '</code>' ); ?>
+        <?php printf( __( "I've done a courtesy search for the term %s for you. See if you can find what you're looking for in the list below.", 'graphene' ), '<code>' . get_search_query() . '</code>' ); ?>
         </p>
         <?php if ( have_posts() ) : ?>    
-            <ul style="margin-left:20px;padding-left:0;">
+            <ul class="search-404-results">
             <?php while ( have_posts() ) : the_post(); ?>
                 <li class="clearfix">
                     <h3><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf( esc_attr__( 'Permalink Link to %s', 'graphene' ), the_title_attribute( 'echo=0' ) ); ?>"><?php the_title(); ?></a></h3>

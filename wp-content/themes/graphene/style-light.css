@@ -28,7 +28,7 @@
 #header-menu > li:hover,
 #header-menu > li.current-menu-item,
 #header-menu > li.current-menu-ancestor {
-	background: url(images/sprite_h.png) left -3px repeat-x #eee;
+	background: url(images/sprite_h.png) left -4px repeat-x #eee;
 }
 #header-menu > li:hover > a,
 #header-menu > li.current-menu-item > a,

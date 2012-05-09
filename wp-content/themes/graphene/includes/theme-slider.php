@@ -81,10 +81,19 @@ function graphene_slider(){
 	
 	do_action( 'graphene_before_slider' ); ?>
     <?php 
-		$class = ( $graphene_settings['slider_display_style'] == 'bgimage-excerpt' ) ? ' full-sized' : '';
-		$class .= ' ' . $graphene_settings['slider_animation'];
+		/* Generate classes for the slider wrapper */
+		$class = array( 'featured_slider', 'clearfix' );
+		$class[] = $graphene_settings['slider_display_style'];
+		$class[] = $graphene_settings['slider_animation'];
+		
+		/* For backward compatibility */
+		if ( $graphene_settings['slider_display_style'] == 'bgimage-excerpt' )
+			$class[] = 'full-sized';
+			
+		$class = apply_filters( 'graphene_slider_class', $class );
+		$class = implode( ' ', $class );
 	?>
-    <div class="featured_slider<?php echo $class; ?> clearfix">
+    <div class="<?php echo $class; ?>">
 	    <?php do_action( 'graphene_before_slider_root' ); ?>
         <div id="slider_root" class="clearfix">
        		<?php do_action( 'graphene_before_slideritems' ); ?>
@@ -108,13 +117,16 @@ function graphene_slider(){
 					$style .= ' );"';
 				}
 			}
+                        
+            $slider_link_url = get_post_meta( get_the_ID(), '_graphene_slider_url', true) == '' ? get_permalink() : get_post_meta( get_the_ID(), '_graphene_slider_url', true);
+                        
 			?>
             
             <div <?php graphene_grid( 'slider_post clearfix', 16, 11, 8, true, true ); ?> id="slider-post-<?php the_ID(); ?>" <?php echo $style; ?>>
                 <?php do_action( 'graphene_before_sliderpost' ); ?>
                 
                 <?php if ( $graphene_settings['slider_display_style'] == 'bgimage-excerpt' ) : ?>
-                	<a href="<?php the_permalink(); ?>" class="permalink-overlay"><span><?php _e( 'View full post', 'graphene' ); ?></span></a>
+                	<a href="<?php echo $slider_link_url; ?>" class="permalink-overlay"><span><?php _e( 'View full post', 'graphene' ); ?></span></a>
                 <?php endif; ?>
                 
                 <?php if ( $graphene_settings['slider_display_style'] == 'thumbnail-excerpt' ) : ?>
@@ -125,7 +137,7 @@ function graphene_slider(){
 					if ( $image ) :
 					?>
                     <div class="sliderpost_featured_image">
-                        <a href="<?php the_permalink(); ?>"><?php echo $image;	?></a>
+                        <a href="<?php echo $slider_link_url; ?>"><?php echo $image;	?></a>
                     </div>
                     <?php endif; endif; ?>
                 <?php endif; ?>
@@ -133,7 +145,7 @@ function graphene_slider(){
                 <div class="slider-entry-wrap clearfix">
                 	<div class="slider-content-wrap">
 						<?php /* The slider post's title */ ?>
-                        <h2 class="slider_post_title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                        <h2 class="slider_post_title"><a href="<?php echo $slider_link_url; ?>"><?php the_title(); ?></a></h2>
                         
                         <?php /* The slider post's excerpt */ ?>
                         <div class="slider_post_entry clearfix">
@@ -142,7 +154,7 @@ function graphene_slider(){
 								the_excerpt(); 
 							?>
                             <?php if ( $graphene_settings['slider_display_style'] == 'thumbnail-excerpt' ) : ?>
-                            	<a class="block-button" href="<?php the_permalink(); ?>"><?php _e( 'View full post', 'graphene' ); ?></a>
+                            	<a class="block-button" href="<?php echo $slider_link_url; ?>"><?php _e( 'View full post', 'graphene' ); ?></a>
                             <?php endif; ?>
                             <?php } else { the_content(); }?>
                             
@@ -307,8 +319,11 @@ function graphene_get_slider_posts(){
 		$post_ids = preg_split("/[\s]*[,][\s]*/", $post_ids, -1, PREG_SPLIT_NO_EMPTY); // post_ids are comma seperated, the query needs a array                        
 		$args = array_merge( $args, array( 'post__in' => $post_ids, 'posts_per_page' => -1, 'orderby' => 'post__in' ) );
 	}
-		if ( $slidertype && $slidertype == 'categories' && is_array( $graphene_settings['slider_specific_categories'] ) ) {                        
+	if ( $slidertype && $slidertype == 'categories' && is_array( $graphene_settings['slider_specific_categories'] ) ) {                        
 		$args = array_merge( $args, array( 'category__in' => $graphene_settings['slider_specific_categories'] ) );
+		
+		if ( $graphene_settings['slider_random_category_posts'] )
+			$args = array_merge( $args, array( 'orderby' => 'rand' ) );
 	}
 	
 	/* Get the posts */
@@ -317,4 +332,24 @@ function graphene_get_slider_posts(){
 }
 
 endif;
+
+
+/**
+ * Exclude posts that belong to the categories displayed in slider from the posts listing
+ */
+function graphene_exclude_slider_categories( $request ){
+	global $graphene_settings, $graphene_defaults;
+	
+	if ( $graphene_settings['slider_exclude_categories'] != $graphene_defaults['slider_exclude_categories'] ){
+		$dummy_query = new WP_Query();
+    	$dummy_query->parse_query( $request );
+		
+		if ( ( $graphene_settings['slider_exclude_categories'] == 'everywhere' ) || 
+				$graphene_settings['slider_exclude_categories'] == 'homepage' && $dummy_query->is_home() )
+			$request['category__not_in'] = $graphene_settings['slider_specific_categories'];
+	}
+	
+	return $request;
+}
+add_filter( 'request', 'graphene_exclude_slider_categories' );
 ?>

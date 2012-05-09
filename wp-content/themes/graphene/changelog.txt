@@ -1,8 +1,43 @@
-GRAPHENE WORDPRESS THEME CHANGELOG
+﻿GRAPHENE WORDPRESS THEME CHANGELOG
 by Syahir Hakim
 http://www.khairul-syahir.com
 
 CHANGELOG
+
+Version 1.7
+	* Added the ability to reorder the social media icons in the top bar via drag and drop.
+	* Added option to specify custom URL for the RSS feed button
+	* Added option to specify the colour of post title
+	* Added option to modify the header image height
+	* Added option to exclude posts that belong to categories being displayed in slider from posts listing
+	* Added the "Link" post format
+	* Added the en_US translation file for English (American). Note that this is the default language for a vanilla WordPress install. Change WP_LANG to en_GB to use English (UK).
+	* Added permalink to comments
+	* Added comment count and link in post formats
+	* Added manual excerpt display to video post format. Manual excerpt on video post format will be displayed as the video's caption on the side.
+	* Added option to show random posts from selected categories in the slider
+	* Added option to show social sharing buttons on home and archive pages
+	* Added CSS3 gradient to IE 9 by using DXImage filter
+	* Added colour presets to the Colours Options
+	* Added colour options validation to make sure all colours start with a hash (#) character
+	* Added colour options for comments area and box shadows for widgets and block buttons
+	* Added Greek (el) translation by Nikos Karadimas
+	* Added Kurdish Sorani (ckb) translation, by Hamid Qamishi
+	* Added Romanian (ro_RO) translation, by Alexander Ovsov
+	* Improved 404 Not Found automated search, which can now obtain proper search terms from URLs with dashes and trailing slash
+	* Updated custom header image setup to accommodate changes in the upcoming WordPress 3.4
+	* Updated the PIE.htc file to the latest version (1.0b5)
+	* Refactored options pages scripts so that the .js can now be minified, combined, and cached
+	* Replaced the default sidebar widgets with a notice if there is no widgets in the sidebar
+	* Fixed the background of message blocks extending behind floated elements
+	* Fixed the position of the "View full post" button in slider
+	* Fixed the author bio text going behind the author image when using custom author image with dimensions bigger than the Gravatar size
+	* Fixed issue where users with 'edit_theme_options' capability could not save theme options
+	* Fixed a conflict with the Magic Members plugin
+	* Moved wp_pagenavi output outside the theme's wrapper for posts navigation
+	* Moved the post navigation into a function and switched from using id attribute to using class.
+	* Switched licence from GPL version 2 to GPL version 3
+	* Renamed Arabic translation files from "ar_AR" to "ar" to be in line with the official Arabic version of WordPress
 
 Version 1.6.2
 	* Fixed XSS vulnerability (thanks to Kenneth D for the notification)

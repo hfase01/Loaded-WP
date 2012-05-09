@@ -17,23 +17,30 @@ function graphene_admin_scripts() {
 	
     wp_enqueue_script( 'media-upload' );
     wp_enqueue_script( 'thickbox' );
-	// wp_enqueue_script( 'wp-pointer' );
+    // wp_enqueue_script( 'wp-pointer' );
 	
-	// Load the scripts for the Display options tab
-	if ( strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
+    if ( strpos( $_SERVER['REQUEST_URI'], 'page=graphene_options' ) ) {
+        
+        wp_enqueue_script( 'graphene-admin', get_template_directory_uri() . '/admin/js/admin.js', array('jquery'), false, true );
+        
+        if ( strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
 		wp_enqueue_script( 'farbtastic' );
 		wp_enqueue_script( 'jquery-ui-slider' );
-	}
+	} else {
+            wp_enqueue_script( 'jquery-ui-sortable' );     
+        }
+        
+    }    	
 }
 function graphene_admin_styles() {
     wp_enqueue_style( 'thickbox' );
-	// wp_enqueue_style( 'wp-pointer' );
-	
-	// Load the styles for the Display options tab
-	if ( strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
-		wp_enqueue_style( 'farbtastic' );
-		wp_enqueue_style( 'jquery-ui-slider' );
-	}
+    // wp_enqueue_style( 'wp-pointer' );
+
+    // Load the styles for the Display options tab
+    if ( strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
+            wp_enqueue_style( 'farbtastic' );
+            wp_enqueue_style( 'jquery-ui-slider' );
+    }
 }
 add_action('admin_print_scripts-appearance_page_graphene_options', 'graphene_admin_scripts');
 add_action('admin_print_styles-appearance_page_graphene_options', 'graphene_admin_styles');

@@ -18,19 +18,14 @@
         <?php responsive_widgets(); // above widgets hook ?>
             
             <?php if (!dynamic_sidebar('left-sidebar-half')) : ?>
+            <div class="widget-wrapper">
             
                 <div class="widget-title"><?php _e('In Archive', 'responsive'); ?></div>
 					<ul>
 						<?php wp_get_archives( array( 'type' => 'monthly' ) ); ?>
 					</ul>
 
-                <div class="widget-title"><?php _e('My Account', 'responsive'); ?></div>
-					<ul>
-						<?php wp_register(); ?>
-						<li><?php wp_loginout(); ?></li>
-						<?php wp_meta(); ?>
-					</ul>
-
+            </div><!-- end of .widget-wrapper -->
             <?php endif; //end of left-sidebar-half ?>
 
         <?php responsive_widgets_end(); // after widgets hook ?>

@@ -114,17 +114,17 @@ function graphene_column_mode( $post_id = NULL ){
     // Check the front-end template
 	if ( ! is_admin() && ! $post_id){
 		if ( is_page_template( 'template-onecolumn.php' ) )
-			return 'one-column';
+			return 'one_column';
 		elseif ( is_page_template( 'template-twocolumnsleft.php' ) )
-			return 'two-col-left';
+			return 'two_col_left';
 		elseif ( is_page_template( 'template-twocolumnsright.php' ) )
-			return 'two-col-right';
+			return 'two_col_right';
 		elseif ( is_page_template( 'template-threecolumnsleft.php' ) )
-			return 'three-col-left';
+			return 'three_col_left';
 		elseif ( is_page_template( 'template-threecolumnsright.php' ) )
-			return 'three-col-right';
+			return 'three_col_right';
 		elseif ( is_page_template( 'template-threecolumnscenter.php' ) )
-			return 'three-col-center';
+			return 'three_col_center';
 	}
 		
 	/* Check the template in Edit Page screen in admin */
@@ -138,11 +138,11 @@ function graphene_column_mode( $post_id = NULL ){
 		
 		if ( $page_template != 'default' ){
 			if ( strpos( $page_template, 'template-onecolumn' ) === 0 )
-				return 'one-column';
+				return 'one_column';
 			elseif ( strpos( $page_template, 'template-twocolumns' ) === 0 )
-				return 'two-col';
+				return 'two_col';
 			elseif ( strpos( $page_template, 'template-threecolumns' ) === 0 )
-				return 'three-col';
+				return 'three_col';
 		}
 	}
     

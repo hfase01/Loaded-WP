@@ -37,9 +37,9 @@ function graphene_body_class( $classes ){
     $column_mode = graphene_column_mode();
     $classes[] = $column_mode;
     // for easier CSS
-    if ( strpos( $column_mode, 'two-col' ) === 0 ){
+    if ( strpos( $column_mode, 'two_col' ) === 0 ){
         $classes[] = 'two-columns';
-    } else if ( strpos( $column_mode, 'three-col' ) === 0 ){
+    } else if ( strpos( $column_mode, 'three_col' ) === 0 ){
         $classes[] = 'three-columns';
     }
     
@@ -66,23 +66,27 @@ add_filter( 'post_class', 'graphene_sticky_post_class' );
  * Add Facebook and Twitter icon to top bar
 */
 function graphene_top_bar_social(){
-	global $graphene_settings;
+    global $graphene_settings;
+
+    /* Loop through the registered custom social modia */
+    $social_profiles = $graphene_settings['social_profiles'];
+	if ( in_array( false, $social_profiles) ) return;
 	
-	if ( $graphene_settings['twitter_url']) : ?>
-    	<a href="<?php echo $graphene_settings['twitter_url']; ?>" title="<?php printf(esc_attr__( 'Follow %s on Twitter', 'graphene' ), get_bloginfo( 'name' ) ); ?>" class="twitter_link" <?php if ( $graphene_settings['social_media_new_window'] ) { echo 'target="_blank"'; } ?>><span><?php printf(esc_attr__( 'Follow %s on Twitter', 'graphene' ), get_bloginfo( 'name' ) ); ?></span></a>
-    <?php endif; 
-	if ( $graphene_settings['facebook_url']) : ?>
-    	<a href="<?php echo $graphene_settings['facebook_url']; ?>" title="<?php printf(esc_attr__("Visit %s's Facebook page", 'graphene' ), get_bloginfo( 'name' ) ); ?>" class="facebook_link" <?php if ( $graphene_settings['social_media_new_window'] ) { echo 'target="_blank"'; } ?>><span><?php printf(esc_attr__("Visit %s's Facebook page", 'graphene' ), get_bloginfo( 'name' ) ); ?></span></a>
+    foreach ( $social_profiles as $social_key => $social_profile ) : 
+        if ( ! empty( $social_profile['url'] ) || $social_profile['type'] == 'rss' ) : 
+            $title = graphene_determine_social_medium_title( $social_profile );
+            $class = 'mysocial social-' . $social_profile['type'];
+            $extra = $graphene_settings['social_media_new_window'] ?  ' target="_blank"' : '';
+            $url = ( $social_profile['type'] == 'rss' && empty( $social_profile['url'] ) ) ? get_bloginfo('rss2_url') : $social_profile['url'];
+            if ( $social_profile['type'] == 'custom' ) {
+                $extra .= ' style="background-image:url(' . $social_profile['icon_url']. ')"';
+                $class = 'mysocial-icon';
+            } ?>
+            <a href="<?php echo $url; ?>" title="<?php echo $title; ?>" class="<?php echo $class; ?>"<?php echo $extra; ?>><span><?php echo $title; ?></span></a>                
     <?php endif;
-	
-	/* Loop through the registered custom social modia */
-	$social_media = $graphene_settings['social_media'];
-	foreach ( $social_media as $slug => $social_medium ) : if ( ! empty( $slug ) && ! empty( $social_medium['url'] ) ) : ?>
-    	<?php /* translators: %1$s is the website's name, %2$s is the social media name */ ?>                
-		<a href="<?php echo $social_medium['url']; ?>" title="<?php echo graphene_determine_social_medium_title($social_medium); ?>" class="<?php echo $slug?>-link" style="background-image:url(<?php echo $social_medium['icon']; ?>)" <?php if ( $graphene_settings['social_media_new_window'] ) { echo 'target="_blank"'; } ?>><span><?php echo graphene_determine_social_medium_title($social_medium); ?></span></a>
-    <?php endif; endforeach;
+    endforeach;
 }
-add_action( 'graphene_feed_icon', 'graphene_top_bar_social' );
+add_action( 'graphene_social_profiles', 'graphene_top_bar_social' );
 
 /**
  * Determine the title for the social medium.
@@ -91,10 +95,11 @@ add_action( 'graphene_feed_icon', 'graphene_top_bar_social' );
  */
 function graphene_determine_social_medium_title( $social_medium ) {
     if ( isset( $social_medium['title'] ) && ! empty( $social_medium['title']) ) {
-        return $social_medium['title'];
+        return esc_attr__( $social_medium['title'] );
     }
     else {
-        return sprintf( esc_attr__( 'Visit %1$s\'s %2$s page', 'graphene' ), get_bloginfo( 'name' ), $social_medium['name'] );
+        /* translators: %1$s is the website's name, %2$s is the social media name */
+        return sprintf( esc_attr__( 'Visit %1$s\'s %2$s page', 'graphene' ), get_bloginfo( 'name' ), ucfirst( $social_profile['type'] ) );
     }
 }
 
@@ -122,11 +127,11 @@ function graphene_grid_width( $mod = '', $grid_one = 1, $grid_two = '', $grid_th
 	
 	$width = $grid_width;
 	
-	if ( strpos( $column_mode, 'one-col' ) === 0 )
+	if ( strpos( $column_mode, 'one_col' ) === 0 )
 		$width = $grid_width * $grid_one + $gutter_width * ($grid_one - 1);
-	if ( strpos( $column_mode, 'two-col' ) === 0 )
+	if ( strpos( $column_mode, 'two_col' ) === 0 )
 		$width = $grid_width * $grid_two + $gutter_width * ($grid_two - 1);
-	if ( strpos( $column_mode, 'three-col' ) === 0 )
+	if ( strpos( $column_mode, 'three_col' ) === 0 )
 		$width = $grid_width * $grid_three + $gutter_width * ($grid_three - 1);
 		
 	if ( $mod )
@@ -165,11 +170,11 @@ function graphene_get_grid( $classes = '', $grid_one = 1, $grid_two = '', $grid_
 	if ( $classes )
 		$grid = array_merge( $grid, explode( ' ', trim( $classes ) ) );
 	
-	if ( strpos( $column_mode, 'one-col' ) === 0 )
+	if ( strpos( $column_mode, 'one_col' ) === 0 )
 		$grid[] = 'grid_' . $grid_one;
-	if ( strpos( $column_mode, 'two-col' ) === 0 )
+	if ( strpos( $column_mode, 'two_col' ) === 0 )
 		$grid[] = 'grid_' . $grid_two;
-	if ( strpos( $column_mode, 'three-col' ) === 0 )
+	if ( strpos( $column_mode, 'three_col' ) === 0 )
 		$grid[] = 'grid_' . $grid_three;
 	
 	if ( $alpha ){
@@ -237,4 +242,28 @@ function graphene_get_avatar_uri( $id_or_email, $size = '96', $default = '', $al
 	return apply_filters( 'graphene_get_avatar_url', $src, $id_or_email, $size, $default, $alt );
 }
 endif;
+
+
+function graphene_feed_link($output, $feed) {
+    global $graphene_settings;
+    
+    if ( ( $feed == 'rss2' || $feed == 'rss' ) 
+            && $graphene_settings['use_custom_rss_feed'] && ! empty( $graphene_settings['custom_rss_feed_url'] ) ) {
+        $output = $graphene_settings['custom_rss_feed_url'];    
+    }
+    return $output;
+}
+add_filter( 'feed_link', 'graphene_feed_link', 1, 2 );
+
+
+/**
+ * Displays a notice to logged in users if there is no widgets placed in the displayed sidebars
+ */
+function graphene_sidebar_notice( $sidebar_name = '' ){
+	$html = '[warning]<p>';
+	$html .= sprintf( __( 'You haven\'t placed any widget into this widget area. Go to %1$s and place some widgets in the widget area called %2$s.', 'graphene' ), '<em>' . __( 'WP Admin > Appearance > Widgets', 'graphene' ) . '</em>', '<strong>' . $sidebar_name . '</strong>' ) . '</p>';
+	$html .= '<p>' . __( "This notice will not be displayed to your site's visitors.", 'graphene' ) . '</p>';
+	$html .= '[/warning]';
+	echo do_shortcode( apply_filters( 'graphene_sidebar_notice', $html, $sidebar_name ) );
+}
 ?>

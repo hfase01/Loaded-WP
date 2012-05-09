@@ -96,6 +96,11 @@ $style = '';
 	$font_style .= ( $graphene_settings['content_font_colour'] != $graphene_defaults['content_font_colour']) ? 'color:'.$graphene_settings['content_font_colour'].';' : '';
 	if ( $font_style ) { $style .= '.entry-content, .sidebar, .comment-entry { '.$font_style.' }'; }
 	
+	/* Title text colour */
+	$font_style = '';
+	$font_style .= ( $graphene_settings['title_font_colour'] != $graphene_defaults['title_font_colour']) ? 'color:'.$graphene_settings['title_font_colour'].';' : '';
+	if ( $font_style ) { $style .= '.post-title, .post-title a { '.$font_style.' }'; }
+	
     /* Adjust post title if author's avatar is shown */
 	if ( $graphene_settings['show_post_avatar']) {
 		$tmp_margin = !is_rtl() ? 'margin-right' : 'margin-left';
@@ -107,17 +112,22 @@ $style = '';
 		$style .= '.featured_slider #slider_root{height:'.$graphene_settings['slider_height'].'px;}';
 	}
 	
+	/* Header image height */
+	if ( $graphene_settings['header_img_height'] != $graphene_defaults['header_img_height'] ){
+		$style .= '#header{height:'. HEADER_IMAGE_HEIGHT .'px;}';
+	}
+	
 	/* Link header image */
-	if ( $graphene_settings['link_header_img'] && (HEADER_IMAGE_WIDTH != 900 || HEADER_IMAGE_HEIGHT != 198) ) {
+	if ( $graphene_settings['link_header_img'] && ( HEADER_IMAGE_WIDTH != 960 || HEADER_IMAGE_HEIGHT != $graphene_defaults['header_img_height'] ) ) {
 		$style .= '#header_img_link{width:'. HEADER_IMAGE_WIDTH .'px; height:'. HEADER_IMAGE_HEIGHT .'px;}';
 	}
 		
 	// Link style
-	if ( $graphene_settings['link_colour_normal'] != $graphene_defaults['link_colour_normal']) { $style.='a{color:'.$graphene_settings['link_colour_normal'].';}';}
-	if ( $graphene_settings['link_colour_visited'] != $graphene_defaults['link_colour_visited']) { $style.='a:visited{color:'.$graphene_settings['link_colour_visited'].';}';}
-	if ( $graphene_settings['link_colour_hover'] != $graphene_defaults['link_colour_hover']) { $style.='a:hover{color:'.$graphene_settings['link_colour_hover'].';}';}
-	if ( $graphene_settings['link_decoration_normal']) { $style.='a{text-decoration:'.$graphene_settings['link_decoration_normal'].';}';}
-	if ( $graphene_settings['link_decoration_hover']) { $style.='a:hover{text-decoration:'.$graphene_settings['link_decoration_hover'].';}';}
+	if ( $graphene_settings['link_colour_normal'] != $graphene_defaults['link_colour_normal']) { $style.='a,.post-title,.post-title a,#comments > h4.current a{color:'.$graphene_settings['link_colour_normal'].';}';}
+	if ( $graphene_settings['link_colour_visited'] != $graphene_defaults['link_colour_visited']) { $style.='a:visited,.post-title a:visited{color:'.$graphene_settings['link_colour_visited'].';}';}
+	if ( $graphene_settings['link_colour_hover'] != $graphene_defaults['link_colour_hover']) { $style.='a:hover,.post-title a:hover{color:'.$graphene_settings['link_colour_hover'].';}';}
+	if ( $graphene_settings['link_decoration_normal']) { $style.='a,.post-title a{text-decoration:'.$graphene_settings['link_decoration_normal'].';}';}
+	if ( $graphene_settings['link_decoration_hover']) { $style.='a:hover,.post-title a:hover{text-decoration:'.$graphene_settings['link_decoration_hover'].';}';}
 	
 	// Custom column width
 	$style .= graphene_get_custom_column_width();
@@ -137,12 +147,12 @@ function graphene_get_custom_colours(){
 	global $graphene_settings, $graphene_defaults;
     $style = '';
     
-	if ( ! is_admin() || strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
+	if ( ! is_admin() || strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
 
     	/* Customised colours */
 		
 		// Content area
-		if ( $graphene_settings['bg_content_wrapper'] != $graphene_defaults['bg_content_wrapper']) {$style .= '#content, .menu-bottom-shadow{background-color:'.$graphene_settings['bg_content_wrapper'].';}';}
+		if ( $graphene_settings['bg_content_wrapper'] != $graphene_defaults['bg_content_wrapper']) {$style .= '#content, .menu-bottom-shadow, #sidebar_bottom{background-color:'.$graphene_settings['bg_content_wrapper'].';}';}
 		if ( $graphene_settings['bg_content'] != $graphene_defaults['bg_content']) {$style .= '.post{background-color:'.$graphene_settings['bg_content'].';}';}
 		if ( $graphene_settings['bg_meta_border'] != $graphene_defaults['bg_meta_border']) {$style .= '.post-title, .post-title a, .post-title a:visited, .entry-footer{border-color:'.$graphene_settings['bg_meta_border'].';}';}
 		if ( $graphene_settings['bg_post_top_border'] != $graphene_defaults['bg_post_top_border']) {$style .= '.post{border-top-color:'.$graphene_settings['bg_post_top_border'].';}';}
@@ -151,6 +161,11 @@ function graphene_get_custom_colours(){
 		
 		// Widgets
 		if ( $graphene_settings['bg_widget_item'] != $graphene_defaults['bg_widget_item']) {$style .= '.sidebar div.sidebar-wrap{background-color:'.$graphene_settings['bg_widget_item'].';}';}
+		if ( $graphene_settings['bg_widget_box_shadow'] != $graphene_defaults['bg_widget_box_shadow']) {$style .= '.sidebar div.sidebar-wrap{
+				-moz-box-shadow: 0 0 5px '.$graphene_settings['bg_widget_box_shadow'].';
+				-webkit-box-shadow: 0 0 5px '.$graphene_settings['bg_widget_box_shadow'].';
+				box-shadow: 0 0 5px '.$graphene_settings['bg_widget_box_shadow'].';
+		}';}
 		if ( $graphene_settings['bg_widget_list'] != $graphene_defaults['bg_widget_list']) {$style .= '.sidebar ul li{border-color:'.$graphene_settings['bg_widget_list'].';}';}
 		if ( $graphene_settings['bg_widget_header_border'] != $graphene_defaults['bg_widget_header_border']) {$style .= '.sidebar h3{border-color:'.$graphene_settings['bg_widget_header_border'].';}';}
 		if ( $graphene_settings['bg_widget_title'] != $graphene_defaults['bg_widget_title']) {$style .= '.sidebar h3, .sidebar h3 a, .sidebar h3 a:visited{color:'.$graphene_settings['bg_widget_title'].';}';}
@@ -161,19 +176,23 @@ function graphene_get_custom_colours(){
 				background: ' . $grad_top . ';
 				background: -moz-linear-gradient( ' . $grad_top . ', ' . $grad_bottom . ' );
 				background: -webkit-linear-gradient(top, ' . $grad_top . ', ' . $grad_bottom . ' );
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr=\'' . $grad_top . '\', EndColorStr=\'' . $grad_bottom . '\')";
 				background: linear-gradient( ' . $grad_top . ', ' . $grad_bottom . ' );
 		}';}
 		
 		// Slider
-		$grad_top = $graphene_settings['bg_slider_top'];
-		$grad_bottom = $graphene_settings['bg_slider_bottom'];
-		if ( $grad_bottom != $graphene_defaults['bg_slider_bottom'] || $grad_top != $graphene_defaults['bg_slider_top']) {$style .= '.featured_slider {
-				-pie-background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
-				background: ' . $grad_top . ';
-				background: -moz-linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
-				background: -webkit-linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
-				background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
-		}';}
+		if ( $graphene_settings['slider_display_style'] != 'bgimage-excerpt' ) {
+			$grad_top = $graphene_settings['bg_slider_top'];
+			$grad_bottom = $graphene_settings['bg_slider_bottom'];
+			if ( $grad_bottom != $graphene_defaults['bg_slider_bottom'] || $grad_top != $graphene_defaults['bg_slider_top']) {$style .= '.featured_slider {
+					-pie-background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
+					background: ' . $grad_top . ';
+					background: -moz-linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
+					background: -webkit-linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
+					-ms-filter: "progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorStr=\'' . $grad_top . '\', EndColorStr=\'' . $grad_bottom . '\')";
+					background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
+			}';}
+		}
 		
 		// Block button
 		$grad_top = $graphene_settings['bg_button'];
@@ -181,24 +200,32 @@ function graphene_get_custom_colours(){
 		$grad_bottom_hover = graphene_hex_addition( $grad_top, -52);
 		$font_color = $graphene_settings['bg_button_label'];
 		$font_shadow = $graphene_settings['bg_button_label_textshadow'];
+		$box_shadow = $graphene_settings['bg_button_box_shadow'];
 		if ( $grad_top != $graphene_defaults['bg_button']) {
 			$style .= '.block-button, .block-button:visited, .Button, .button, #commentform #submit {
 							background: ' . $grad_top . ';
 							background: -moz-linear-gradient( ' . $grad_top . ', ' . $grad_bottom . ' );
 							background: -webkit-linear-gradient(top, ' . $grad_top . ', ' . $grad_bottom . ' );
+							-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr=\'' . $grad_top . '\', EndColorStr=\'' . $grad_bottom . '\')";
 							background: linear-gradient( ' . $grad_top . ', ' . $grad_bottom . ' );
 							border-color: ' . $grad_bottom . ';
 							text-shadow: 0 -1px 1px ' . $font_shadow . ';
 							color: ' . $font_color . ';
+							-moz-box-shadow: 0 0 5px ' . $box_shadow . ';
+							-webkit-box-shadow: 0 0 5px ' . $box_shadow . ';
+							box-shadow: 0 0 5px ' . $box_shadow . ';
 						}';
 			$style .= '.block-button:hover, .button:hover, #commentform #submit:hover {
 							background: ' . $grad_top . ';
 							background: -moz-linear-gradient( ' . $grad_top . ', ' . $grad_bottom_hover . ' );
 							background: -webkit-linear-gradient(top, ' . $grad_top . ', ' . $grad_bottom_hover . ' );
+							-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr=\'' . $grad_top . '\', EndColorStr=\'' . $grad_bottom_hover . '\')";
 							background: linear-gradient( ' . $grad_top . ', ' . $grad_bottom_hover . ' );
 							color: ' . $font_color . ';
 						}';
 		}
+		if ( is_admin() )
+			$style = str_replace( '.button', '.colour-preview .button', $style );
                 
         // Archive
 		$grad_left = $graphene_settings['bg_archive_left'];
@@ -208,15 +235,29 @@ function graphene_get_custom_colours(){
 				background: ' . $grad_top . ';
 				background: -moz-linear-gradient(left top, ' . $grad_left . ', ' . $grad_right . ' );
 				background: -webkit-linear-gradient(left top, ' . $grad_left . ', ' . $grad_right . ' );
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(gradientType=1, startColorStr=\'' . $grad_left . '\', EndColorStr=\'' . $grad_right . '\')";
 				background: linear-gradient(left top, ' . $grad_left . ', ' . $grad_right . ' );
 		}';}
         if ( $graphene_settings['bg_archive_label'] != $graphene_defaults['bg_archive_label']) {$style .= '.page-title{color:'.$graphene_settings['bg_archive_label'].';}';}
         if ( $graphene_settings['bg_archive_text'] != $graphene_defaults['bg_archive_text']) {$style .= '.page-title span{color:'.$graphene_settings['bg_archive_text'].';}';}
 		if ( $graphene_settings['bg_archive_textshadow'] != $graphene_defaults['bg_archive_textshadow']) {$style .= '.page-title{text-shadow: 0 -1px 0 '.$graphene_settings['bg_archive_textshadow'].';}';}
+		
+		// Comments area
+		if ( $graphene_settings['bg_comments'] != $graphene_defaults['bg_comments']) {$style .= '#comments ol li.comment, #comments ol li.pingback, #comments ol li.trackback{background-color:'.$graphene_settings['bg_comments'].';}';}
+		if ( $graphene_settings['comments_text_colour'] != $graphene_defaults['comments_text_colour']) {$style .= '#comments{color:'.$graphene_settings['comments_text_colour'].';}';}
+		if ( $graphene_settings['threaded_comments_border'] != $graphene_defaults['threaded_comments_border']) {
+			$style .= '#comments ol.children li.comment{border-color:'.$graphene_settings['threaded_comments_border'].';}';
+			$style .= '#comments ol.children li.bypostauthor, #comments li.bypostauthor.comment{border-color: '.$graphene_settings['bg_author_comments_border'].';}';
+		}
+		if ( $graphene_settings['bg_author_comments'] != $graphene_defaults['bg_author_comments']) {$style .= '#comments ol.children li.bypostauthor, #comments li.bypostauthor.comment{background-color:'.$graphene_settings['bg_author_comments'].';}';}
+		if ( $graphene_settings['bg_author_comments_border'] != $graphene_defaults['bg_author_comments_border']) {$style .= '#comments ol.children li.bypostauthor, #comments li.bypostauthor.comment{border-color: '.$graphene_settings['bg_author_comments_border'].';}';}
+		if ( $graphene_settings['author_comments_text_colour'] != $graphene_defaults['author_comments_text_colour']) {$style .= '#comments ol.children li.bypostauthor, #comments li.bypostauthor.comment{font-color:'.$graphene_settings['author_comments_text_colour'].';}';}
+		if ( $graphene_settings['bg_comment_form'] != $graphene_defaults['bg_comment_form']) {$style .= '#commentform{background-color:'.$graphene_settings['bg_comment_form'].';}';}
+		if ( $graphene_settings['comment_form_text'] != $graphene_defaults['comment_form_text']) {$style .= '#commentform{color:'.$graphene_settings['comment_form_text'].';}';}
 	}
 	
 	// Admin only
-	if ( is_admin() && strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
+	if ( is_admin() && strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options&tab=display' ) ) {
 		
 		// Widgets
 		if ( $graphene_settings['content_font_colour'] != $graphene_defaults['content_font_colour']) {$style .= '.graphene, .graphene li, .graphene p{color:'.$graphene_settings['content_font_colour'].';}';}
@@ -230,9 +271,10 @@ function graphene_get_custom_colours(){
 		if ( $grad_bottom != $graphene_defaults['bg_slider_bottom'] || $grad_top != $graphene_defaults['bg_slider_top']) {$style .= '#grad-box {
 				-pie-background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
 				background: ' . $grad_top . ';
-				background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
 				background: -moz-linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
 				background: -webkit-gradient(linear, left top, right bottom, from( ' . $grad_top . ' ), to( ' . $grad_bottom . ' ) );
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr=\'' . $grad_top . '\', EndColorStr=\'' . $grad_bottom . '\')";
+				background: linear-gradient(left top, ' . $grad_top . ', ' . $grad_bottom . ' );
                             }';
                 }
 	}
@@ -289,7 +331,7 @@ function graphene_get_custom_column_width(){
 	}
 	
 	/* Custom column width - one-column mode */
-	if ( strpos( $column_mode, 'one-col' ) === 0 && ( $container != $graphene_defaults['container_width'] ) ){
+	if ( strpos( $column_mode, 'one_col' ) === 0 && ( $container != $graphene_defaults['container_width'] ) ){
 		$content = $container - $gutter * 2;
 		
 		$style .= '.one-column .comment-form-author, .one-column .comment-form-email, .one-column .comment-form-url {width:' . ( ( $content - $gutter * 6 ) / 3 ). 'px}';
@@ -298,11 +340,11 @@ function graphene_get_custom_column_width(){
 	}
 	
 	/* Custom column width - two-column mode */
-	$content = $graphene_settings['column_width']['two-col']['content'];
-	$content_default = $graphene_defaults['column_width']['two-col']['content'];
+	$content = $graphene_settings['column_width']['two_col']['content'];
+	$content_default = $graphene_defaults['column_width']['two_col']['content'];
 	
-	if ( strpos( $column_mode, 'two-col' ) === 0 && ( $content != $content_default ) ){
-		$sidebar = $graphene_settings['column_width']['two-col']['sidebar'];
+	if ( strpos( $column_mode, 'two_col' ) === 0 && ( $content != $content_default ) ){
+		$sidebar = $graphene_settings['column_width']['two_col']['sidebar'];
 
 		$style .= '#content-main, .container_16 .slider_post {width:' . $content . 'px}';
 		$style .= '#sidebar1, #sidebar2 {width:' . $sidebar . 'px}';
@@ -312,14 +354,14 @@ function graphene_get_custom_column_width(){
 	}
 	
 	/* Custom column width - three-column mode */
-	$content = $graphene_settings['column_width']['three-col']['content'];
-	$sidebar_left = $graphene_settings['column_width']['three-col']['sidebar_left'];
-	$sidebar_right = $graphene_settings['column_width']['three-col']['sidebar_right'];
-	$content_default = $graphene_defaults['column_width']['three-col']['content'];
-	$sidebar_left_default = $graphene_defaults['column_width']['three-col']['sidebar_left'];
-	$sidebar_right_default = $graphene_defaults['column_width']['three-col']['sidebar_right'];
+	$content = $graphene_settings['column_width']['three_col']['content'];
+	$sidebar_left = $graphene_settings['column_width']['three_col']['sidebar_left'];
+	$sidebar_right = $graphene_settings['column_width']['three_col']['sidebar_right'];
+	$content_default = $graphene_defaults['column_width']['three_col']['content'];
+	$sidebar_left_default = $graphene_defaults['column_width']['three_col']['sidebar_left'];
+	$sidebar_right_default = $graphene_defaults['column_width']['three_col']['sidebar_right'];
 	
-	if ( strpos( $column_mode, 'three-col' ) === 0 && ( $content != $content_default || $sidebar_left != $sidebar_left_default || $sidebar_right != $sidebar_right_default ) ){
+	if ( strpos( $column_mode, 'three_col' ) === 0 && ( $content != $content_default || $sidebar_left != $sidebar_left_default || $sidebar_right != $sidebar_right_default ) ){
 
 		$style .= '#content-main, .container_16 .slider_post {width:' . $content . 'px}';
 		$style .= '#sidebar1 {width:' . $sidebar_right . 'px}';

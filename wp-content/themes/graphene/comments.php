@@ -40,10 +40,19 @@ global $graphene_settings;
 <?php /* Lists all the comments for the current post */ ?>
 <?php if ( have_comments() ) : ?>
 
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$('li.comment .comment-permalink').hide();
+		$('.comment-wrap').hover( function(){ $('.comment-permalink', this).fadeIn(200); }, function(){ $('.comment-permalink:eq(0)', this).fadeOut(200); });
+	});
+</script>
+
 <div id="comments" class="clearfix">
 	<?php /* Get the comments and pings count */ 
 		global $tabbed;
 		$comments_num = graphene_get_comment_count();
+		// to also show comments awaiting approval
+		$allcomments_num = graphene_get_comment_count( 'comments', false );
 		$pings_num = graphene_get_comment_count( 'pings' );
 		if ( $comments_num )
 			$comment_count = sprintf( _n( '1 comment', '%d comments', $comments_num, 'graphene' ), number_format_i18n( $comments_num ) );
@@ -60,7 +69,7 @@ global $graphene_settings;
 
 	<?php do_action( 'graphene_before_comments' ); ?>
 
-	<?php if ( $comments_num ) : ?>
+	<?php if ( $comments_num || $allcomments_num ) : ?>
         <ol class="clearfix" id="comments_list">
             <?php
             /* Loop through and list the comments. Tell wp_list_comments()

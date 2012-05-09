@@ -6,7 +6,7 @@
 global $graphene_defaults;
 $graphene_defaults = array(
 	/* Theme's DB version */
-	'db_version' 		=> '1.0',
+	'db_version' 		=> '1.1',
 	
 	/* All options toggle */
 	'show_all_options' 	=> false,
@@ -19,12 +19,12 @@ $graphene_defaults = array(
 	'grid_width' 		=> 40,
 	'gutter_width' 		=> 10,
 	'column_width' 		=> array(
-								'three-col'	=> array(
+								'three_col'	=> array(
 												'sidebar_left'	=> 220,
 												'content' 		=> 460,
 												'sidebar_right' => 220,
 												),
-								'two-col'	=> array(
+								'two_col'	=> array(
 												'content' 		=> 640,
 												'sidebar' 		=> 280,
 												),
@@ -34,6 +34,7 @@ $graphene_defaults = array(
 	'slider_type' 				=> 'latest_posts', // latest_posts | random | posts_pages | categories
 	'slider_specific_posts' 	=> '',
     'slider_specific_categories'=> '',
+	'slider_exclude_categories'	=> 'disabled',
 	'slider_postcount' 			=> '',
 	'slider_img' 				=> 'featured_image', // disabled | featured_image | post_image | custom_url
 	'slider_display_style' 		=> 'thumbnail-excerpt', // thumbnail-excerpt | bgimage-excerpt | full-post
@@ -61,24 +62,31 @@ $graphene_defaults = array(
     /* Child page options */    
     'hide_parent_content_if_empty' => false,
     'child_page_listing' 		=> 'show_always', // hide | show_always | show_if_parent_empty
+        
+	/* RSS Feed options */
+	'use_custom_rss_feed'       => false,
+	'custom_rss_feed_url'       => '',
 	
 	/* Top bar options(Syndication) */
-    'hide_top_bar' 				=> false,
-	'custom_feed_url' 			=> '',
-	'hide_feed_icon' 			=> false,
-	'social_media_new_window' 	=> false,
-	'twitter_url' 				=> '',
-	'facebook_url' 				=> '',
-	'social_media'				=> array(),
+	'hide_top_bar' 				=> false,        		
+	'social_media_new_window'   => false,	
+	'social_profiles'           => array( 
+										0 => array( 
+												'type'	=> 'rss',
+												'name'	=> 'RSS',
+												'title'	=> sprintf( __( "Subscribe to %s's RSS feed", 'graphene' ), get_bloginfo( 'name' ) ),
+												'url'	=> '',
+											)
+									),
 	
 	/* Adsense Options */
 	'show_adsense' 				=> false,
 	'adsense_code' 				=> '',
-	'adsense_show_frontpage' 	=> false,
+	'adsense_show_frontpage'    => false,
 	
 	/* Social Sharing options */
 	'show_addthis' 				=> false,
-	'show_addthis_page' 		=> false,
+	'show_addthis_page'         => false,
 	'addthis_location' 			=> 'post-bottom', // post-bottom | post-top | top-bottom
 	'addthis_code' 				=> '',
 	
@@ -108,13 +116,13 @@ $graphene_defaults = array(
 	'link_header_img' 			=> false,
 	'featured_img_header' 		=> false,
 	'use_random_header_img' 	=> false,
-	'hide_feed_icon'			=> false,
+	'header_img_height'		 	=> 198,	
 	'search_box_location' 		=> 'top_bar', // top_bar | nav_bar | disabled
 	
 	/* Column options */
     /* two column with the main-content on the left side */	
-	'column_mode' 				=> 'two-col-left',  // one-column | two-col-left | two-col-right | three-col-left | three-col-right | three-col-center
-	'bbp_column_mode' 			=> 'two-col-left',
+	'column_mode' 				=> 'two_col_left',  // one_column | two_col_left | two_col_right | three_col_left | three_col_right | three_col_center
+	'bbp_column_mode' 			=> 'two_col_left',
 	
 	/* Posts Display options */
 	'posts_show_excerpt' 		=> false,
@@ -141,6 +149,7 @@ $graphene_defaults = array(
 	'disable_menu_desc' 		=> false,
 	
 	/* Colour options */
+	'colour_preset'				=> 'default',
 	'bg_content_wrapper' 		=> '#e3e3e3',
 	'bg_content' 				=> '#fff',
 	'bg_meta_border' 			=> '#e3e3e3',
@@ -153,17 +162,33 @@ $graphene_defaults = array(
 	'bg_widget_title_textshadow'=> '#555',
 	'bg_widget_header_bottom' 	=> '#1f6eb6',
 	'bg_widget_header_top' 		=> '#3c9cd2',
+	'bg_widget_box_shadow'		=> '#BBBBBB',
 	'bg_slider_top' 			=> '#0F2D4D',
 	'bg_slider_bottom' 			=> '#2880C3',
 	'bg_button' 				=> '#2982C5',
 	'bg_button_label' 			=> '#fff',
 	'bg_button_label_textshadow'=> '#16497E',
+	'bg_button_box_shadow'		=> '#555555',
 	'bg_archive_left' 			=> '#0F2D4D',
 	'bg_archive_right' 			=> '#2880C3',
 	'bg_archive_label' 			=> '#E3E3E3',
 	'bg_archive_text' 			=> '#fff',
 	'bg_archive_textshadow' 	=> '#333',
-       
+	'content_font_colour' 		=> '#2c2b2b',
+	'title_font_colour' 		=> '#1772af',
+	'link_colour_normal' 		=> '#1772af',
+	'link_colour_visited' 		=> '#1772af',
+	'link_colour_hover' 		=> '#074d7c',
+	
+	/* Comments colour options */
+	'bg_comments' 				=> '#E9ECF5',
+	'comments_text_colour' 		=> '#2C2B2B',
+	'threaded_comments_border'	=> '#DDDDDD',
+	'bg_author_comments' 		=> '#FFFFFF',
+	'bg_author_comments_border' => '#CCCCCC',
+	'author_comments_text_colour'=> '#2C2B2B',
+	'bg_comment_form' 			=> '#EEEEEE',
+	'comment_form_text' 		=> '#2C2B2B',
     
 	/* Header Text options */
 	'header_title_font_type' 	=> '',
@@ -182,11 +207,7 @@ $graphene_defaults = array(
 	'content_font_type' 		=> '',
 	'content_font_size' 		=> '',
 	'content_font_lineheight' 	=> '',
-	'content_font_colour' 		=> '#2c2b2b',
 	
-	'link_colour_normal' 		=> '#1772af',
-	'link_colour_visited' 		=> '#1772af',
-	'link_colour_hover' 		=> '#074d7c',
 	'link_decoration_normal' 	=> '',
 	'link_decoration_hover' 	=> '',
 	

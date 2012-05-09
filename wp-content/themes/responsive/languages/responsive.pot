@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Responsive 1.3.7\n"
+"Project-Id-Version: Responsive 1.4.8\n"
 "POT-Creation-Date: 2012-03-27 20:22-0600\n"
-"PO-Revision-Date: 2012-03-27 20:23-0600\n"
+"PO-Revision-Date: 2012-04-24 23:24-0600\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 
 #: 404.php:22
 #: archive.php:94
-#: blog-excerpt.php:88
-#: blog.php:87
+#: blog-excerpt.php:91
+#: blog.php:90
 #: content-sidebar-half-page.php:87
 #: content-sidebar-page.php:87
 #: full-width-page.php:87
@@ -25,7 +25,7 @@ msgstr ""
 #: index.php:80
 #: landing-page.php:55
 #: page.php:86
-#: search.php:87
+#: search.php:108
 #: sidebar-content-half-page.php:87
 #: sidebar-content-page.php:87
 #: single.php:93
@@ -36,14 +36,14 @@ msgstr ""
 
 #: 404.php:23
 #: archive.php:95
-#: blog-excerpt.php:89
-#: blog.php:88
+#: blog-excerpt.php:92
+#: blog.php:91
 #: content-sidebar-half-page.php:88
 #: content-sidebar-page.php:88
 #: full-width-page.php:88
 #: landing-page.php:56
 #: page.php:87
-#: search.php:88
+#: search.php:109
 #: sidebar-content-half-page.php:88
 #: sidebar-content-page.php:88
 #: single.php:94
@@ -54,8 +54,8 @@ msgstr ""
 
 #: 404.php:24
 #: archive.php:96
-#: blog-excerpt.php:90
-#: blog.php:89
+#: blog-excerpt.php:93
+#: blog.php:92
 #: content-sidebar-half-page.php:89
 #: content-sidebar-page.php:89
 #: full-width-page.php:89
@@ -63,7 +63,7 @@ msgstr ""
 #: index.php:82
 #: landing-page.php:57
 #: page.php:88
-#: search.php:89
+#: search.php:110
 #: sidebar-content-half-page.php:89
 #: sidebar-content-page.php:89
 #: single.php:95
@@ -74,15 +74,14 @@ msgstr ""
 
 #: 404.php:24
 #: archive.php:96
-#: blog-excerpt.php:90
-#: blog.php:89
+#: blog-excerpt.php:93
+#: blog.php:92
 #: content-sidebar-half-page.php:89
 #: content-sidebar-page.php:89
 #: full-width-page.php:89
-#: includes/functions.php:229
 #: landing-page.php:57
 #: page.php:88
-#: search.php:89
+#: search.php:110
 #: sidebar-content-half-page.php:89
 #: sidebar-content-page.php:89
 #: single.php:95
@@ -98,8 +97,8 @@ msgstr ""
 
 #: 404.php:24
 #: archive.php:96
-#: blog-excerpt.php:90
-#: blog.php:89
+#: blog-excerpt.php:93
+#: blog.php:92
 #: content-sidebar-half-page.php:89
 #: content-sidebar-page.php:89
 #: full-width-page.php:89
@@ -107,7 +106,7 @@ msgstr ""
 #: index.php:82
 #: landing-page.php:57
 #: page.php:88
-#: search.php:89
+#: search.php:110
 #: sidebar-content-half-page.php:89
 #: sidebar-content-page.php:89
 #: single.php:95
@@ -140,10 +139,9 @@ msgid "Blog Archives"
 msgstr ""
 
 #: archive.php:43
-#: blog-excerpt.php:34
-#: blog.php:33
+#: blog-excerpt.php:37
+#: blog.php:36
 #: index.php:26
-#: search.php:41
 #: sitemap.php:47
 #, php-format
 #@ responsive
@@ -151,15 +149,15 @@ msgid "Permanent Link to %s"
 msgstr ""
 
 #: archive.php:47
-#: blog-excerpt.php:38
-#: blog.php:37
+#: blog-excerpt.php:41
+#: blog.php:40
 #: content-sidebar-half-page.php:37
 #: content-sidebar-page.php:37
 #: full-width-page.php:37
 #: image.php:31
 #: index.php:30
 #: page.php:36
-#: search.php:45
+#: search.php:50
 #: sidebar-content-half-page.php:37
 #: sidebar-content-page.php:37
 #: single.php:35
@@ -169,15 +167,15 @@ msgid "<span class=\"%1$s\">Posted on</span> %2$s by %3$s"
 msgstr ""
 
 #: archive.php:55
-#: blog-excerpt.php:46
-#: blog.php:45
+#: blog-excerpt.php:49
+#: blog.php:48
 #: content-sidebar-half-page.php:45
 #: content-sidebar-page.php:45
 #: full-width-page.php:45
 #: image.php:39
 #: index.php:38
 #: page.php:44
-#: search.php:53
+#: search.php:58
 #: sidebar-content-half-page.php:45
 #: sidebar-content-page.php:45
 #: single.php:43
@@ -187,15 +185,15 @@ msgid "View all posts by %s"
 msgstr ""
 
 #: archive.php:63
-#: blog-excerpt.php:54
-#: blog.php:53
+#: blog-excerpt.php:57
+#: blog.php:56
 #: content-sidebar-half-page.php:53
 #: content-sidebar-page.php:53
 #: full-width-page.php:53
 #: image.php:47
 #: index.php:46
 #: page.php:52
-#: search.php:69
+#: search.php:66
 #: sidebar-content-half-page.php:53
 #: sidebar-content-page.php:53
 #: single.php:51
@@ -204,15 +202,15 @@ msgid "No Comments &darr;"
 msgstr ""
 
 #: archive.php:63
-#: blog-excerpt.php:54
-#: blog.php:53
+#: blog-excerpt.php:57
+#: blog.php:56
 #: content-sidebar-half-page.php:53
 #: content-sidebar-page.php:53
 #: full-width-page.php:53
 #: image.php:47
 #: index.php:46
 #: page.php:52
-#: search.php:69
+#: search.php:66
 #: sidebar-content-half-page.php:53
 #: sidebar-content-page.php:53
 #: single.php:51
@@ -221,15 +219,15 @@ msgid "1 Comment &darr;"
 msgstr ""
 
 #: archive.php:63
-#: blog-excerpt.php:54
-#: blog.php:53
+#: blog-excerpt.php:57
+#: blog.php:56
 #: content-sidebar-half-page.php:53
 #: content-sidebar-page.php:53
 #: full-width-page.php:53
 #: image.php:47
 #: index.php:46
 #: page.php:52
-#: search.php:69
+#: search.php:66
 #: sidebar-content-half-page.php:53
 #: sidebar-content-page.php:53
 #: single.php:51
@@ -238,8 +236,8 @@ msgid "% Comments &darr;"
 msgstr ""
 
 #: archive.php:70
-#: blog-excerpt.php:66
-#: blog.php:65
+#: blog-excerpt.php:69
+#: blog.php:68
 #: content-sidebar-half-page.php:61
 #: content-sidebar-page.php:61
 #: full-width-page.php:61
@@ -247,7 +245,7 @@ msgstr ""
 #: index.php:58
 #: landing-page.php:31
 #: page.php:60
-#: search.php:62
+#: search.php:84
 #: sidebar-content-half-page.php:61
 #: sidebar-content-page.php:61
 #: single.php:69
@@ -257,8 +255,8 @@ msgid "Pages:"
 msgstr ""
 
 #: archive.php:74
-#: blog-excerpt.php:70
-#: blog.php:69
+#: blog-excerpt.php:73
+#: blog.php:72
 #: content-sidebar-half-page.php:66
 #: content-sidebar-page.php:66
 #: full-width-page.php:66
@@ -266,7 +264,7 @@ msgstr ""
 #: index.php:62
 #: landing-page.php:36
 #: page.php:65
-#: search.php:66
+#: search.php:88
 #: sidebar-content-half-page.php:66
 #: sidebar-content-page.php:66
 #: single.php:73
@@ -275,8 +273,8 @@ msgid "Tagged with:"
 msgstr ""
 
 #: archive.php:75
-#: blog-excerpt.php:71
-#: blog.php:70
+#: blog-excerpt.php:74
+#: blog.php:73
 #: content-sidebar-half-page.php:67
 #: content-sidebar-page.php:67
 #: full-width-page.php:67
@@ -284,7 +282,7 @@ msgstr ""
 #: index.php:63
 #: landing-page.php:37
 #: page.php:66
-#: search.php:67
+#: search.php:89
 #: sidebar-content-half-page.php:67
 #: sidebar-content-page.php:67
 #: single.php:74
@@ -294,8 +292,8 @@ msgid "Posted in %s"
 msgstr ""
 
 #: archive.php:78
-#: blog-excerpt.php:74
-#: blog.php:73
+#: blog-excerpt.php:77
+#: blog.php:76
 #: content-sidebar-half-page.php:71
 #: content-sidebar-page.php:71
 #: full-width-page.php:71
@@ -303,7 +301,7 @@ msgstr ""
 #: index.php:66
 #: landing-page.php:41
 #: page.php:70
-#: search.php:68
+#: search.php:92
 #: sidebar-content-half-page.php:71
 #: sidebar-content-page.php:71
 #: single.php:77
@@ -313,15 +311,15 @@ msgid "Edit"
 msgstr ""
 
 #: archive.php:87
-#: blog-excerpt.php:81
-#: blog.php:80
+#: blog-excerpt.php:84
+#: blog.php:83
 #: content-sidebar-half-page.php:80
 #: content-sidebar-page.php:80
 #: full-width-page.php:80
 #: index.php:73
 #: landing-page.php:48
 #: page.php:79
-#: search.php:80
+#: search.php:101
 #: sidebar-content-half-page.php:80
 #: sidebar-content-page.php:80
 #: single.php:86
@@ -331,15 +329,15 @@ msgid "&#8249; Older posts"
 msgstr ""
 
 #: archive.php:88
-#: blog-excerpt.php:82
-#: blog.php:81
+#: blog-excerpt.php:85
+#: blog.php:84
 #: content-sidebar-half-page.php:81
 #: content-sidebar-page.php:81
 #: full-width-page.php:81
 #: index.php:74
 #: landing-page.php:49
 #: page.php:80
-#: search.php:81
+#: search.php:102
 #: sidebar-content-half-page.php:81
 #: sidebar-content-page.php:81
 #: single.php:87
@@ -349,8 +347,8 @@ msgid "Newer posts &#8250;"
 msgstr ""
 
 #: archive.php:96
-#: blog-excerpt.php:90
-#: blog.php:89
+#: blog-excerpt.php:93
+#: blog.php:92
 #: content-sidebar-half-page.php:89
 #: content-sidebar-page.php:89
 #: full-width-page.php:89
@@ -358,7 +356,7 @@ msgstr ""
 #: index.php:82
 #: landing-page.php:57
 #: page.php:88
-#: search.php:89
+#: search.php:110
 #: sidebar-content-half-page.php:89
 #: sidebar-content-page.php:89
 #: single.php:95
@@ -367,13 +365,14 @@ msgstr ""
 msgid "&#9166; Home"
 msgstr ""
 
-#: blog.php:64
+#: blog.php:67
 #: content-sidebar-half-page.php:60
 #: content-sidebar-page.php:60
 #: full-width-page.php:60
 #: index.php:57
 #: landing-page.php:30
 #: page.php:59
+#: search.php:72
 #: sidebar-content-half-page.php:60
 #: sidebar-content-page.php:60
 #: single.php:57
@@ -518,155 +517,130 @@ msgstr ""
 msgid "home"
 msgstr ""
 
-#: includes/functions.php:94
+#: includes/functions.php:70
 #@ responsive
 msgid "Top Menu"
 msgstr ""
 
-#: includes/functions.php:95
+#: includes/functions.php:71
 #@ responsive
 msgid "Header Menu"
 msgstr ""
 
-#: includes/functions.php:96
+#: includes/functions.php:72
 #@ responsive
 msgid "Sub-Header Menu"
 msgstr ""
 
-#: includes/functions.php:97
+#: includes/functions.php:73
 #@ responsive
 msgid "Footer Menu"
 msgstr ""
 
-#: includes/functions.php:173
+#: includes/functions.php:218
 #@ responsive
 msgid "<div class=\"read-more\">Read more &#8250;</div><!-- end of .read-more -->"
 msgstr ""
 
-#: includes/functions.php:290
-#@ responsive
-msgid "Search results for &#39;"
-msgstr ""
-
-#: includes/functions.php:290
-#@ responsive
-msgid "&#39;"
-msgstr ""
-
-#: includes/functions.php:292
-#@ responsive
-msgid "Posts tagged &#39;"
-msgstr ""
-
-#: includes/functions.php:298
-#@ responsive
-msgid "Articles posted by "
-msgstr ""
-
-#: includes/functions.php:300
-#@ responsive
-msgid "Error 404"
-msgstr ""
-
-#: includes/functions.php:306
+#: includes/functions.php:362
 #@ responsive
 msgid "Page"
 msgstr ""
 
-#: includes/functions.php:351
+#: includes/functions.php:408
 #@ responsive
 msgid "Untitled"
 msgstr ""
 
-#: includes/functions.php:363
+#: includes/functions.php:420
 #@ responsive
 msgid "Main Sidebar"
 msgstr ""
 
-#: includes/functions.php:364
+#: includes/functions.php:421
 #@ responsive
 msgid "Area One - sidebar.php"
 msgstr ""
 
-#: includes/functions.php:373
+#: includes/functions.php:430
 #@ responsive
 msgid "Right Sidebar"
 msgstr ""
 
-#: includes/functions.php:374
+#: includes/functions.php:431
 #@ responsive
 msgid "Area Two - sidebar-right.php"
 msgstr ""
 
-#: includes/functions.php:383
+#: includes/functions.php:440
 #@ responsive
 msgid "Left Sidebar"
 msgstr ""
 
-#: includes/functions.php:384
+#: includes/functions.php:441
 #@ responsive
 msgid "Area Three - sidebar-left.php"
 msgstr ""
 
-#: includes/functions.php:393
+#: includes/functions.php:450
 #@ responsive
 msgid "Left Sidebar Half Page"
 msgstr ""
 
-#: includes/functions.php:394
+#: includes/functions.php:451
 #@ responsive
 msgid "Area Four - sidebar-left-half.php"
 msgstr ""
 
-#: includes/functions.php:403
+#: includes/functions.php:460
 #@ responsive
 msgid "Right Sidebar Half Page"
 msgstr ""
 
-#: includes/functions.php:404
+#: includes/functions.php:461
 #@ responsive
 msgid "Area Five - sidebar-right-half.php"
 msgstr ""
 
-#: includes/functions.php:413
-#: sidebar-home.php:23
+#: includes/functions.php:470
+#: sidebar-home.php:24
 #@ responsive
 msgid "Home Widget 1"
 msgstr ""
 
-#: includes/functions.php:414
+#: includes/functions.php:471
 #@ responsive
 msgid "Area Six - sidebar-home.php"
 msgstr ""
 
-#: includes/functions.php:423
-#: sidebar-home.php:36
+#: includes/functions.php:480
+#: sidebar-home.php:39
 #@ responsive
 msgid "Home Widget 2"
 msgstr ""
 
-#: includes/functions.php:424
+#: includes/functions.php:481
 #@ responsive
 msgid "Area Seven - sidebar-home.php"
 msgstr ""
 
-#: includes/functions.php:433
-#: sidebar-home.php:49
+#: includes/functions.php:490
+#: sidebar-home.php:54
 #@ responsive
 msgid "Home Widget 3"
 msgstr ""
 
-#: includes/functions.php:434
+#: includes/functions.php:491
 #@ responsive
 msgid "Area Eight - sidebar-home.php"
 msgstr ""
 
-#: includes/functions.php:443
+#: includes/functions.php:500
 #@ responsive
 msgid "Gallery Sidebar"
 msgstr ""
 
-#: includes/functions.php:444
+#: includes/functions.php:501
 #@ responsive
 msgid "Area Nine - sidebar-gallery.php"
 msgstr ""
@@ -1011,11 +985,6 @@ msgstr ""
 msgid " &#8211; "
 msgstr ""
 
-#: search.php:27
-#@ responsive
-msgid "articles for "
-msgstr ""
-
 #: search.php:28
 #@ responsive
 msgid "<span class=\"post-search-terms\">"
@@ -1024,11 +993,6 @@ msgstr ""
 #: search.php:30
 #@ responsive
 msgid "</span><!-- end of .post-search-terms -->"
-msgstr ""
-
-#: search.php:61
-#@ responsive
-msgid "Read more &raquo;"
 msgstr ""
 
 #: searchform.php:18
@@ -1041,81 +1005,72 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: sidebar-gallery.php:20
+#: sidebar-gallery.php:21
 #@ responsive
 msgid "Image Information"
 msgstr ""
 
-#: sidebar-gallery.php:25
+#: sidebar-gallery.php:26
 #@ responsive
 msgid "Full Size:"
 msgstr ""
 
-#: sidebar-gallery.php:28
+#: sidebar-gallery.php:29
 #@ responsive
 msgid "Aperture: f&#47;"
 msgstr ""
 
-#: sidebar-gallery.php:32
+#: sidebar-gallery.php:33
 #@ responsive
 msgid "Focal Length:"
 msgstr ""
 
-#: sidebar-gallery.php:32
+#: sidebar-gallery.php:33
 #@ responsive
 msgid "mm"
 msgstr ""
 
-#: sidebar-gallery.php:36
+#: sidebar-gallery.php:37
 #@ responsive
 msgid "ISO:"
 msgstr ""
 
-#: sidebar-gallery.php:40
+#: sidebar-gallery.php:41
 #@ responsive
 msgid "Shutter:"
 msgstr ""
 
-#: sidebar-gallery.php:57
+#: sidebar-gallery.php:58
 #@ responsive
 msgid "Camera:"
 msgstr ""
 
-#: sidebar-half-left.php:22
-#: sidebar-left-half.php:22
-#: sidebar-left.php:22
-#: sidebar-right-half.php:22
-#: sidebar-right.php:22
-#: sidebar.php:22
+#: sidebar-half-left.php:23
+#: sidebar-left-half.php:23
+#: sidebar-left.php:23
+#: sidebar-right-half.php:23
+#: sidebar-right.php:23
+#: sidebar.php:23
 #@ responsive
 msgid "In Archive"
 msgstr ""
 
-#: sidebar-half-left.php:27
-#: sidebar-left-half.php:27
-#: sidebar-left.php:27
-#: sidebar-right-half.php:27
-#: sidebar-right.php:27
-#: sidebar.php:27
-#@ responsive
-msgid "My Account"
-msgstr ""
-
-#: sidebar-home.php:24
+#: sidebar-home.php:25
 #@ responsive
 msgid "This is your first home widget box. To edit please go to Appearance > Widgets and choose 6th widget from the top in area six called Home Widget 1. Title is also managable from widgets as well."
 msgstr ""
 
-#: sidebar-home.php:37
+#: sidebar-home.php:40
 #@ responsive
 msgid "This is your second home widget box. To edit please go to Appearance > Widgets and choose 7th widget from the top in area seven called Home Widget 2. Title is also managable from widgets as well."
 msgstr ""
 
-#: sidebar-home.php:50
+#: sidebar-home.php:55
 #@ responsive
 msgid "This is your third home widget box. To edit please go to Appearance > Widgets and choose 8th widget from the top in area eight called Home Widget 3. Title is also managable from widgets as well."
 msgstr ""
 
+#: search.php:78
 #: single.php:63
 #@ responsive
 msgid "About"
@@ -1129,6 +1084,36 @@ msgstr ""
 #: sitemap.php:43
 #@ responsive
 msgid "Latest Posts"
+msgstr ""
+
+#: includes/functions.php:293
+#@ responsive
+msgid "Archive for "
+msgstr ""
+
+#: includes/functions.php:346
+#@ responsive
+msgid "Search results for "
+msgstr ""
+
+#: includes/functions.php:349
+#@ responsive
+msgid "Posts tagged "
+msgstr ""
+
+#: includes/functions.php:354
+#@ responsive
+msgid "All posts by "
+msgstr ""
+
+#: includes/functions.php:357
+#@ responsive
+msgid "Error 404 "
+msgstr ""
+
+#: search.php:27
+#@ responsive
+msgid "results for "
 msgstr ""
 
 #: sitemap.php:54

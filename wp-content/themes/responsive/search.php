@@ -24,7 +24,7 @@
                 $count = $allsearch->post_count;
                 _e(' &#8211; ', 'responsive');
                 echo $count . ' ';
-                _e('articles for ', 'responsive');
+                _e('results for ', 'responsive');
                 _e('<span class="post-search-terms">', 'responsive');
                 echo $key;
                 _e('</span><!-- end of .post-search-terms -->', 'responsive');
@@ -36,6 +36,11 @@
 <?php if (have_posts()) : ?>
 
 		<?php while (have_posts()) : the_post(); ?>
+        
+        <?php $options = get_option('responsive_theme_options'); ?>
+		<?php if ($options['breadcrumb'] == 0): ?>
+		<?php echo responsive_breadcrumb_lists(); ?>
+        <?php endif; ?> 
           
             <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <h1><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf(__('Permanent Link to %s', 'responsive'), the_title_attribute('echo=0')); ?>"><?php the_title(); ?></a></h1>
@@ -55,32 +60,48 @@
 		                )
 			        );
 		        ?>
+				    <?php if ( comments_open() ) : ?>
+                        <span class="comments-link">
+                        <span class="mdash">&mdash;</span>
+                    <?php comments_popup_link(__('No Comments &darr;', 'responsive'), __('1 Comment &darr;', 'responsive'), __('% Comments &darr;', 'responsive')); ?>
+                        </span>
+                    <?php endif; ?> 
                 </div><!-- end of .post-meta -->
                                 
                 <div class="post-entry">
-                    <?php the_content(__('Read more &raquo;', 'responsive')); ?>
-                    <?php wp_link_pages(array('before' => '<div class="pagination">' . __('Pages:', 'responsive'), 'after' => '</div><!-- end of .pagination -->')); ?>
+                    <?php the_content(__('Read more &#8250;', 'responsive')); ?>
+                    
+                    <?php if ( get_the_author_meta('description') != '' ) : ?>
+                    
+                    <div id="author-meta">
+                    <?php if (function_exists('get_avatar')) { echo get_avatar( get_the_author_meta('email'), '80' ); }?>
+                        <div class="about-author"><?php _e('About','responsive'); ?> <?php the_author_posts_link(); ?></div>
+                        <p><?php the_author_meta('description') ?></p>
+                    </div><!-- end of #author-meta -->
+                    
+                    <?php endif; // no description, no author's meta ?>
+                    
+                    <?php wp_link_pages(array('before' => '<div class="pagination">' . __('Pages:', 'responsive'), 'after' => '</div>')); ?>
                 </div><!-- end of .post-entry -->
                 
                 <div class="post-data">
 				    <?php the_tags(__('Tagged with:', 'responsive') . ' ', ', ', '<br />'); ?> 
-					<?php printf(__('Posted in %s', 'responsive'), get_the_category_list(', ')); ?> | 
-					<?php edit_post_link(__('Edit', 'responsive'), '', ' &#124; '); ?>  
-					<?php comments_popup_link(__('No Comments &darr;', 'responsive'), __('1 Comment &darr;', 'responsive'), __('% Comments &darr;', 'responsive')); ?>
+					<?php printf(__('Posted in %s', 'responsive'), get_the_category_list(', ')); ?> 
                 </div><!-- end of .post-data -->             
-            
+
+            <div class="post-edit"><?php edit_post_link(__('Edit', 'responsive')); ?></div>             
             </div><!-- end of #post-<?php the_ID(); ?> -->
             
 			<?php comments_template( '', true ); ?>
             
         <?php endwhile; ?> 
-        
+
         <?php if (  $wp_query->max_num_pages > 1 ) : ?>
         <div class="navigation">
 			<div class="previous"><?php next_posts_link( __( '&#8249; Older posts', 'responsive' ) ); ?></div>
             <div class="next"><?php previous_posts_link( __( 'Newer posts &#8250;', 'responsive' ) ); ?></div>
 		</div><!-- end of .navigation -->
-        <?php endif; ?> 
+        <?php endif; ?>
 
 	    <?php else : ?>
 

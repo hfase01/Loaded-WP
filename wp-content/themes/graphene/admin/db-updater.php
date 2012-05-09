@@ -5,7 +5,26 @@
 */
 function graphene_update_db(){
 	global $graphene_defaults;
+        
+	if ( get_option( 'graphene_ga_code' ) === '' ){       
+		wp_die('updating to 1.0');
+		graphene_update_db_to_1_0();
+	}
 	
+	$current_settings = get_option( 'graphene_settings', array() );
+	if ( empty( $current_settings['db_version'] ) || $current_settings['db_version'] === '1.0') {            
+		graphene_update_db_to_1_1();
+	}
+        
+        $current_settings = get_option( 'graphene_settings', array() );
+	if ( empty( $current_settings['db_version'] ) || $current_settings['db_version'] === '1.1') {            
+		graphene_update_db_to_1_2();
+	}
+}
+
+function graphene_update_db_to_1_0(){
+    global $graphene_defaults;
+        
 	// Get the current options from the database
 	$graphene_settings['slider_cat'] = get_option('graphene_slider_cat');
 	$graphene_settings['slider_postcount'] = get_option('graphene_slider_postcount');
@@ -47,11 +66,11 @@ function graphene_update_db(){
 	$graphene_settings['hide_feed_icon'] = get_option('graphene_hide_feed_icon');
 	$graphene_settings['search_box_location'] = get_option('graphene_search_box_location');
 	
-        if (get_option('graphene_hide_sidebar')) {
-            $graphene_settings['column_mode'] = 'one-col';
-        } else {
-            $graphene_settings['column_mode'] = get_option('graphene_content_sidebar_position')  == 'left' ? 'two-col-right' : 'two-col-left';
-        }
+	if (get_option('graphene_hide_sidebar')) {
+		$graphene_settings['column_mode'] = 'one-col';
+	} else {
+		$graphene_settings['column_mode'] = get_option('graphene_content_sidebar_position')  == 'left' ? 'two-col-right' : 'two-col-left';
+	}
 	
 	$graphene_settings['posts_show_excerpt'] = get_option('graphene_posts_show_excerpt');
 	$graphene_settings['hide_post_author'] = get_option('graphene_hide_post_author');
@@ -64,7 +83,7 @@ function graphene_update_db(){
 		$graphene_settings['post_date_display'] = 'icon_no_year';
 	}
 	
-    $graphene_settings['hide_post_commentcount'] = get_option('graphene_hide_post_commentcount');
+	$graphene_settings['hide_post_commentcount'] = get_option('graphene_hide_post_commentcount');
 	$graphene_settings['hide_post_cat'] = get_option('graphene_hide_post_cat');
 	$graphene_settings['hide_post_tags'] = get_option('graphene_hide_post_tags');
 	$graphene_settings['show_post_avatar'] = get_option('graphene_show_post_avatar');
@@ -176,11 +195,110 @@ function graphene_update_db(){
 		delete_option('graphene_show_cc');
 		delete_option('graphene_copy_text');
 		delete_option('graphene_hide_copyright');
+                
+                /* Delete DB Version from the database. This value is now included in the $graphene_defaults array */
+		delete_option( 'graphene_dbversion' );
 		
 		return true;
 		
 	} else {
 		return false;
 	}
+}
+
+function graphene_update_db_to_1_1(){
+    global $graphene_defaults;
+        
+    $graphene_settings = get_option( 'graphene_settings', array() );
+    $graphene_settings['db_version'] = '1.1';
+    $graphene_settings['social_profiles'] = $graphene_defaults['social_profiles'];
+    
+    if ( ! empty( $graphene_settings['custom_feed_url'] ) ) {
+		$graphene_settings['social_profiles'][0]['url'] = $graphene_settings['custom_feed_url'];;
+        unset( $graphene_settings['custom_feed_url'] );
+    }
+    
+    // Remove the RSS profile if it is hidden
+    if ( isset ( $graphene_settings['hide_feed_icon'] ) ) {
+        unset( $graphene_settings['social_profiles'][0] );
+        unset( $graphene_settings['hide_feed_icon'] );
+    }
+    
+    // Add the Twitter profile if the url is set
+    if ( ! empty( $graphene_settings['twitter_url'] ) ) {
+        $graphene_settings['social_profiles'][] = array (  
+            'type' 	=> 'twitter',
+			'name' => 'Twitter',
+			'title'	=> sprintf( __( 'Follow %s on Twitter', 'graphene' ), get_bloginfo( 'name' ) ),
+            'url' 	=> $graphene_settings['twitter_url']
+        );        
+        unset( $graphene_settings['twitter_url'] );
+    }
+    
+    // Add the Facebook url if the url is set
+    if ( !empty( $graphene_settings['facebook_url'] ) ) {
+        $graphene_settings['social_profiles'][] = array (  
+            'type' => 'facebook',
+			'name'	=> 'Facebook',
+            'title' => sprintf( __( "Visit %s's Facebook page", 'graphene' ), get_bloginfo( 'name' ) ),
+            'url' => $graphene_settings['facebook_url']
+        );        
+        unset( $graphene_settings['facebook_url'] );
+    }
+	
+	// Convert the custom social media to social media of "Custom" type
+	$social_media = $graphene_settings['social_media'];
+	if ( ! empty( $social_media ) ){
+		foreach ( $social_media as $slug => $social_medium ){
+			$graphene_settings['social_profiles'][] = array(
+				'type'		=> 'custom',
+				'name'		=> 'Custom',
+				'title'		=> $social_medium['title'],
+				'url'		=> $social_medium['url'],
+				'icon_url' 	=> $social_medium['icon'],
+			);
+		}
+	}
+	
+	// If there is no social media (including RSS), set the setting to false
+	if ( empty( $graphene_settings['social_profiles'] ) )
+		$graphene_settings['social_profiles'] = array( 0 => false );
+    
+    /* Merge current settings with the default settings */
+    $graphene_settings = array_merge($graphene_defaults, $graphene_settings);
+	
+	/* Only save options that have different values than the default values */
+	foreach ( $graphene_settings as $key => $value ){
+		if ( ( $graphene_defaults[$key] === $value || $value === '' ) && $key != 'db_version' ) {
+			unset( $graphene_settings[$key] );
+		}
+	}
+	
+    update_option('graphene_settings', $graphene_settings);        
+}
+
+function graphene_update_db_to_1_2(){    
+        
+    $graphene_settings = get_option( 'graphene_settings', array() );
+    $graphene_settings['db_version'] = '1.2';
+    
+    /* because the column modus have been renamed we need to update the DB! */
+    if ( isset( $graphene_settings['column_mode'] ) ) {
+        $graphene_settings['column_mode'] = str_replace( '-', '_', $graphene_settings['column_mode'] );
+    }     
+    if ( isset( $graphene_settings['bbp_column_mode'] ) ) {
+        $graphene_settings['bbp_column_mode'] = str_replace( '-', '_', $graphene_settings['bbp_column_mode'] );
+    } 
+    
+    if ( isset( $graphene_settings['column_width'] ) && is_array( $graphene_settings['column_width'] ) ) {
+        $two_col = $graphene_settings['column_width']['two-col'];
+        $three_col = $graphene_settings['column_width']['three-col'];
+        $graphene_settings['column_width'] = array(
+            'two_col' => $two_col,
+            'three_col' => $three_col 
+        );
+    }    
+    
+    update_option('graphene_settings', $graphene_settings);        
 }
 ?>

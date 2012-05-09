@@ -46,12 +46,32 @@ add_action( 'admin_menu', 'graphene_options_init', 8);
 
 
 /**
+ * Allow users with 'edit_theme_options' capability to be able to modify the theme's options
+ */
+function graphene_options_page_capability( $cap ){
+	return apply_filters( 'graphene_options_page_capability', 'edit_theme_options' );
+}
+add_filter( 'option_page_capability_graphene_options', 'graphene_options_page_capability' );
+
+
+/**
  * Add JavaScript for the theme's options page
 */
 function graphene_options_js(){ 
-	if ( strstr( $_SERVER["REQUEST_URI"], 'page=graphene_options' ) ) {
-		require( get_template_directory() . '/admin/js/admin.js.php' );	
-	}
+    global $graphene_settings;
+    if ( strpos( $_SERVER["REQUEST_URI"], 'page=graphene_options' ) ) {
+        $tab = 'general'; // default set the current tab to general
+        // detect any other allowed tabs
+        if ( isset( $_GET['tab'] ) && in_array($_GET['tab'], array('general', 'display', 'advanced')) ){ $tab = $_GET['tab']; }            
+        ?>
+<script type="text/javascript">
+//<![CDATA[
+    var graphene_tab = '<?php echo $tab; ?>';
+    var graphene_settings = <?php echo json_encode($graphene_settings); ?>;
+//]]>
+</script>
+        <?php
+    }
 }
 add_action( 'admin_footer', 'graphene_options_js' );
 
@@ -131,19 +151,19 @@ function graphene_page_template_visualizer() {
 		$default_template = __( 'default', 'graphene' );
 	} else {
 		switch( $graphene_settings['column_mode']){
-			case 'one-column':
+			case 'one_column':
 				$default_template = 'template-onecolumn.php';
 				break;
-			case 'two-col-right':
+			case 'two_col_right':
 				$default_template = 'template-twocolumnsright.php';
 				break;
-			case 'three-col-left':
+			case 'three_col_left':
 				$default_template = 'template-threecolumnsleft.php';
 				break;
-			case 'three-col-right':
+			case 'three_col_right':
 				$default_template = 'template-threecolumnsright.php';
 				break;
-			case 'three-col-center':
+			case 'three_col_center':
 				$default_template = 'template-threecolumnscenter.php';
 				break;
 			default:

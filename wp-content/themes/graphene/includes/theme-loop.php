@@ -130,9 +130,15 @@ if ( $graphene_settings['show_excerpt_more']) {
 if (!function_exists( 'graphene_posts_nav' ) ) :
 	function graphene_posts_nav(){ 
 		$query = $GLOBALS['wp_query'];
-		if ( $query->max_num_pages > 1) : ?>
+		
+		if (function_exists( 'wp_pagenavi' ) ) :  ?>
+			<div class="post-nav clearfix">
+				<?php wp_pagenavi(); ?>
+            </div>
+        <?php 
+		
+		elseif ( $query->max_num_pages > 1) : ?>
             <div class="post-nav clearfix">
-            <?php if (function_exists( 'wp_pagenavi' ) ) : wp_pagenavi(); else : ?>
                 <?php if (!is_search() ) : ?>
                     <p id="previous"><?php next_posts_link(__( 'Older posts &laquo;', 'graphene' ) ) ?></p>
                     <p id="next-post"><?php previous_posts_link(__( '&raquo; Newer posts', 'graphene' ) ) ?></p>
@@ -140,11 +146,31 @@ if (!function_exists( 'graphene_posts_nav' ) ) :
                     <p id="next-post"><?php next_posts_link(__( 'Next page &raquo;', 'graphene' ) ) ?></p>
                     <p id="previous"><?php previous_posts_link(__( '&laquo; Previous page', 'graphene' ) ) ?></p>
                 <?php endif; ?>
-            <?php endif; do_action( 'graphene_posts_nav' ); ?>
             </div>
+         
 	<?php
 		endif;
 	}
+endif;
+
+
+/**
+ * Generates the post navigation links
+*/
+if ( ! function_exists( 'graphene_post_nav' ) ) :
+
+function graphene_post_nav(){
+	if ( is_singular() ) :
+	?>
+	<div class="post-nav clearfix">
+		<p class="previous"><?php previous_post_link(); ?></p>
+		<p class="next-post"><?php next_post_link(); ?></p>
+		<?php do_action( 'graphene_post_nav' ); ?>
+	</div>
+	<?php
+	endif;
+}
+
 endif;
 
 
@@ -156,11 +182,11 @@ function graphene_modify_excerpt_length( $length ) {
 	/*
 	$column_mode = graphene_column_mode();
 	if ( $graphene_settings['slider_display_style'] == 'bgimage-excerpt' ){
-		if ( strpos( $column_mode, 'three-col' ) === 0)
+		if ( strpos( $column_mode, 'three_col' ) === 0)
 			return 24;
-		if ( strpos( $column_mode, 'two-col' ) === 0)
+		if ( strpos( $column_mode, 'two_col' ) === 0)
 			return 40;
-		if ( $column_mode == 'one-column' )
+		if ( $column_mode == 'one_column' )
 			return 55;
 	}
 	*/

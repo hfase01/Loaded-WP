@@ -7,6 +7,88 @@ Changelog Legend:
 [x] = Deleted
 [!] = Bugs
 
+(05/01/2012) - Maintenance Version 1.5.0
+[+] missing textdomain for 'powered by' footer.php
+[*] featured-image DIV end (comment only) home.php
+[+] Instagram and Pinterest icons
+[+] custom styles in Theme Options
+[+] German translation
+[*] theme-options.css
+
+(04/24/2012) - Bug Fixes/Maintenance Version 1.4.8/9
+[!] dropdown menu clear background
+[!] no breadcrumb chevron on page levels
+[+] Class for breadcrumb lists CSS
+[+] form-allowed-tags element
+[*] search.php post-meta rearrangement 
+[*] default logo
+[*] featured image 
+[*] localization
+[*] reset input class CSS
+
+
+(04/21/2012) - Bug Fix
+[!] Breadcrumb List chevron was not displaying
+    correctly on Windows based systems
+
+(04/18/2012) - Maintenance Version 1.4.5/6
+[!] social icons px fix
+[+] WP 3.4 add_theme_support('custom-background') w/backward compatibilities
+[+] WP 3.4 add_theme_support('custom-header') w/backward compatibilities
+[+] new breadcrumb lists
+[*] featured-image.png
+[*] screenshot.png
+
+(04/14/2012) - Maintenance Version 1.4.4
+[!] blog.php and blog-excerpt.php while frontpage fix
+[+] image dimensions for social icons
+[-] image dimension for social icons CSS 
+[*] PHP sidebar-left headings
+[x] unnececary theme options functions.php
+[x] sub-header-menu border-radius
+
+
+(04/05/2012) - Maintenance Version 1.4.2/3
+[x] widgets ul styles CSS
+[*] widgets a padding CSS
+[^] widgets ul styles to widget-wrapper and widget-wrapper-left
+[!] widgets were breaking styles CSS/functions.php
+[!] main menu current_page_item CSS
+[*] margins for widget titles CSS
+[!] featured-title line-height CSS
+[*] featured-subtitle padding CSS
+[+] clearfix to widget-wrapper
+[+] footer a color CSS
+[+] post-data a color CSS and font-weight
+[+] comment-meta font-size CSS
+[x] global links underline
+[*] Theme description in style.css
+[*] headimg background-repeat none /includes/functions.php
+[*] read-more font-weight CSS
+[+] widget-wrapper DIV to all default sidebars
+
+
+(04/01/2012) - Maintenance Version 1.4.0/1
+[x] ul children for better CSS efficiancy
+[x] ul widget a color
+[x] form div margins
+[+] ID/class for all widgetized areas
+[*] author-meta margins
+[*] WP-Core image alignments
+[*] top-menu CSS
+[*] featured div comments
+[!] extra ; in .address CSS
+[+] word-wrap to all p's and headings CSS
+[x] paddings for global a's CSS
+[+] margin-bottom for site-description CSS
+[+] font-weight for site-name CSS
+[x] header search-box CSS
+[x] featured-button CSS
+[*] jQuery version in theme-options.php
+[x] border in pre CSS
+[*] blockquote's CSS
+[*] author-meta CSS
+
 (03/27/2012) - Maintenance Version 1.3.8
 [*] description typo in style.css
 [+] link color in style.css for better visibility

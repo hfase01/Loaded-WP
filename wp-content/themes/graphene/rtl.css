@@ -326,10 +326,10 @@ Theme Name: Graphene
 /* =Header
 -------------------------------------------------------------- */
 
-#rss{
+#profiles {
 	float: right;
 }
-#rss a {
+#profiles a {
 	float: right;
 	margin-left: 10px;
 	margin-right: 0;
@@ -504,7 +504,9 @@ Theme Name: Graphene
 .post-meta .edit-post,
 .post-meta .post-date-inline,
 .email,
-.print {
+.print,
+.post-format .edit-post, 
+.post-format .comment-link {
 	float: left;
 }
 .post-meta .edit-post,
@@ -513,6 +515,11 @@ Theme Name: Graphene
 .email {
 	margin-right: 5px;
 	margin-left: 0;
+}
+.post-format .edit-post, 
+.post-format .comment-link {
+	margin-right: 0;
+	margin-left: 5px;
 }
 .post-meta .post-date-inline {
 	border-right: 1px solid #ccc;
@@ -608,7 +615,15 @@ pre.block {
 	float: left;
 	text-align: left;
 }
-
+.comment-avatar-wrap {
+    float: right;
+    margin-left: 10px;
+	margin-right: 0;
+}
+#comments .children {
+	margin-left: 0;
+	margin-right: 60px;
+}
 
 /* =Post Formats
 -------------------------------------------------------------- */

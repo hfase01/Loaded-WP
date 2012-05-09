@@ -26,20 +26,20 @@ function graphene_options_general() {
                             <label><?php _e( 'What do you want to show in the slider', 'graphene' ); ?></label><br />                            
                         </th>
                         <td>
-                            <input type="radio" name="graphene_settings[slider_type]" value="latest_posts" id="slider_type_latest_posts" <?php checked( $graphene_settings['slider_type'], 'latest_posts' ); ?>/>
+                            <input type="radio" name="graphene_settings[slider_type]" value="latest_posts" class="slider-type" id="slider_type_latest_posts" <?php checked( $graphene_settings['slider_type'], 'latest_posts' ); ?>/>
                             <label for="slider_type_latest_posts"><?php _e( 'Show latest posts', 'graphene' ); ?></label>                            
                             <br />
-                            <input type="radio" name="graphene_settings[slider_type]" value="random" id="slider_type_random" <?php checked( $graphene_settings['slider_type'], 'random' ); ?>/>
+                            <input type="radio" name="graphene_settings[slider_type]" value="random" class="slider-type" id="slider_type_random" <?php checked( $graphene_settings['slider_type'], 'random' ); ?>/>
                             <label for="slider_type_random"><?php _e( 'Show random posts', 'graphene' ); ?></label>
                             <br />
-                            <input type="radio" name="graphene_settings[slider_type]" value="posts_pages" id="slider_type_posts_pages" <?php checked( $graphene_settings['slider_type'], 'posts_pages' ); ?>/>
+                            <input type="radio" name="graphene_settings[slider_type]" value="posts_pages" class="slider-type" id="slider_type_posts_pages" <?php checked( $graphene_settings['slider_type'], 'posts_pages' ); ?>/>
                             <label for="slider_type_posts_pages"><?php _e( 'Show specific posts/pages', 'graphene' ); ?></label>                            
                             <br />
-                            <input type="radio" name="graphene_settings[slider_type]" value="categories" id="slider_type_categories" <?php checked( $graphene_settings['slider_type'], 'categories' ); ?>/>
+                            <input type="radio" name="graphene_settings[slider_type]" value="categories" class="slider-type" id="slider_type_categories" <?php checked( $graphene_settings['slider_type'], 'categories' ); ?>/>
                             <label for="slider_type_categories"><?php _e( 'Show posts from categories', 'graphene' ); ?></label>                            
                         </td>
                     </tr>
-                    <tr id="row_slider_type_posts_pages"<?php if ( $graphene_settings['slider_type'] != 'posts_pages' ) echo ' class="hide"'; ?>>
+                    <tr class="row_slider_type_posts_pages<?php if ( $graphene_settings['slider_type'] != 'posts_pages' ) echo ' hide'; ?>">
                         <th scope="row">
                             <label for="slider_specific_posts"><?php _e( 'Posts and/or pages to display', 'graphene' ); ?></label>
                         </th>
@@ -51,7 +51,7 @@ function graphene_options_general() {
                             </span>                        
                         </td>
                     </tr>
-                    <tr id="row_slider_type_categories"<?php if ( $graphene_settings['slider_type'] != 'categories' ) echo ' class="hide"'; ?>>
+                    <tr class="row_slider_type_categories<?php if ( $graphene_settings['slider_type'] != 'categories' ) echo ' hide'; ?>">
                         <th scope="row">
                             <label for="slider_specific_categories"><?php _e( 'Categories to display', 'graphene' ); ?></label>
                             <small><?php _e( 'All posts within the categories selected here will be displayed on the slider. Usage example: create a new category "Featured" and assign all posts to be displayed on the slider to that category, and then select that category here.', 'graphene' ); ?></small>
@@ -66,6 +66,26 @@ function graphene_options_general() {
                                 <option value="<?php echo $category->cat_ID; ?>" <?php if ( $selected_cats && in_array( $category->cat_ID, $selected_cats ) ) { echo 'selected="selected"'; }?>><?php echo $category->cat_name; ?></option>
                                 <?php endforeach; ?> 
                             </select>                       
+                        </td>
+                    </tr>
+                    <tr class="row_slider_type_categories<?php if ( $graphene_settings['slider_type'] != 'categories' ) echo ' hide'; ?>">
+                        <th scope="row">
+                            <label for="slider_specific_categories"><?php _e( 'Exclude the categories from posts listing', 'graphene' ); ?></label>
+                        </th>
+                        <td>
+                        	<select name="graphene_settings[slider_exclude_categories]">
+                        		<option type="radio" name="graphene_settings[slider_exclude_categories]" id="slider_exclude_categories_disabled" <?php selected( $graphene_settings['slider_exclude_categories'], 'disabled' ); ?> value="disabled" data-toggleOptions="true"><?php _e( 'Disabled', 'graphene' ); ?></option>
+                                <option type="radio" name="graphene_settings[slider_exclude_categories]" id="slider_exclude_categories_frontpage" <?php selected( $graphene_settings['slider_exclude_categories'], 'frontpage' ); ?> value="homepage" data-toggleOptions="true"><?php _e( 'Home Page', 'graphene' ); ?></option>
+                                <option type="radio" name="graphene_settings[slider_exclude_categories]" id="slider_exclude_categories_everywhere" <?php selected( $graphene_settings['slider_exclude_categories'], 'everywhere' ); ?> value="everywhere" data-toggleOptions="true"><?php _e( 'Everywhere', 'graphene' ); ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="row_slider_type_categories<?php if ( $graphene_settings['slider_type'] != 'categories' ) echo ' hide'; ?>">
+                        <th scope="row">
+                            <label for="slider_random_category_posts"><?php _e( 'Show posts from categories in random order', 'graphene' ); ?></label>
+                        </th>
+                        <td>
+                        	<input type="checkbox" name="graphene_settings[slider_random_category_posts]" id="slider_random_category_posts" <?php checked( $graphene_settings['slider_random_category_posts'] ); ?> value="true" data-toggleOptions="true" />
                         </td>
                     </tr>
                     <tr>
@@ -219,13 +239,13 @@ function graphene_options_general() {
                             <?php _e( 'Type of content to show', 'graphene' ); ?>
                         </th>
                         <td>
-                            <input type="radio" name="graphene_settings[show_post_type]" value="latest-posts" id="show_post_type_latest-posts" <?php checked( $graphene_settings['show_post_type'], 'latest-posts' ); ?>/>
+                            <input type="radio" name="graphene_settings[show_post_type]" value="latest-posts" class="homepage-panes-post-type" id="show_post_type_latest-posts" <?php checked( $graphene_settings['show_post_type'], 'latest-posts' ); ?>/>
                             <label for="show_post_type_latest-posts"><?php _e( 'Latest posts', 'graphene' ); ?></label>
                             
-                            <input type="radio" name="graphene_settings[show_post_type]" value="cat-latest-posts" id="show_post_type_cat-latest-posts" <?php checked( $graphene_settings['show_post_type'],  'cat-latest-posts' ); ?>/>
+                            <input type="radio" name="graphene_settings[show_post_type]" value="cat-latest-posts" class="homepage-panes-post-type" id="show_post_type_cat-latest-posts" <?php checked( $graphene_settings['show_post_type'],  'cat-latest-posts' ); ?>/>
                             <label for="show_post_type_cat-latest-posts"><?php _e( 'Latest posts by category', 'graphene' ); ?></label>
                            
-                            <input type="radio" name="graphene_settings[show_post_type]" value="posts" id="show_post_type_pages" <?php checked( $graphene_settings['show_post_type'], 'posts' ); ?>/>
+                            <input type="radio" name="graphene_settings[show_post_type]" value="posts" class="homepage-panes-post-type" id="show_post_type_pages" <?php checked( $graphene_settings['show_post_type'], 'posts' ); ?>/>
                             <label for="show_post_type_pages"><?php _e( 'Posts and/or pages', 'graphene' ); ?></label>
                         </td>
                     </tr>
@@ -367,7 +387,7 @@ function graphene_options_general() {
                 </table>
             </div>
         </div>
-        
+                
         
         <?php /* Top Bar Options */ ?>
         <div class="postbox">
@@ -381,78 +401,127 @@ function graphene_options_general() {
                         <th scope="row">
                             <label for="hide_top_bar"><?php _e( 'Hide the top bar', 'graphene' ); ?></label>
                         </th>
-                        <td><input type="checkbox" name="graphene_settings[hide_top_bar]" id="hide_top_bar" <?php checked( $graphene_settings['hide_top_bar'] ); ?> value="true" data-toggleOptions="true" /></td>
+                        <td><input type="checkbox" name="graphene_settings[hide_top_bar]" id="hide_top_bar" <?php checked( $graphene_settings['hide_top_bar'] ); ?> value="true" data-toggleOptions="true" rel="social-media-table" /></td>
                     </tr>
                 </table>
+                
+                <h4 class="social-media-table"><?php _e( 'Social Media', 'graphene' ); ?></h4>
                 <table class="form-table social-media-table<?php if ( $graphene_settings['hide_top_bar'] == true ) echo ' hide'; ?>">
-                    <tbody>
-                    <tr class="non-essential-option">
-                        <th scope="row"><label for="hide_feed_icon"><?php _e( 'Hide feed icon', 'graphene' ); ?></label></th>
-                        <td><input type="checkbox" name="graphene_settings[hide_feed_icon]" id="hide_feed_icon" <?php checked( $graphene_settings['hide_feed_icon'] ); ?> value="true" /></td>                                    
-                    </tr> 	
-                    <tr class="non-essential-option">
-                        <th scope="row"><label for="custom_feed_url"><?php _e( 'Use custom feed URL', 'graphene' ); ?></label></th>
-                        <td>
-                            <input type="text" name="graphene_settings[custom_feed_url]" id="custom_feed_url" value="<?php echo $graphene_settings['custom_feed_url']; ?>" size="60" class="widefat code" /><br />
-                            <span class="description"><?php _e( 'This custom feed URL will replace the default WordPress RSS feed URL.', 'graphene' ); ?></span>
-                        </td>
-                    </tr>
                     <tr class="non-essential-option">
                         <th scope="row"><label for="social_media_new_window"><?php _e( 'Open social media links in new window', 'graphene' ); ?></label></th>
-                        <td><input type="checkbox" name="graphene_settings[social_media_new_window]" id="social_media_new_window" <?php checked( $graphene_settings['social_media_new_window'] ); ?> value="true" /></td>                                    
-                    </tr> 
-                    <tr>
-                        <th scope="row"><label for="twitter_url"><?php _e( 'Twitter URL', 'graphene' ); ?></label></th>
-                        <td>
-                            <input type="text" name="graphene_settings[twitter_url]" id="twitter_url" value="<?php echo $graphene_settings['twitter_url']; ?>" size="60" class="widefat code" /><br />
-                            <span class="description"><?php _e( 'Enter the URL to your Twitter page.', 'graphene' ); ?></span>
-                        </td>
+                        <td><input type="checkbox" name="graphene_settings[social_media_new_window]" id="social_media_new_window" <?php checked( $graphene_settings['social_media_new_window'] ); ?> value="true" /></td>    
                     </tr>
-                    <tr>
-                        <th scope="row"><label for="facebook_url"><?php _e( 'Facebook URL', 'graphene' ); ?></label></th>
-                        <td>
-                            <input type="text" name="graphene_settings[facebook_url]" id="facebook_url" value="<?php echo $graphene_settings['facebook_url']; ?>" size="60" class="widefat code" /><br />
-                            <span class="description"><?php _e( 'Enter the URL to your Facebook profile page.', 'graphene' ); ?></span>
-                        </td>
-                    </tr>
-                    
-                    <?php /* Loop through the registered social media */
-					$social_media = $graphene_settings['social_media'];
-					// disect_it( $social_media);
-					if ( ! empty( $social_media) ) : 
-						foreach ( $social_media as $slug => $social_medium) : ?>
-                            <tr class="<?php echo $slug.'-opt '; echo $slug.'-title'; ?> social-media-custom social-media-custom-name">
-                            	<?php /* translators: %s will be replaced by the social media service name. Example: LinkedIn Title */ ?>
-                                <th scope="row"><label for="social_media_<?php echo $slug; ?>_title"><?php printf( __( '%s Title', 'graphene' ), $social_medium['name'] ); ?></label></th>
-                                <td>
-                                    <input type="text" name="graphene_settings[social_media][<?php echo $slug; ?>][title]" id="social_media_<?php echo $slug; ?>_title" value="<?php echo $social_medium['title']; ?>" size="60" class="widefat code" />
-                                    <?php if ( !( isset( $social_medium['title'] ) && ! empty( $social_medium['title'] ) ) ) : ?>
-                                    <br />
-                                    <span class="description"><?php printf( __( 'The title is empty and the following title will be shown: <strong>%s</strong>', 'graphene' ), graphene_determine_social_medium_title( $social_medium, false ) ); ?></span>
+                    <tr class="non-essential-option">
+                		<td colspan="2"><p><?php _e( '<strong>Hint:</strong> drag and drop to rearrange the placement of the social media icons.', 'graphene' ); ?></p></td>
+                	</tr>
+                    <tr class="non-essential-option">
+                        <td colspan="2" id="socialprofile-sortable">                            
+                            <?php        
+                                /*
+								 * Credits go to Benjamin Reid for the icons - Social Media Bookmark Icon +
+								 * http://www.nouveller.com/general/free-social-media-bookmark-icon-pack-the-ever-growing-icon-set/
+								 */
+                                $available_profiles = array (   'Twitter', 'Facebook', 'LinkedIn', 'RSS', '-', __( 'Custom', 'graphene' ), '-',
+                                                    'audioBoo', 'Bebo', 'Behance', 'Blogger', 'Buzz', 'CreativeCommons', 'DailyBooth', 'Delicious', 'DesignFloat', 'DeviantArt', 
+                                                    'Digg', 'Dopplr', 'Dribbble', 'Email', 'Ember', 'Flickr', 'Forrst', 'Friendfeed', 'Google', 
+                                                    'Gowalla', 'Grooveshark', 'Hyves', 'LastFM', 'LiveJournal', 'Lockerz', 'Megavideo', 'MySpace', 'Piano', 
+                                                    'Playfire', 'PlayStation', 'Reddit', 'Skype', 'Socialvibe', 'SoundCloud', 'Spotify', 'Steam', 'StumbleUpon', 
+                                                    'Technorati', 'Tumblr', 'TwitPic', 'Typepad', 'Vimeo', 'Wakoopa', 'WordPress', 'Xing', 'Yahoo', 'YouTube' );
+
+                                $social_profiles = ( ! empty( $graphene_settings['social_profiles'] ) ) ? $graphene_settings['social_profiles'] : array();
+                            ?>
+                            <?php 
+								if ( ! in_array( false, $social_profiles) ) : 
+								foreach ($social_profiles as $profile_key => $profile_data) : 
+							?>
+                                <table class="form-table socialprofile-table">
+                                    <tr>
+                                        <th scope="row" rowspan="<?php echo $profile_data['type'] == sanitize_title( __( 'Custom', 'graphene' ) ) ? '3' : '2'; ?>" class="small-row">                            
+                                            <?php echo $profile_data['name']; ?><br />
+                                            <input type="hidden" name="graphene_settings[social_profiles][<?php echo $profile_key; ?>][type]" value="<?php echo $profile_data['type']; ?>" />
+                                            <input type="hidden" name="graphene_settings[social_profiles][<?php echo $profile_key; ?>][name]" value="<?php echo $profile_data['name']; ?>" />
+                                            <?php if ( $profile_data['type'] == 'custom' ) : ?>
+                                            <img class="mysocial-icon" src="<?php echo $profile_data['icon_url']; ?>" alt="" />
+                                            <?php else : ?>
+                                            <div class="mysocial social-<?php echo $profile_data['type']; ?>">&nbsp;</div>
+                                            <?php endif; ?>
+                                        </th>
+                                        <th class="small-row"><?php _e( 'Title attribute', 'graphene' ); ?></th>
+                                        <td><input type="text" name="graphene_settings[social_profiles][<?php echo $profile_key; ?>][title]" value="<?php echo $profile_data['title']; ?>" class="widefat code" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="small-row"><?php _e('URL', 'graphene'); ?></th>
+                                        <td>
+                                            <input type="text" name="graphene_settings[social_profiles][<?php echo $profile_key; ?>][url]" value="<?php echo $profile_data['url']; ?>" class="widefat code" />
+                                            <?php if ( $profile_data['type'] == 'rss' ) : ?>
+                                                <br /><span class="description"><?php _e('Leave the URL empty to use the default RSS URL.', 'graphene'); ?></span>
+                                            <?php endif; ?>
+                                    <?php if ( $profile_data['type'] == 'custom' ) : ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="small-row"><?php _e('Icon URL', 'graphene'); ?></th>
+                                        <td>
+                                            <input type="text" name="graphene_settings[social_profiles][<?php echo $profile_key; ?>][icon_url]" value="<?php echo $profile_data['icon_url']; ?>" class="widefat code" />                            
                                     <?php endif; ?>
-                                </td>
-                            </tr>
-                            <tr class="<?php echo $slug.'-opt '; echo $slug.'-url'; ?> social-media-custom">
-                            	<?php /* translators: %s will be replaced by the social media service name. Example: LinkedIn URL */ ?>
-                                <th scope="row"><label for="social_media_<?php echo $slug; ?>_url"><?php printf( __( '%s URL', 'graphene' ), $social_medium['name'] ); ?></label></th>
-                                <td><input type="text" name="graphene_settings[social_media][<?php echo $slug; ?>][url]" id="social_media_<?php echo $slug; ?>_url" value="<?php echo $social_medium['url']; ?>" size="60" class="widefat code" /></td>
-                            </tr>                            
-                            <tr class="<?php echo $slug.'-opt '; echo $slug.'-icon'; ?> social-media-custom">
-                            	<?php /* translators: %s will be replaced by the social media service name. Example: LinkedIn icon URL */ ?>
-                                <th scope="row"><label for="social_media_<?php echo $slug; ?>_icon"><?php printf( __( '%s icon URL', 'graphene' ), $social_medium['name'] ); ?></label></th>
-                                <td><input type="text" name="graphene_settings[social_media][<?php echo $slug; ?>][icon]" id="social_media_<?php echo $slug; ?>_icon" value="<?php echo $social_medium['icon']; ?>" size="60" class="widefat code" />
-                                    <input type="hidden" name="graphene_settings[social_media][<?php echo $slug; ?>][name]" value="<?php echo $social_medium['name']; ?>" />
-                                    <span class="delete"><a href="#" id="<?php echo $slug.'-del'; ?>" class="social-media-del"><?php _e( 'Delete', 'graphene' ); ?></a></span>
-                                </td>
-                            </tr>
-					<?php endforeach; endif; ?>
-                            
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td><a href="#" id="social-media-new"><?php _e( 'Add new social media icon', 'graphene' ); ?></a></td>
-                        </tr>
-                    </tfoot>
+                                            <br /><span class="delete"><a href="#" class="socialprofile-del"><?php _e( 'Delete', 'graphene' ); ?></a></span>
+                                        </td>
+                                    </tr>
+                                </table>            
+							<?php endforeach; endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="socialprofile-dragging">
+                                <tr>
+                                    <td colspan="2">
+                                        <strong><?php _e( 'Add Social Media Profile', 'graphene' ); ?></strong>
+                                        <input type="hidden" id="socialprofile-next-index" value="<?php echo count($social_profiles)+1; ?>" />                                                                                
+                                        <input type="hidden" id="new-socialprofile-data" 
+                                                data-icon-url="<?php echo get_template_directory_uri() . '/images/social/'; ?>"
+                                                data-custom-title="<?php echo sanitize_title( __( 'Custom', 'graphene' ) ); ?>"
+                                                data-text-icon-url="<?php _e('Icon URL', 'graphene'); ?>"
+                                                data-text-title-attr="<?php _e('Title attribute', 'graphene'); ?>"
+                                                data-text-url="<?php _e('URL', 'graphene'); ?>"
+                                                data-text-delete="<?php _e( 'Delete', 'graphene' ); ?>"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><?php _e( 'Type', 'graphene' ); ?></th>
+                                    <td>
+                                        <select id="new-socialprofile-type">
+                                            <option disabled="disabled" value="-">- <?php _e( 'Choose type', 'graphene' ); ?> -</option>
+                                            <?php foreach ( $available_profiles as $profile_type) : ?>                                
+                                                <?php if ($profile_type == '-') : ?>
+                                                <option disabled="disabled" value="-">-----------------------</option>
+                                                <?php else : ?>
+                                                <option value="<?php echo sanitize_title( $profile_type ); ?>"><?php echo $profile_type; ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>                            
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><?php _e('Title attribute', 'graphene'); ?></th>
+                                    <td><input type="text" id="new-socialprofile-title" class="widefat code" /></td>
+                                </tr>
+                                <tr>
+                                    <th><?php _e('URL', 'graphene'); ?></th>
+                                    <td><input type="text" id="new-socialprofile-url" class="widefat code" />
+                                        <span id="new-socialprofile-url-description" class="hide"><?php _e('Leave the URL empty to use the default RSS URL.', 'graphene'); ?></span>
+                                    </td>
+                                </tr>
+                                <tr class="hide">
+                                    <th><?php _e('Icon URL', 'graphene'); ?></th>
+                                    <td><input type="text" id="new-socialprofile-iconurl" class="widefat code" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><a href="#" id="new-socialprofile-add"><?php _e( 'Add new Social Media Profile', 'graphene' ); ?></a></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -477,6 +546,13 @@ function graphene_options_general() {
                         <td><input type="checkbox" name="graphene_settings[show_addthis_page]" id="show_addthis_page" <?php checked( $graphene_settings['show_addthis_page'] ); ?> value="true" /></td>
                     </tr>
                     <tr>
+                        <th scope="row"><label for="show_addthis_page"><?php _e( 'Show in home and archive pages?', 'graphene' ); ?></label></th>
+                        <td>
+                        	<input type="checkbox" name="graphene_settings[show_addthis_archive]" id="show_addthis_archive" <?php checked( $graphene_settings['show_addthis_archive'] ); ?> value="true" /><br />
+                            <span class="description"><?php printf( __( "Enabling this will cause the social sharing buttons to appear on posts listing pages, like the home page and archive pages. Use the available tags in the code below to get the post's URL, title, and excerpt. Otherwise, all your buttons will share the same URL and title. If you're using AddThis, see the %s.", 'graphene' ), '<a href="http://support.addthis.com/customer/portal/articles/381263-addthis-client-api#.T2UTU9V7lI1">' . __( 'AddThis Client API', 'graphene' ) . '</a>' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row"><label for="addthis_location"><?php _e( 'Social sharing buttons location', 'graphene' ); ?></label></th>
                         <td>
                         	<select name="graphene_settings[addthis_location]" id="addthis_location">
@@ -491,7 +567,7 @@ function graphene_options_general() {
                             <label for="addthis_code"><?php _e("Your social sharing button code", 'graphene' ); ?></label><br />
                             <small><?php _e( 'You can use codes from any popular social sharing sites, like Facebook, Digg, AddThis, etc.', 'graphene' ); ?></small>
                         </th>
-                        <td><textarea name="graphene_settings[addthis_code]" id="addthis_code" cols="60" rows="7" class="widefat code"><?php echo htmlentities(stripslashes( $graphene_settings['addthis_code'] ) ); ?></textarea><br />
+                        <td><textarea name="graphene_settings[addthis_code]" id="addthis_code" cols="60" rows="10" class="widefat code"><?php echo htmlentities(stripslashes( $graphene_settings['addthis_code'] ) ); ?></textarea><br />
                         	<span class="description"><?php _e("You may use these tags to get the post's URL, title, and excerpt:", 'graphene' ); ?> <code>[#post-url]</code>, <code>[#post-title]</code>, <code>[#post-excerpt]</code></span>
                         </td>
                     </tr>

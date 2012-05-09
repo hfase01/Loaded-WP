@@ -27,11 +27,7 @@ if ( function_exists( 'get_post_format' ) ) {
 ?>
 
 <?php /* Post navigation */ ?>
-<div class="post-nav clearfix">
-	<p id="previous"><?php previous_post_link(); ?></p>
-	<p id="next-post"><?php next_post_link(); ?></p>
-	<?php do_action( 'graphene_post_nav' ); ?>
-</div>
+<?php graphene_post_nav(); ?>
         
 <div id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix post' ); ?>>
 	
@@ -133,11 +129,9 @@ if ( function_exists( 'get_post_format' ) ) {
 			<?php endif; ?>
 			
 			<?php 
-			/**
-			 * Display AddThis social sharing button
-			*/ 
+			/* Display AddThis social sharing button */
+			if ( stripos( $graphene_settings['addthis_location'], 'bottom' ) !== false) { graphene_addthis( get_the_ID() ); } 
 			?>
-			<?php if ( stripos( $graphene_settings['addthis_location'], 'bottom' ) !== false) { graphene_addthis( get_the_ID() ); } ?>
 			
 			<?php do_action( 'graphene_post_footer' ); ?>
 		</div>

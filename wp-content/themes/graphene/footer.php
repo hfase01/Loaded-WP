@@ -15,12 +15,12 @@ global $graphene_settings;
     <?php
     
         /* Sidebar 2 on the right side? */
-        if ( graphene_column_mode() == 'three-col-left' ){
+        if ( graphene_column_mode() == 'three_col_left' ){
             get_sidebar( 'two' );
         }
 		
 		/* Sidebar 1 on the right side? */
-        if ( in_array( graphene_column_mode(), array( 'two-col-left', 'three-col-left', 'three-col-center' ) ) ){
+        if ( in_array( graphene_column_mode(), array( 'two_col_left', 'three_col_left', 'three_col_center' ) ) ){
             get_sidebar();
         }
     
