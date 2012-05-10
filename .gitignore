@@ -5,6 +5,15 @@ wp-content/blogs.dir/
 wp-content/upgrade/*
 wp-content/backup-db/*
 wp-content/cache/*
+<<<<<<< HEAD
 sitemap.xml
 sitemap.xml.gz
 wp-config.php
+=======
+wp-content/w3-total-cache-config.php
+sitemap.xml
+sitemap.xml.gz
+readme.html
+license.txt
+wp-config.php
+>>>>>>> working-on-logo
