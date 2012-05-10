@@ -1,0 +1,671 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: The Welcomizer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-11 16:21-0500\n"
+"PO-Revision-Date: 2012-04-11 19:48-0500\n"
+"Last-Translator: Sébastien Laframboise <wordpress@sebastien-laframboise.com>\n"
+"Language-Team: Sébastien Laframboise| sebastien-laframboise.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: CANADA\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: twiz-index.php:80
+#: includes/twiz.class.php:453
+msgid "The Welcomizer"
+msgstr "Le Welcomizeur"
+
+#: includes/twiz.admin.class.php:54
+msgid "All"
+msgstr "Toutes"
+
+#: includes/twiz.admin.class.php:91
+msgid "Register jQuery default library"
+msgstr "Inscrire la librairie jQuery par défaut "
+
+#: includes/twiz.admin.class.php:95
+msgid "Compress Output code"
+msgstr "Compresser le code de sortie "
+
+#: includes/twiz.admin.class.php:99
+msgid "Output code hooked to"
+msgstr "Code de sortie accroché à "
+
+#: includes/twiz.admin.class.php:105
+msgid "Starting position by default"
+msgstr "Position de départ par défaut "
+
+#: includes/twiz.admin.class.php:109
+msgid "Maximum number of posts in lists"
+msgstr "Nombre maximum d'articles dans les listes "
+
+#: includes/twiz.admin.class.php:115
+msgid "Minimum Role to access this plugin"
+msgstr "Rôle minimum d'accès à ce plugin "
+
+#: includes/twiz.admin.class.php:121
+msgid "Delete all when disabling the plugin"
+msgstr "Tout effacer à la désactivation du plugin "
+
+#: includes/twiz.admin.class.php:127
+#: includes/twiz.class.php:1846
+#: includes/twiz.menu.class.php:693
+msgid "Save"
+msgstr "Enregistrer"
+
+#: includes/twiz.ajax.class.php:42
+#: includes/twiz.class.php:520
+msgid "Import"
+msgstr "Importer"
+
+#: includes/twiz.ajax.class.php:49
+#: includes/twiz.ajax.class.php:69
+msgid "{file} has invalid extension. Only {extensions} are allowed."
+msgstr "{file} a une extension invalide. Seulement les {extensions} sont permis."
+
+#: includes/twiz.ajax.class.php:50
+#: includes/twiz.ajax.class.php:70
+msgid "{file} is too large, maximum file size is {sizeLimit}."
+msgstr "{file} est trop lourd, Le taille maximale d'un fichier est {sizeLimit}."
+
+#: includes/twiz.ajax.class.php:51
+#: includes/twiz.ajax.class.php:71
+msgid "{file} is too small, minimum file size is {minSizeLimit}."
+msgstr "{file} est trop léger, la taille minimale est d'un fichier est {minSizeLimit}."
+
+#: includes/twiz.ajax.class.php:52
+#: includes/twiz.ajax.class.php:72
+msgid "{file} is empty, please select files again without it."
+msgstr "{file} est vide, svp choisissez d'autres fichiers sans celui-ci."
+
+#: includes/twiz.ajax.class.php:53
+#: includes/twiz.ajax.class.php:73
+msgid "The files are being uploaded, if you leave now the upload will be cancelled."
+msgstr "Le fichier se téléverse, si vous quitter maintenant le téléversement sera annulé."
+
+#: includes/twiz.ajax.class.php:62
+#: includes/twiz.class.php:522
+msgid "Upload"
+msgstr "Téléverser"
+
+#: includes/twiz.ajax.class.php:322
+#: includes/twiz.ajax.class.php:759
+msgid "Are you sure to delete?"
+msgstr "Êtes-vous certain d'effacer?"
+
+#: includes/twiz.ajax.class.php:551
+#: includes/twiz.class.php:688
+msgid "Edit"
+msgstr "Modifier"
+
+#: includes/twiz.ajax.class.php:873
+#: includes/twiz.ajax.class.php:875
+#: includes/twiz.menu.class.php:122
+#: includes/twiz.menu.class.php:670
+msgid "Give the section a name"
+msgstr "Donnez un nom à la section"
+
+#: includes/twiz.ajax.class.php:886
+msgid "Please type a short code."
+msgstr "S'il vous plaît, tapez un short code."
+
+#: includes/twiz.ajax.class.php:896
+msgid "Please choose an output option."
+msgstr "S'il vous plaît, choisissez une option."
+
+#: includes/twiz.ajax.class.php:910
+msgid "Please select at least one option."
+msgstr "S'il vous plaît, choisissez au moins une option."
+
+#: includes/twiz.ajax.class.php:919
+msgid "Please type a custom logic."
+msgstr "S'il vous plaît, tapez une logique personnalisée."
+
+#: includes/twiz.class.php:510
+msgid "Add New"
+msgstr "Ajouter"
+
+#: includes/twiz.class.php:521
+msgid "Export"
+msgstr "Exporter"
+
+#: includes/twiz.class.php:523
+#: includes/twiz.menu.class.php:757
+msgid "Library"
+msgstr "Librairie"
+
+#: includes/twiz.class.php:524
+#: includes/twiz.menu.class.php:759
+msgid "Admin"
+msgstr "Admin"
+
+#: includes/twiz.class.php:578
+msgid "More suggestions"
+msgstr "Plus de suggestions"
+
+#: includes/twiz.class.php:578
+msgid "Fewer suggestions"
+msgstr "Moins de suggestions"
+
+#: includes/twiz.class.php:667
+#: includes/twiz.class.php:1738
+#: includes/twiz.library.class.php:64
+msgid "Status"
+msgstr "Status "
+
+#: includes/twiz.class.php:667
+#: includes/twiz.class.php:1741
+msgid "Element"
+msgstr "Élément "
+
+#: includes/twiz.class.php:667
+msgid "Event"
+msgstr "Événement"
+
+#: includes/twiz.class.php:667
+msgid "Delay"
+msgstr "Délai"
+
+#: includes/twiz.class.php:667
+#: includes/twiz.class.php:1743
+msgid "Duration"
+msgstr "Durée "
+
+#: includes/twiz.class.php:667
+#: includes/twiz.class.php:1739
+#: includes/twiz.library.class.php:67
+#: includes/twiz.menu.class.php:693
+msgid "Action"
+msgstr "Action"
+
+#: includes/twiz.class.php:688
+#: includes/twiz.class.php:1731
+msgid "Copy"
+msgstr "Copier"
+
+#: includes/twiz.class.php:688
+#: includes/twiz.library.class.php:85
+msgid "Delete"
+msgstr "Effacer"
+
+#: includes/twiz.class.php:759
+msgid "Cannot open file"
+msgstr "Impossible d'ouvrir le fichier"
+
+#: includes/twiz.class.php:764
+msgid "Cannot write to file"
+msgstr "Impossible d'écrire dans le fichier"
+
+#: includes/twiz.class.php:771
+#: includes/import/server/php.php:156
+msgid "You must first create this directory"
+msgstr "Vous devez d'abord créer ce répertoire"
+
+#: includes/twiz.class.php:774
+msgid "Right-click, Save Target As/Save Link As"
+msgstr "Faites un clic droit, enregistrer la cible du lien sous / enregistrer le lien sous"
+
+#: includes/twiz.class.php:774
+msgid "Download file"
+msgstr "Télécharger le fichier"
+
+#: includes/twiz.class.php:1740
+msgid "Trigger by Event"
+msgstr "Sur événement "
+
+#: includes/twiz.class.php:1740
+msgid "(optional)"
+msgstr "(facultatif) "
+
+#: includes/twiz.class.php:1742
+msgid "Start delay"
+msgstr "Délai du départ  "
+
+#: includes/twiz.class.php:1742
+#: includes/twiz.class.php:1743
+msgid "sec"
+msgstr "sec"
+
+#: includes/twiz.class.php:1743
+#: includes/twiz.class.php:1900
+msgid "More configurations"
+msgstr "Plus de configurations"
+
+#: includes/twiz.class.php:1747
+#: includes/twiz.class.php:1909
+msgid "Starting Positions"
+msgstr "Positions de départ"
+
+#: includes/twiz.class.php:1748
+#: includes/twiz.class.php:1779
+#: includes/twiz.class.php:2190
+msgid "OnReady"
+msgstr "OnReady"
+
+#: includes/twiz.class.php:1749
+#: includes/twiz.class.php:1780
+#: includes/twiz.class.php:2193
+msgid "Before the delay"
+msgstr "Avant le délai"
+
+#: includes/twiz.class.php:1750
+#: includes/twiz.class.php:1781
+#: includes/twiz.class.php:2196
+msgid "After the delay"
+msgstr "Après le délai"
+
+#: includes/twiz.class.php:1752
+#: includes/twiz.class.php:1793
+#: includes/twiz.class.php:1821
+#: includes/twiz.class.php:1911
+#: includes/twiz.class.php:1934
+#: includes/twiz.class.php:1947
+msgid "Top"
+msgstr "Top "
+
+#: includes/twiz.class.php:1757
+#: includes/twiz.class.php:1799
+#: includes/twiz.class.php:1827
+#: includes/twiz.class.php:1912
+#: includes/twiz.class.php:1935
+#: includes/twiz.class.php:1948
+msgid "Left"
+msgstr "Left "
+
+#: includes/twiz.class.php:1762
+#: includes/twiz.class.php:1913
+msgid "Position"
+msgstr "Position "
+
+#: includes/twiz.class.php:1764
+msgid "absolute"
+msgstr "absolu"
+
+#: includes/twiz.class.php:1765
+msgid "relative"
+msgstr "relative"
+
+#: includes/twiz.class.php:1766
+msgid "fixed"
+msgstr "fixe"
+
+#: includes/twiz.class.php:1767
+msgid "static"
+msgstr "statique"
+
+#: includes/twiz.class.php:1770
+#: includes/twiz.class.php:1914
+msgid "z-index"
+msgstr "z-index"
+
+#: includes/twiz.class.php:1778
+#: includes/twiz.class.php:1919
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: includes/twiz.class.php:1785
+#: includes/twiz.class.php:1808
+#: includes/twiz.class.php:1813
+#: includes/twiz.class.php:1837
+#: includes/twiz.class.php:1842
+msgid "e.g."
+msgstr "Ex."
+
+#: includes/twiz.class.php:1790
+#: includes/twiz.class.php:1932
+msgid "First Move"
+msgstr "Premier déplacement"
+
+#: includes/twiz.class.php:1790
+#: includes/twiz.class.php:1818
+#: includes/twiz.class.php:2207
+msgid "Swing"
+msgstr "Avec élan"
+
+#: includes/twiz.class.php:1791
+#: includes/twiz.class.php:1819
+#: includes/twiz.class.php:2210
+msgid "Linear"
+msgstr "Linéaire"
+
+#: includes/twiz.class.php:1804
+#: includes/twiz.class.php:1832
+msgid "More Options"
+msgstr "Plus d'options"
+
+#: includes/twiz.class.php:1806
+#: includes/twiz.class.php:1835
+msgid "Personalized options"
+msgstr "Options personnalisées"
+
+#: includes/twiz.class.php:1807
+#: includes/twiz.class.php:1836
+msgid "Pick from List"
+msgstr "Choisir parmis la liste"
+
+#: includes/twiz.class.php:1813
+#: includes/twiz.class.php:1842
+msgid "Extra JavaScript"
+msgstr "Extra JavaScript"
+
+#: includes/twiz.class.php:1818
+#: includes/twiz.class.php:1945
+msgid "Second Move"
+msgstr "Second déplacement"
+
+#: includes/twiz.class.php:1846
+#: includes/twiz.menu.class.php:693
+msgid "Cancel"
+msgstr "Annuler"
+
+#: includes/twiz.class.php:2060
+msgid "Global"
+msgstr "Global"
+
+#: includes/twiz.class.php:2085
+msgid "All animations"
+msgstr "Liste des animations"
+
+#: includes/twiz.class.php:2174
+msgid "Choose"
+msgstr "Choisissez"
+
+#: includes/twiz.library.class.php:65
+msgid "Filename"
+msgstr "Nom du fichier"
+
+#: includes/twiz.library.class.php:66
+msgid "Order"
+msgstr "Ordre"
+
+#: includes/twiz.menu.class.php:52
+#: includes/twiz.menu.class.php:728
+#: includes/twiz.menu.class.php:779
+msgid "Home"
+msgstr "Accueil"
+
+#: includes/twiz.menu.class.php:53
+#: includes/twiz.menu.class.php:743
+#: includes/twiz.menu.class.php:793
+msgid "Everywhere"
+msgstr "Partout"
+
+#: includes/twiz.menu.class.php:54
+#: includes/twiz.menu.class.php:747
+#: includes/twiz.menu.class.php:797
+msgid "All Categories"
+msgstr "Toutes les catégories"
+
+#: includes/twiz.menu.class.php:55
+#: includes/twiz.menu.class.php:751
+#: includes/twiz.menu.class.php:801
+msgid "All Pages"
+msgstr "Toutes les pages"
+
+#: includes/twiz.menu.class.php:56
+#: includes/twiz.menu.class.php:755
+#: includes/twiz.menu.class.php:805
+msgid "All Posts"
+msgstr "Tous les articles "
+
+#: includes/twiz.menu.class.php:59
+msgid "Default"
+msgstr "Défaut"
+
+#: includes/twiz.menu.class.php:60
+#: includes/twiz.menu.class.php:687
+msgid "Unique"
+msgstr "Unique"
+
+#: includes/twiz.menu.class.php:61
+#: includes/twiz.menu.class.php:688
+msgid "Multiple"
+msgstr "Multiple"
+
+#: includes/twiz.menu.class.php:62
+#: includes/twiz.menu.class.php:689
+msgid "Custom logic"
+msgstr "Logique perso"
+
+#: includes/twiz.menu.class.php:63
+msgid "Logic"
+msgstr "Logique"
+
+#: includes/twiz.menu.class.php:64
+#: includes/twiz.menu.class.php:686
+msgid "Short code"
+msgstr "Short code"
+
+#: includes/twiz.menu.class.php:445
+msgid "Choose the output"
+msgstr "Choisisser la sortie"
+
+#: includes/twiz.menu.class.php:653
+#: includes/twiz.menu.class.php:654
+msgid "Example"
+msgstr "Exemple"
+
+#: includes/twiz.menu.class.php:659
+msgid "Default sections cannot be modified."
+msgstr "Les sections par défaut ne peuvent être modifiées."
+
+#: includes/twiz.menu.class.php:659
+msgid "To create a new custom section, click on the + menu."
+msgstr "Afin de créer une nouvelle section personnalisée, cliquer sur le menu +."
+
+#: includes/twiz.menu.class.php:659
+msgid "Close"
+msgstr "Fermer"
+
+#: includes/twiz.menu.class.php:684
+msgid "Output type"
+msgstr "Type de sortie "
+
+#: includes/twiz.menu.class.php:693
+msgid "Section name"
+msgstr "Nom de la section "
+
+#: includes/twiz.menu.class.php:698
+msgid "Paste the short code in posts, pages and text widgets."
+msgstr "Coller le short code dans les articles, pages, et widgets textes."
+
+#: includes/twiz.menu.class.php:701
+msgid "Select to overwrite the section name."
+msgstr "Sélectionner pour écraser le nom de la section."
+
+#: includes/twiz.menu.class.php:704
+msgid "DoubleClick to overwrite the section name."
+msgstr "Doublecliquer pour écraser le nom de la section."
+
+#: includes/twiz.menu.class.php:704
+msgid "Press CTRL to select multiple output choices."
+msgstr "Appuyer sur CTRL pour sélectionner plusieurs options."
+
+#: includes/twiz.menu.class.php:707
+msgid "Conditional Tags on WordPress.org"
+msgstr "Balises conditionnelles sur WordPress.org"
+
+#: includes/twiz.menu.class.php:707
+msgid "See also Widget Logic plugin page."
+msgstr "Voir aussi la page du plugin Widget Logic."
+
+#: includes/import/server/php.php:71
+msgid "Getting content length is not supported."
+msgstr "Lire la longueur du contenu n'est pas supporté."
+
+#: includes/import/server/php.php:130
+msgid "php.ini increase post_max_size and upload_max_filesize to "
+msgstr "php.ini augmenter post_max_size et upload_max_filesize à "
+
+#: includes/import/server/php.php:160
+msgid "No files were uploaded."
+msgstr "Aucun fichier n'a été téléversé."
+
+#: includes/import/server/php.php:166
+msgid "File is empty"
+msgstr "Le fichier est vide."
+
+#: includes/import/server/php.php:170
+msgid "File is too large"
+msgstr "Le fichier est trop lourd"
+
+#: includes/import/server/php.php:180
+msgid "File has an invalid extension, it should be one of "
+msgstr "Le fichier a une extension invalide, elle devrait être"
+
+#: includes/import/server/php.php:206
+#: includes/import/server/php.php:223
+msgid "File is corrupted and unreadable, the import was cancelled."
+msgstr "Le fichier est endommagé et illisible, l'importation a été annulée."
+
+#: includes/import/server/php.php:245
+msgid "Could not save uploaded file. The upload was cancelled, or server error encountered"
+msgstr "Impossible d'enregistrer le fichier. Le transfert a été annulé, ou une erreur serveur a été rencontré"
+
+#~ msgid "Less suggestions"
+#~ msgstr "Moins de suggestions"
+
+#~ msgid "More Choices"
+#~ msgstr "Plus de choix"
+
+#~ msgid "Fewer Choices"
+#~ msgstr "Moins de choix"
+
+#~ msgid "Developed by"
+#~ msgstr "Développé par"
+
+#~ msgid "Licensed under the GPL version 2.0"
+#~ msgstr "Sous licence GPL version 2.0"
+
+#~ msgid " All Categories"
+#~ msgstr "Toutes Catégories"
+
+#~ msgid "Categories"
+#~ msgstr "Catégories"
+
+#~ msgid "Pages"
+#~ msgstr "Pages"
+
+#~ msgid "Posts"
+#~ msgstr "Articles "
+
+#~ msgid "Choose and overwrite the section name."
+#~ msgstr "Sélectionner pour écraser le nom de la section."
+
+#~ msgid "Single"
+#~ msgstr "Unique"
+
+#~ msgid "Single output"
+#~ msgstr "Une seule sortie"
+
+#~ msgid "Custom Logic Output"
+#~ msgstr "Logique de sortie"
+
+#~ msgid "Z-Index"
+#~ msgstr "Z-Index "
+
+#~ msgid "Category"
+#~ msgstr "Catégorie"
+
+#~ msgid "Page"
+#~ msgstr "Page"
+
+#~ msgid "Post"
+#~ msgstr "Article "
+
+#~ msgid "Output compression"
+#~ msgstr "Compressé le code de sortie "
+
+#~ msgid "This section is under construction."
+#~ msgstr "Cette section est en construction."
+
+#~ msgid "px"
+#~ msgstr "px"
+
+#~ msgid "Articles"
+#~ msgstr "Articles"
+
+#~ msgid "Server error. Upload directory isn't writable: "
+#~ msgstr ""
+#~ "Erreur serveur. Le répertoire de téléversement n'est pas accessible en "
+#~ "écriture:"
+
+#~ msgid "Include"
+#~ msgstr "Inclure "
+
+#~ msgid "JavaScript Before"
+#~ msgstr "JavaScript Avant"
+
+#~ msgid "What are the features you want within the administration panel?"
+#~ msgstr ""
+#~ "Quelles sont les fonctionnalités que vous voulez à l'intérieur du panneau "
+#~ "d'administration?"
+
+#~ msgid ""
+#~ "What features are you expecting inside the admin panel?\\nYour feedback "
+#~ "is not only appreciated, but necessary.\\n\\nThink about it, and send me "
+#~ "your suggestions before the next version.\\nAre you following?"
+#~ msgstr ""
+#~ "Quelles sont les fonctionnalités que vous attendez à l'intérieur du "
+#~ "panneau d'administration? \\nVos commentaires sont non seulement "
+#~ "appréciés, mais nécessaires. \\n\\nPensez-y, et envoyez-moi vos "
+#~ "suggestions avant la prochaine version.\\nMe suivez-vous?"
+
+#~ msgid "Learn more about jQuery .animate() properties"
+#~ msgstr "En apprendre d'avantage sur jQuery .animate()"
+
+#~ msgid "Welcome!"
+#~ msgstr "Bienvenue !"
+
+#~ msgid "New"
+#~ msgstr "Nouveau"
+
+#~ msgid "Saved!"
+#~ msgstr "Enregistré !"
+
+#~ msgid "Layer ID"
+#~ msgstr "ID du layer "
+
+#~ msgid "seconds"
+#~ msgstr "secondes"
+
+#~ msgid "Message"
+#~ msgstr "Message "
+
+#~ msgid "Speed"
+#~ msgstr "Vitesse "
+
+#~ msgid "Move"
+#~ msgstr "Déplacement "
+
+#~ msgid "A"
+#~ msgstr "A "
+
+#~ msgid "B"
+#~ msgstr "B "
+
+#~ msgid "Start"
+#~ msgstr "Début"
+
+#~ msgid "Travel"
+#~ msgstr "Déplacement"
+
+#~ msgid "Deleted!"
+#~ msgstr "Effacé!"
+
+#~ msgid "End"
+#~ msgstr "Arrivé"
+
+#~ msgid "Active"
+#~ msgstr "Actif "
+
+#~ msgid "Initial style"
+#~ msgstr "Style initial "
+
+#~ msgid "End Left position"
+#~ msgstr "Position d'arrivé Left "
