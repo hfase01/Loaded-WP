@@ -10,8 +10,7 @@
 					<canvas id="myCanvas" width="380" height="175"
 		onmousemove="handleMouseMove(event)"
 		onmouseout="handleMouseOut()"></canvas>
-					
-				
+		
 				</div>
 			</div>
 			<?php

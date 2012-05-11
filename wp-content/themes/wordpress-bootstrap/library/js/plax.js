@@ -24,7 +24,8 @@
 */
 
 (function ($) {
-
+$('img').plaxify()
+$.plax.enable()
   var maxfps             = 25,
       delay              = 1 / maxfps * 1000,
       lastRender         = new Date().getTime(),
