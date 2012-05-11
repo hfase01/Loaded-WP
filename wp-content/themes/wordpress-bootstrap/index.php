@@ -7,9 +7,10 @@
 			<div class="clearfix row-fluid">
 				<div class="hero-unit">
 				
-					<h1><?php bloginfo('title'); ?></h1>
+					<canvas id="myCanvas" width="380" height="175"
+		onmousemove="handleMouseMove(event)"
+		onmouseout="handleMouseOut()"></canvas>
 					
-					<p><?php bloginfo('description'); ?></p>
 				
 				</div>
 			</div>

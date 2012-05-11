@@ -231,7 +231,7 @@
 				
 	</head>
 	
-	<body <?php body_class(); ?>>
+	<body onload="init()" <?php body_class(); ?>>
 				
 		<header role="banner">
 		
