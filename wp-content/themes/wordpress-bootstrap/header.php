@@ -9,11 +9,12 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		
 		<title><?php wp_title('', true, 'right'); ?></title>
-				
 		<meta name="viewport" content="width=device-width; initial-scale=1.0">
 		
+		<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script>window.jQuery || document.write(unescape('%3Cscript src="<?php echo get_template_directory_uri(); ?>/library/js/libs/jquery-1.7.1.min.js"%3E%3C/script%3E'))</script>
 		<!-- icons & favicons -->
 		<!-- For iPhone 4 -->
 		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo get_template_directory_uri(); ?>/library/images/icons/h/apple-touch-icon.png">
@@ -26,12 +27,11 @@
 		<!-- For everything else -->
 		<link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico">
 		
-		<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script>window.jQuery || document.write(unescape('%3Cscript src="<?php echo get_template_directory_uri(); ?>/library/js/libs/jquery-1.7.1.min.js"%3E%3C/script%3E'))</script>
 		
 		<script src="<?php echo get_template_directory_uri(); ?>/library/js/modernizr.full.min.js"></script>
-		
+		<script src="<?php echo get_template_directory_uri(); ?>/library/js/jquery-twinkle/jquery.twinkle.js"></script>
+		<script src="<?php echo get_template_directory_uri(); ?>/library/js/hfase.js"></script>
+		<script src="<?php echo get_template_directory_uri(); ?>/library/js/plax.js"></script>
 		<!-- media-queries.js (fallback) -->
 		<!--[if lt IE 9]>
 			<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>			
@@ -48,7 +48,8 @@
 		<?php wp_head(); ?>
 		<!-- end of wordpress head -->
 		
-		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap.min.css">
+		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap.css">
+		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/normalize.css">
 		
 		<?php
 			$theme_options_styles = '';
@@ -205,7 +206,7 @@
 			if( $bootstrap_theme && $use_theme ){
 				if( $bootstrap_theme == 'default' ){
 		?>
-			<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap.min.css">
+			<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap.css">
 		<?php
 				}
 				else {
@@ -216,7 +217,7 @@
 			}
 		?>
 		
-		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap-responsive.min.css">
+		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/bootstrap-responsive.css">
 		<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>">
 		
 		<?php 
