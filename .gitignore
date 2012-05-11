@@ -8,7 +8,6 @@ wp-content/cache/*
 sitemap.xml
 sitemap.xml.gz
 wp-config.php
-wp-content/w3-total-cache-config.php
 sitemap.xml
 sitemap.xml.gz
 readme.html
