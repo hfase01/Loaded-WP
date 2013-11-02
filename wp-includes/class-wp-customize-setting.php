@@ -1,22 +1,23 @@
 <?php
 /**
- * Customize Setting Class
+ * Customize Setting Class.
  *
  * @package WordPress
  * @subpackage Customize
  * @since 3.4.0
  */
-
 class WP_Customize_Setting {
 	public $manager;
 	public $id;
 
-	public $type              = 'theme_mod';
-	public $capability        = 'edit_theme_options';
-	public $theme_supports    = '';
-	public $default           = '';
-	public $sanitize_callback = '';
-	public $transport         = 'refresh';
+	public $type            = 'theme_mod';
+	public $capability      = 'edit_theme_options';
+	public $theme_supports  = '';
+	public $default         = '';
+	public $transport       = 'refresh';
+
+	public $sanitize_callback    = '';
+	public $sanitize_js_callback = '';
 
 	protected $id_data = array();
 	private $_post_value; // Cached, sanitized $_POST value.
@@ -26,9 +27,11 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
+	 * @param WP_Customize_Manager $manager
 	 * @param string $id An specific ID of the setting. Can be a
 	 *                   theme mod or option name.
 	 * @param array $args Setting arguments.
+	 * @return WP_Customize_Setting
 	 */
 	function __construct( $manager, $id, $args = array() ) {
 		$keys = array_keys( get_class_vars( __CLASS__ ) );
@@ -49,8 +52,11 @@ class WP_Customize_Setting {
 		if ( ! empty( $this->id_data[ 'keys' ] ) )
 			$this->id .= '[' . implode( '][', $this->id_data[ 'keys' ] ) . ']';
 
-		if ( $this->sanitize_callback != '' )
-			add_filter( "customize_sanitize_{$this->id}", $this->sanitize_callback );
+		if ( $this->sanitize_callback )
+			add_filter( "customize_sanitize_{$this->id}", $this->sanitize_callback, 10, 2 );
+
+		if ( $this->sanitize_js_callback )
+			add_filter( "customize_sanitize_js_{$this->id}", $this->sanitize_js_callback, 10, 2 );
 
 		return $this;
 	}
@@ -68,8 +74,10 @@ class WP_Customize_Setting {
 			case 'option' :
 				if ( empty( $this->id_data[ 'keys' ] ) )
 					add_filter( 'pre_option_' . $this->id_data[ 'base' ], array( $this, '_preview_filter' ) );
-				else
+				else {
 					add_filter( 'option_' . $this->id_data[ 'base' ], array( $this, '_preview_filter' ) );
+					add_filter( 'default_option_' . $this->id_data[ 'base' ], array( $this, '_preview_filter' ) );
+				}
 				break;
 			default :
 				do_action( 'customize_preview_' . $this->id );
@@ -80,8 +88,9 @@ class WP_Customize_Setting {
 	 * Callback function to filter the theme mods and options.
 	 *
 	 * @since 3.4.0
+	 * @uses WP_Customize_Setting::multidimensional_replace()
 	 *
-	 * @param mixed Old value.
+	 * @param mixed $original Old value.
 	 * @return mixed New or old value.
 	 */
 	public function _preview_filter( $original ) {
@@ -111,8 +120,8 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param $default mixed A default value which is used as a fallback. Default is null.
-	 * @return mixed Either the default value on failure or sanitized value.
+	 * @param mixed $default A default value which is used as a fallback. Default is null.
+	 * @return mixed The default value on failure, otherwise the sanitized value.
 	 */
 	public final function post_value( $default = null ) {
 		if ( isset( $this->_post_value ) )
@@ -131,12 +140,12 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param $value mixed The value to sanitize.
+	 * @param mixed $value The value to sanitize.
 	 * @return mixed Null if an input isn't valid, otherwise the sanitized value.
 	 */
 	public function sanitize( $value ) {
-		$value = stripslashes_deep( $value );
-		return apply_filters( "customize_sanitize_{$this->id}", $value );
+		$value = wp_unslash( $value );
+		return apply_filters( "customize_sanitize_{$this->id}", $value, $this );
 	}
 
 	/**
@@ -144,7 +153,7 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param $value mixed The value to update.
+	 * @param mixed $value The value to update.
 	 * @return mixed The result of saving the value.
 	 */
 	protected function update( $value ) {
@@ -165,7 +174,7 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param $value mixed The value to update.
+	 * @param mixed $value The value to update.
 	 * @return mixed The result of saving the value.
 	 */
 	protected function _update_theme_mod( $value ) {
@@ -185,7 +194,7 @@ class WP_Customize_Setting {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param $value mixed The value to update.
+	 * @param mixed $value The value to update.
 	 * @return mixed The result of saving the value.
 	 */
 	protected function _update_option( $value ) {
@@ -229,6 +238,22 @@ class WP_Customize_Setting {
 	}
 
 	/**
+	 * Escape the parameter's value for use in JavaScript.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @return mixed The requested escaped value.
+	 */
+	public function js_value() {
+		$value = apply_filters( "customize_sanitize_js_{$this->id}", $this->value(), $this );
+
+		if ( is_string( $value ) )
+			return html_entity_decode( $value, ENT_QUOTES, 'UTF-8');
+
+		return $value;
+	}
+
+	/**
 	 * Check if the theme supports the setting and check user capabilities.
 	 *
 	 * @since 3.4.0
@@ -253,7 +278,7 @@ class WP_Customize_Setting {
 	 * @param $root
 	 * @param $keys
 	 * @param bool $create Default is false.
-	 * @return null|array
+	 * @return null|array Keys are 'root', 'node', and 'key'.
 	 */
 	final protected function multidimensional( &$root, $keys, $create = false ) {
 		if ( $create && empty( $root ) )
@@ -342,5 +367,73 @@ class WP_Customize_Setting {
 	final protected function multidimensional_isset( $root, $keys ) {
 		$result = $this->multidimensional_get( $root, $keys );
 		return isset( $result );
+	}
+}
+
+/**
+ * A setting that is used to filter a value, but will not save the results.
+ *
+ * Results should be properly handled using another setting or callback.
+ *
+ * @package WordPress
+ * @subpackage Customize
+ * @since 3.4.0
+ */
+class WP_Customize_Filter_Setting extends WP_Customize_Setting {
+
+	/**
+	 * @since 3.4.0
+	 */
+	public function update( $value ) {}
+}
+
+/**
+ * A setting that is used to filter a value, but will not save the results.
+ *
+ * Results should be properly handled using another setting or callback.
+ *
+ * @package WordPress
+ * @subpackage Customize
+ * @since 3.4.0
+ */
+final class WP_Customize_Header_Image_Setting extends WP_Customize_Setting {
+	public $id = 'header_image_data';
+
+	/**
+	 * @since 3.4.0
+	 *
+	 * @param $value
+	 */
+	public function update( $value ) {
+		global $custom_image_header;
+
+		// If the value doesn't exist (removed or random),
+		// use the header_image value.
+		if ( ! $value )
+			$value = $this->manager->get_setting('header_image')->post_value();
+
+		if ( is_array( $value ) && isset( $value['choice'] ) )
+			$custom_image_header->set_header_image( $value['choice'] );
+		else
+			$custom_image_header->set_header_image( $value );
+	}
+}
+
+/**
+ * @package WordPress
+ * @subpackage Customize
+ * @since 3.4.0
+ */
+final class WP_Customize_Background_Image_Setting extends WP_Customize_Setting {
+	public $id = 'background_image_thumb';
+
+	/**
+	 * @since 3.4.0
+	 * @uses remove_theme_mod()
+	 *
+	 * @param $value
+	 */
+	public function update( $value ) {
+		remove_theme_mod( 'background_image_thumb' );
 	}
 }

@@ -11,19 +11,19 @@
  *
  * @since 2.8.0
  *
- * @param string $template Template directory of the theme to delete
+ * @param string $stylesheet Stylesheet of the theme to delete
  * @param string $redirect Redirect to page when complete.
  * @return mixed
  */
-function delete_theme($template, $redirect = '') {
+function delete_theme($stylesheet, $redirect = '') {
 	global $wp_filesystem;
 
-	if ( empty($template) )
+	if ( empty($stylesheet) )
 		return false;
 
 	ob_start();
 	if ( empty( $redirect ) )
-		$redirect = wp_nonce_url('themes.php?action=delete&template=' . $template, 'delete-theme_' . $template);
+		$redirect = wp_nonce_url('themes.php?action=delete&stylesheet=' . urlencode( $stylesheet ), 'delete-theme_' . $stylesheet);
 	if ( false === ($credentials = request_filesystem_credentials($redirect)) ) {
 		$data = ob_get_contents();
 		ob_end_clean();
@@ -37,7 +37,7 @@ function delete_theme($template, $redirect = '') {
 	}
 
 	if ( ! WP_Filesystem($credentials) ) {
-		request_filesystem_credentials($url, '', true); // Failed to connect, Error and request again
+		request_filesystem_credentials($redirect, '', true); // Failed to connect, Error and request again
 		$data = ob_get_contents();
 		ob_end_clean();
 		if ( ! empty($data) ) {
@@ -61,11 +61,11 @@ function delete_theme($template, $redirect = '') {
 		return new WP_Error('fs_no_themes_dir', __('Unable to locate WordPress theme directory.'));
 
 	$themes_dir = trailingslashit( $themes_dir );
-	$theme_dir = trailingslashit($themes_dir . $template);
+	$theme_dir = trailingslashit($themes_dir . $stylesheet);
 	$deleted = $wp_filesystem->delete($theme_dir, true);
 
 	if ( ! $deleted )
-		return new WP_Error('could_not_remove_theme', sprintf(__('Could not fully remove the theme %s.'), $template) );
+		return new WP_Error('could_not_remove_theme', sprintf(__('Could not fully remove the theme %s.'), $stylesheet) );
 
 	// Force refresh of theme update information
 	delete_site_transient('update_themes');
@@ -151,7 +151,7 @@ function theme_update_available( $theme ) {
 function get_theme_feature_list( $api = true ) {
 	// Hard-coded list is used if api not accessible.
 	$features = array(
-			__('Colors') => array(
+			__( 'Colors' ) => array(
 				'black'   => __( 'Black' ),
 				'blue'    => __( 'Blue' ),
 				'brown'   => __( 'Brown' ),
@@ -169,7 +169,7 @@ function get_theme_feature_list( $api = true ) {
 				'light'   => __( 'Light' ),
 			),
 
-		__('Columns') => array(
+		__( 'Columns' ) => array(
 			'one-column'    => __( 'One Column' ),
 			'two-columns'   => __( 'Two Columns' ),
 			'three-columns' => __( 'Three Columns' ),
@@ -178,7 +178,7 @@ function get_theme_feature_list( $api = true ) {
 			'right-sidebar' => __( 'Right Sidebar' ),
 		),
 
-		__('Width') => array(
+		__( 'Width' ) => array(
 			'fixed-width'    => __( 'Fixed Width' ),
 			'flexible-width' => __( 'Flexible Width' ),
 		),
@@ -193,6 +193,7 @@ function get_theme_feature_list( $api = true ) {
 			'editor-style'          => __( 'Editor Style' ),
 			'featured-image-header' => __( 'Featured Image Header' ),
 			'featured-images'       => __( 'Featured Images' ),
+			'flexible-header'       => __( 'Flexible Header' ),
 			'front-page-post-form'  => __( 'Front Page Posting' ),
 			'full-width-template'   => __( 'Full Width Template' ),
 			'microformats'          => __( 'Microformats' ),
@@ -215,10 +216,10 @@ function get_theme_feature_list( $api = true ) {
 		return $features;
 
 	if ( !$feature_list = get_site_transient( 'wporg_theme_feature_list' ) )
-		set_site_transient( 'wporg_theme_feature_list', array( ), 10800);
+		set_site_transient( 'wporg_theme_feature_list', array(), 10800);
 
 	if ( !$feature_list ) {
-		$feature_list = themes_api( 'feature_list', array( ) );
+		$feature_list = themes_api( 'feature_list', array() );
 		if ( is_wp_error( $feature_list ) )
 			return $features;
 	}
@@ -265,23 +266,64 @@ function get_theme_feature_list( $api = true ) {
  *
  * @since 2.8.0
  *
- * @param string $action
- * @param array|object $args Optional. Arguments to serialize for the Theme Info API.
+ * @param string       $action The requested action. Likely values are 'theme_information',
+ *                             'feature_list', or 'query_themes'.
+ * @param array|object $args   Optional. Arguments to serialize for the Theme Info API.
  * @return mixed
  */
-function themes_api($action, $args = null) {
+function themes_api( $action, $args = null ) {
 
 	if ( is_array($args) )
 		$args = (object)$args;
 
 	if ( !isset($args->per_page) )
 		$args->per_page = 24;
-
-	$args = apply_filters('themes_api_args', $args, $action); //NOTE: Ensure that an object is returned via this filter.
-	$res = apply_filters('themes_api', false, $action, $args); //NOTE: Allows a theme to completely override the builtin WordPress.org API.
+	/**
+	 * Filter arguments used to query for installer pages from the WordPress.org Themes API.
+	 *
+	 * Important: An object MUST be returned to this filter.
+	 * 
+	 * @since 2.8.0
+	 * 
+	 * @param object $args   Arguments used to query for installer pages from the WordPress.org Themes API.
+	 * @param string $action Requested action. Likely values are 'theme_information',
+	 *                       'feature_list', or 'query_themes'.
+ 	*/
+	$args = apply_filters( 'themes_api_args', $args, $action );
+	
+	/**
+	 * Filter whether to override the WordPress.org Themes API.
+	 *
+	 * Returning a value of true to this filter allows a theme to completely
+	 * override the built-in WordPress.org API.
+	 * 
+	 * @since 2.8.0
+	 *
+	 * @param bool   $bool   Whether to override the WordPress.org Themes API. Default false.
+	 * @param string $action Requested action. Likely values are 'theme_information',
+	 *                       'feature_list', or 'query_themes'.
+	 * @param object $args   Arguments used to query for installer pages from the Themes API.
+	 */
+	$res = apply_filters( 'themes_api', false, $action, $args );
 
 	if ( ! $res ) {
-		$request = wp_remote_post('http://api.wordpress.org/themes/info/1.0/', array( 'body' => array('action' => $action, 'request' => serialize($args))) );
+		$url = $http_url = 'http://api.wordpress.org/themes/info/1.0/';
+		if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
+			$url = set_url_scheme( $url, 'https' );
+
+		$args = array(
+			'body' => array(
+				'action' => $action,
+				'request' => serialize( $args )
+			)
+		);
+		$request = wp_remote_post( $url, $args );
+
+		if ( $ssl && is_wp_error( $request ) ) {
+			trigger_error( __( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="http://wordpress.org/support/">support forums</a>.' ) . ' ' . '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)', headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE );
+			$request = wp_remote_post( $http_url, $args );
+		}
+
 		if ( is_wp_error($request) ) {
 			$res = new WP_Error('themes_api_failed', __( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="http://wordpress.org/support/">support forums</a>.' ), $request->get_error_message() );
 		} else {
@@ -291,5 +333,15 @@ function themes_api($action, $args = null) {
 		}
 	}
 
-	return apply_filters('themes_api_result', $res, $action, $args);
+	/**
+	 * Filter the returned WordPress.org Themes API response.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param array|object $res    WordPress.org Themes API response.
+	 * @param string       $action Requested action. Likely values are 'theme_information',
+	 *                             'feature_list', or 'query_themes'.
+	 * @param object       $args   Arguments used to query for installer pages from the WordPress.org Themes API.
+	 */
+	return apply_filters( 'themes_api_result', $res, $action, $args );
 }

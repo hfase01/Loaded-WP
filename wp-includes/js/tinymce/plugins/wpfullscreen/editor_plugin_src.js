@@ -1,14 +1,15 @@
 /**
  * WP Fullscreen TinyMCE plugin
  *
- * Contains code from Moxiecode Systems AB released under LGPL License http://tinymce.moxiecode.com/license
+ * Contains code from Moxiecode Systems AB released under LGPL http://tinymce.moxiecode.com/license
  */
 
 (function() {
 	tinymce.create('tinymce.plugins.wpFullscreenPlugin', {
+		resize_timeout: false,
 
 		init : function(ed, url) {
-			var t = this, oldHeight = 0, s = {}, DOM = tinymce.DOM, resized = false;
+			var t = this, oldHeight = 0, s = {}, DOM = tinymce.DOM;
 
 			// Register commands
 			ed.addCommand('wpFullScreenClose', function() {
@@ -93,13 +94,21 @@
 				}
 			});
 
+			ed.addCommand('wpFullScreen', function() {
+				if ( typeof(fullscreen) == 'undefined' )
+					return;
+
+				if ( 'wp_mce_fullscreen' == ed.id )
+					fullscreen.off();
+				else
+					fullscreen.on();
+			});
+
 			// Register buttons
-			if ( 'undefined' != fullscreen ) {
-				ed.addButton('wp_fullscreen', {
-					title : 'fullscreen.desc',
-					onclick : function(){ fullscreen.on(); }
-				});
-			}
+			ed.addButton('wp_fullscreen', {
+				title : 'wordpress.wp_fullscreen_desc',
+				cmd : 'wpFullScreen'
+			});
 
 			// END fullscreen
 //----------------------------------------------------------------
@@ -111,27 +120,30 @@
 			/**
 			 * This method gets executed each time the editor needs to resize.
 			 */
-			function resize() {
-				if ( resized )
+			function resize(editor, e) {
+				var DOM = tinymce.DOM, body = ed.getBody(), ifr = DOM.get(ed.id + '_ifr'), height, y = ed.dom.win.scrollY;
+
+				if ( t.resize_timeout )
 					return;
 
-				var d = ed.getDoc(), DOM = tinymce.DOM, resizeHeight, myHeight;
+				// sometimes several events are fired few ms apart, trottle down resizing a little
+				t.resize_timeout = true;
+				setTimeout(function(){
+					t.resize_timeout = false;
+				}, 500);
 
-				// Get height differently depending on the browser used
-				if ( tinymce.isIE || tinymce.isWebKit )
-					myHeight = d.body.scrollHeight;
-				else
-					myHeight = d.body.offsetHeight;
+				height = body.scrollHeight > 300 ? body.scrollHeight : 300;
 
-				// Don't make it smaller than 300px
-				resizeHeight = (myHeight > 300) ? myHeight : 300;
+				if ( height != ifr.scrollHeight ) {
+					DOM.setStyle(ifr, 'height', height + 'px');
+					ed.getWin().scrollTo(0, 0); // iframe window object, make sure there's no scrolling
+				}
 
-				// Resize content element
-				if ( oldHeight != resizeHeight ) {
-					resized = true;
-					setTimeout(function(){ resized = false; }, 100);
-					DOM.setStyle(DOM.get(ed.id + '_ifr'), 'height', resizeHeight + 'px');
-					oldHeight = resizeHeight;
+				// WebKit scrolls to top on paste...
+				if ( e && e.type == 'paste' && tinymce.isWebKit ) {
+					setTimeout(function(){
+						ed.dom.win.scrollTo(0, y);
+					}, 40);
 				}
 			};
 
@@ -146,7 +158,7 @@
 				ed.getBody().style.overflowY = "hidden";
 			});
 
-			if (ed.getParam('autoresize_on_init', true)) {
+			if ( ed.getParam('autoresize_on_init', true) ) {
 				ed.onLoadContent.add(function(ed, l) {
 					// Because the content area resizes when its content CSS loads,
 					// and we can't easily add a listener to its onload event,

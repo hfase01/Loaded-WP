@@ -8,7 +8,7 @@
  */
 
 /** Load WordPress Administration Bootstrap */
-require_once( './admin.php' );
+require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( ! is_multisite() )
 	wp_die( __( 'Multisite support is not enabled.' ) );
@@ -25,11 +25,9 @@ get_current_screen()->add_help_tab( array(
 		'content' =>
 			'<p>' . __('This screen sets and changes options for the network as a whole. The first site is the main site in the network and network options are pulled from that original site&#8217;s options.') . '</p>' .
 			'<p>' . __('Operational settings has fields for the network&#8217;s name and admin email.') . '</p>' .
-			'<p>' . __('Dashboard Site is an option to give a site to users who do not have a site on the system. Their default role is Subscriber, but that default can be changed. The Admin Notice Feed can provide a notice on all dashboards of the latest post via RSS or Atom, or provide no such notice if left blank.') . '</p>' .
 			'<p>' . __('Registration settings can disable/enable public signups. If you let others sign up for a site, install spam plugins. Spaces, not commas, should separate names banned as sites for this network.') . '</p>' .
 			'<p>' . __('New site settings are defaults applied when a new site is created in the network. These include welcome email for when a new site or user account is registered, and what&#8127;s put in the first post, page, comment, comment author, and comment URL.') . '</p>' .
 			'<p>' . __('Upload settings control the size of the uploaded files and the amount of available upload space for each site. You can change the default value for specific sites when you edit a particular site. Allowed file types are also listed (space separated only).') . '</p>' .
-			'<p>' . __('Checkboxes for media upload buttons set which are shown in the visual editor. If unchecked, a generic upload button is still visible; other media types can still be uploaded if on the allowed file types list.') . '</p>' .
 			'<p>' . __('Menu setting enables/disables the plugin menus from appearing for non super admins, so that only super admins, not site admins, have access to activate plugins.') . '</p>' .
 			'<p>' . __('Super admins can no longer be added on the Options screen. You must now go to the list of existing users on Network Admin > Users and click on Username or the Edit action link below that name. This goes to an Edit User page where you can check a box to grant super admin privileges.') . '</p>'
 ) );
@@ -41,72 +39,44 @@ get_current_screen()->set_help_sidebar(
 );
 
 if ( $_POST ) {
-	do_action( 'wpmuadminedit' , '' );
+	/** This action is documented in wp-admin/network/edit.php */
+	do_action( 'wpmuadminedit' );
 
 	check_admin_referer( 'siteoptions' );
 
-	if ( isset( $_POST['WPLANG'] ) && ( '' === $_POST['WPLANG'] || in_array( $_POST['WPLANG'], get_available_languages() ) ) )
-		update_site_option( 'WPLANG', $_POST['WPLANG'] );
-
-	if ( is_email( $_POST['admin_email'] ) )
-		update_site_option( 'admin_email', $_POST['admin_email'] );
-
-	$illegal_names = explode( ' ', $_POST['illegal_names'] );
-	foreach ( (array) $illegal_names as $name ) {
-		$name = trim( $name );
-		if ( $name != '' )
-			$names[] = trim( $name );
-	}
-	update_site_option( 'illegal_names', $names );
-
-	if ( $_POST['limited_email_domains'] != '' ) {
-		$limited_email_domains = str_replace( ' ', "\n", $_POST['limited_email_domains'] );
-		$limited_email_domains = explode( "\n", stripslashes( $limited_email_domains ) );
-		$limited_email = array();
-		foreach ( (array) $limited_email_domains as $domain ) {
-			$domain = trim( $domain );
-			if ( ! preg_match( '/(--|\.\.)/', $domain ) && preg_match( '|^([a-zA-Z0-9-\.])+$|', $domain ) )
-				$limited_email[] = trim( $domain );
-		}
-		update_site_option( 'limited_email_domains', $limited_email );
-	} else {
-		update_site_option( 'limited_email_domains', '' );
-	}
-
-	if ( $_POST['banned_email_domains'] != '' ) {
-		$banned_email_domains = explode( "\n", stripslashes( $_POST['banned_email_domains'] ) );
-		$banned = array();
-		foreach ( (array) $banned_email_domains as $domain ) {
-			$domain = trim( $domain );
-			if ( ! preg_match( '/(--|\.\.)/', $domain ) && preg_match( '|^([a-zA-Z0-9-\.])+$|', $domain ) )
-				$banned[] = trim( $domain );
-		}
-		update_site_option( 'banned_email_domains', $banned );
-	} else {
-		update_site_option( 'banned_email_domains', '' );
-	}
-
-	$options = array( 'registrationnotification', 'registration', 'add_new_users', 'menu_items', 'upload_space_check_disabled', 'blog_upload_space', 'upload_filetypes', 'site_name', 'first_post', 'first_page', 'first_comment', 'first_comment_url', 'first_comment_author', 'welcome_email', 'welcome_user_email', 'fileupload_maxk', 'global_terms_enabled' );
 	$checked_options = array( 'menu_items' => array(), 'registrationnotification' => 'no', 'upload_space_check_disabled' => 1, 'add_new_users' => 0 );
 	foreach ( $checked_options as $option_name => $option_unchecked_value ) {
 		if ( ! isset( $_POST[$option_name] ) )
 			$_POST[$option_name] = $option_unchecked_value;
 	}
+
+	$options = array(
+		'registrationnotification', 'registration', 'add_new_users', 'menu_items',
+		'upload_space_check_disabled', 'blog_upload_space', 'upload_filetypes', 'site_name',
+		'first_post', 'first_page', 'first_comment', 'first_comment_url', 'first_comment_author',
+		'welcome_email', 'welcome_user_email', 'fileupload_maxk', 'global_terms_enabled',
+		'illegal_names', 'limited_email_domains', 'banned_email_domains', 'WPLANG', 'admin_email',
+	);
+
 	foreach ( $options as $option_name ) {
 		if ( ! isset($_POST[$option_name]) )
 			continue;
-		$value = stripslashes_deep( $_POST[$option_name] );
+		$value = wp_unslash( $_POST[$option_name] );
 		update_site_option( $option_name, $value );
 	}
 
-	// Update more options here
+	/**
+	 * Fires after the network options are updated.
+	 * 
+	 * @since MU
+	 */
 	do_action( 'update_wpmu_options' );
 
 	wp_redirect( add_query_arg( 'updated', 'true', network_admin_url( 'settings.php' ) ) );
 	exit();
 }
 
-include( '../admin-header.php' );
+include( ABSPATH . 'wp-admin/admin-header.php' );
 
 if ( isset( $_GET['updated'] ) ) {
 	?><div id="message" class="updated"><p><?php _e( 'Options saved.' ) ?></p></div><?php
@@ -215,7 +185,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<th scope="row"><label for="welcome_email"><?php _e( 'Welcome Email' ) ?></label></th>
 				<td>
 					<textarea name="welcome_email" id="welcome_email" rows="5" cols="45" class="large-text">
-<?php echo esc_textarea( stripslashes( get_site_option( 'welcome_email' ) ) ) ?></textarea>
+<?php echo esc_textarea( get_site_option( 'welcome_email' ) ) ?></textarea>
 					<br />
 					<?php _e( 'The welcome email sent to new site owners.' ) ?>
 				</td>
@@ -224,7 +194,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<th scope="row"><label for="welcome_user_email"><?php _e( 'Welcome User Email' ) ?></label></th>
 				<td>
 					<textarea name="welcome_user_email" id="welcome_user_email" rows="5" cols="45" class="large-text">
-<?php echo esc_textarea( stripslashes( get_site_option( 'welcome_user_email' ) ) ) ?></textarea>
+<?php echo esc_textarea( get_site_option( 'welcome_user_email' ) ) ?></textarea>
 					<br />
 					<?php _e( 'The welcome email sent to new users.' ) ?>
 				</td>
@@ -233,7 +203,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<th scope="row"><label for="first_post"><?php _e( 'First Post' ) ?></label></th>
 				<td>
 					<textarea name="first_post" id="first_post" rows="5" cols="45" class="large-text">
-<?php echo esc_textarea( stripslashes( get_site_option( 'first_post' ) ) ) ?></textarea>
+<?php echo esc_textarea( get_site_option( 'first_post' ) ) ?></textarea>
 					<br />
 					<?php _e( 'The first post on a new site.' ) ?>
 				</td>
@@ -242,7 +212,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<th scope="row"><label for="first_page"><?php _e( 'First Page' ) ?></label></th>
 				<td>
 					<textarea name="first_page" id="first_page" rows="5" cols="45" class="large-text">
-<?php echo esc_textarea( stripslashes( get_site_option('first_page') ) ) ?></textarea>
+<?php echo esc_textarea( get_site_option( 'first_page' ) ) ?></textarea>
 					<br />
 					<?php _e( 'The first page on a new site.' ) ?>
 				</td>
@@ -251,7 +221,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<th scope="row"><label for="first_comment"><?php _e( 'First Comment' ) ?></label></th>
 				<td>
 					<textarea name="first_comment" id="first_comment" rows="5" cols="45" class="large-text">
-<?php echo esc_textarea( stripslashes( get_site_option('first_comment') ) ) ?></textarea>
+<?php echo esc_textarea( get_site_option( 'first_comment' ) ) ?></textarea>
 					<br />
 					<?php _e( 'The first comment on a new site.' ) ?>
 				</td>
@@ -320,6 +290,21 @@ if ( isset( $_GET['updated'] ) ) {
 				<td>
 			<?php
 			$menu_perms = get_site_option( 'menu_items' );
+			/**
+			 * Filter available network-wide administration menu options.
+			 *
+			 * Options returned to this filter are output as individual checkboxes that, when selected,
+			 * enable site administrator access to the specified administration menu in certain contexts.
+			 *
+			 * Adding options for specific menus here hinges on the appropriate checks and capabilities
+			 * being in place in the site dashboard on the other side. For instance, when the single
+			 * default option, 'plugins' is enabled, site administrators are granted access to the Plugins
+			 * screen in their individual sites' dashboards.
+			 *
+			 * @since MU
+			 * 
+			 * @param array $admin_menus The menu items available.
+			 */
 			$menu_items = apply_filters( 'mu_menu_items', array( 'plugins' => __( 'Plugins' ) ) );
 			foreach ( (array) $menu_items as $key => $val ) {
 				echo "<label><input type='checkbox' name='menu_items[" . $key . "]' value='1'" . ( isset( $menu_perms[$key] ) ? checked( $menu_perms[$key], '1', false ) : '' ) . " /> " . esc_html( $val ) . "</label><br/>";
@@ -329,10 +314,15 @@ if ( isset( $_GET['updated'] ) ) {
 			</tr>
 		</table>
 
-		<?php do_action( 'wpmu_options' ); // Add more options here ?>
-
+		<?php 
+		/**
+		 * Fires at the end of the Network Settings form, before the submit button.
+		 *
+		 * @since MU
+		 */
+		do_action( 'wpmu_options' ); ?>
 		<?php submit_button(); ?>
 	</form>
 </div>
 
-<?php include( '../admin-footer.php' ); ?>
+<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>

@@ -98,12 +98,26 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 	if ( empty( $theme_root ) ) {
 		$theme_root = get_raw_theme_root( $stylesheet );
 		if ( false === $theme_root )
-			$theme_root = WP_CONTENT_DIR . $theme_root;
+			$theme_root = WP_CONTENT_DIR . '/themes';
 		elseif ( ! in_array( $theme_root, (array) $wp_theme_directories ) )
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 	}
 
 	return new WP_Theme( $stylesheet, $theme_root );
+}
+
+/**
+ * Clears the cache held by get_theme_roots() and WP_Theme.
+ *
+ * @since 3.5.0
+ * @param bool $clear_update_cache Whether to clear the Theme updates cache
+ */
+function wp_clean_themes_cache( $clear_update_cache = true ) {
+	if ( $clear_update_cache )
+		delete_site_transient( 'update_themes' );
+	search_theme_directories( true );
+	foreach ( wp_get_themes( array( 'errors' => null ) ) as $theme )
+		$theme->cache_delete();
 }
 
 /**
@@ -328,7 +342,7 @@ function search_theme_directories( $force = false ) {
 
 	// Set up maybe-relative, maybe-absolute array of theme directories.
 	// We always want to return absolute, but we need to cache relative
-	// use in for get_theme_root().
+	// to use in get_theme_root().
 	foreach ( $wp_theme_directories as $theme_root ) {
 		if ( 0 === strpos( $theme_root, WP_CONTENT_DIR ) )
 			$relative_theme_roots[ str_replace( WP_CONTENT_DIR, '', $theme_root ) ] = $theme_root;
@@ -361,8 +375,10 @@ function search_theme_directories( $force = false ) {
 
 		// Start with directories in the root of the current theme directory.
 		$dirs = @ scandir( $theme_root );
-		if ( ! $dirs )
-			return false;
+		if ( ! $dirs ) {
+			trigger_error( "$theme_root is not readable", E_USER_NOTICE );
+			continue;
+		}
 		foreach ( $dirs as $dir ) {
 			if ( ! is_dir( $theme_root . '/' . $dir ) || $dir[0] == '.' || $dir == 'CVS' )
 				continue;
@@ -378,10 +394,12 @@ function search_theme_directories( $force = false ) {
 				// wp-content/themes/a-folder-of-themes/*
 				// wp-content/themes is $theme_root, a-folder-of-themes is $dir, then themes are $sub_dirs
 				$sub_dirs = @ scandir( $theme_root . '/' . $dir );
-				if ( ! $sub_dirs )
-					return false;
+				if ( ! $sub_dirs ) {
+					trigger_error( "$theme_root/$dir is not readable", E_USER_NOTICE );
+					continue;
+				}
 				foreach ( $sub_dirs as $sub_dir ) {
-					if ( ! is_dir( $theme_root . '/' . $dir ) || $dir[0] == '.' || $dir == 'CVS' )
+					if ( ! is_dir( $theme_root . '/' . $dir . '/' . $sub_dir ) || $dir[0] == '.' || $dir == 'CVS' )
 						continue;
 					if ( ! file_exists( $theme_root . '/' . $dir . '/' . $sub_dir . '/style.css' ) )
 						continue;
@@ -532,7 +550,7 @@ function locale_stylesheet() {
 /**
  * Start preview theme output buffer.
  *
- * Will only preform task if the user has permissions and template and preview
+ * Will only perform task if the user has permissions and template and preview
  * query variables exist.
  *
  * @since 2.6.0
@@ -619,7 +637,7 @@ function preview_theme_ob_filter( $content ) {
  */
 function preview_theme_ob_filter_callback( $matches ) {
 	if ( strpos($matches[4], 'onclick') !== false )
-		$matches[4] = preg_replace('#onclick=([\'"]).*?(?<!\\\)\\1#i', '', $matches[4]); //Strip out any onclicks from rest of <a>. (?<!\\\) means to ignore the '" if its escaped by \  to prevent breaking mid-attribute.
+		$matches[4] = preg_replace('#onclick=([\'"]).*?(?<!\\\)\\1#i', '', $matches[4]); //Strip out any onclicks from rest of <a>. (?<!\\\) means to ignore the '" if it's escaped by \  to prevent breaking mid-attribute.
 	if (
 		( false !== strpos($matches[3], '/wp-admin/') )
 	||
@@ -631,22 +649,27 @@ function preview_theme_ob_filter_callback( $matches ) {
 	)
 		return $matches[1] . "#$matches[2] onclick=$matches[2]return false;" . $matches[4];
 
-	$link = add_query_arg( array( 'preview' => 1, 'template' => $_GET['template'], 'stylesheet' => @$_GET['stylesheet'], 'preview_iframe' => 1 ), $matches[3] );
+	$stylesheet = isset( $_GET['stylesheet'] ) ? $_GET['stylesheet'] : '';
+	$template   = isset( $_GET['template'] )   ? $_GET['template']   : '';
+
+	$link = add_query_arg( array( 'preview' => 1, 'template' => $template, 'stylesheet' => $stylesheet, 'preview_iframe' => 1 ), $matches[3] );
 	if ( 0 === strpos($link, 'preview=1') )
 		$link = "?$link";
 	return $matches[1] . esc_attr( $link ) . $matches[4];
 }
 
 /**
- * Switches current theme to new template and stylesheet names.
+ * Switches the theme.
+ *
+ * Accepts one argument: $stylesheet of the theme. It also accepts an additional function signature
+ * of two arguments: $template then $stylesheet. This is for backwards compatibility.
  *
  * @since 2.5.0
  * @uses do_action() Calls 'switch_theme' action, passing the new theme.
  *
- * @param string $template Template name
- * @param string $stylesheet Stylesheet name.
+ * @param string $stylesheet Stylesheet name
  */
-function switch_theme( $template, $stylesheet ) {
+function switch_theme( $stylesheet ) {
 	global $wp_theme_directories, $sidebars_widgets;
 
 	if ( is_array( $sidebars_widgets ) )
@@ -654,7 +677,13 @@ function switch_theme( $template, $stylesheet ) {
 
 	$old_theme  = wp_get_theme();
 	$new_theme = wp_get_theme( $stylesheet );
-	$new_name  = $new_theme->get('Name');
+
+	if ( func_num_args() > 1 ) {
+		$template = $stylesheet;
+		$stylesheet = func_get_arg( 1 );
+	} else {
+		$template = $new_theme->get_template();
+	}
 
 	update_option( 'template', $template );
 	update_option( 'stylesheet', $stylesheet );
@@ -662,7 +691,12 @@ function switch_theme( $template, $stylesheet ) {
 	if ( count( $wp_theme_directories ) > 1 ) {
 		update_option( 'template_root', get_raw_theme_root( $template, true ) );
 		update_option( 'stylesheet_root', get_raw_theme_root( $stylesheet, true ) );
+	} else {
+		delete_option( 'template_root' );
+		delete_option( 'stylesheet_root' );
 	}
+
+	$new_name  = $new_theme->get('Name');
 
 	update_option( 'current_theme', $new_name );
 
@@ -694,17 +728,17 @@ function validate_current_theme() {
 		return true;
 
 	if ( get_template() != WP_DEFAULT_THEME && !file_exists(get_template_directory() . '/index.php') ) {
-		switch_theme( WP_DEFAULT_THEME, WP_DEFAULT_THEME );
+		switch_theme( WP_DEFAULT_THEME );
 		return false;
 	}
 
 	if ( get_stylesheet() != WP_DEFAULT_THEME && !file_exists(get_template_directory() . '/style.css') ) {
-		switch_theme( WP_DEFAULT_THEME, WP_DEFAULT_THEME );
+		switch_theme( WP_DEFAULT_THEME );
 		return false;
 	}
 
 	if ( is_child_theme() && ! file_exists( get_stylesheet_directory() . '/style.css' ) ) {
-		switch_theme( WP_DEFAULT_THEME, WP_DEFAULT_THEME );
+		switch_theme( WP_DEFAULT_THEME );
 		return false;
 	}
 
@@ -850,7 +884,7 @@ function display_header_text() {
 		return false;
 
 	$text_color = get_theme_mod( 'header_textcolor', get_theme_support( 'custom-header', 'default-text-color' ) );
-	return $text_color && 'blank' != $text_color;
+	return 'blank' != $text_color;
 }
 
 /**
@@ -869,12 +903,7 @@ function get_header_image() {
 	if ( is_random_header_image() )
 		$url = get_random_header_image();
 
-	if ( is_ssl() )
-		$url = str_replace( 'http://', 'https://', $url );
-	else
-		$url = str_replace( 'https://', 'http://', $url );
-
-	return esc_url_raw( $url );
+	return esc_url_raw( set_url_scheme( $url ) );
 }
 
 /**
@@ -961,12 +990,12 @@ function is_random_header_image( $type = 'any' ) {
 }
 
 /**
- * Display header image path.
+ * Display header image URL.
  *
  * @since 2.1.0
  */
 function header_image() {
-	echo get_header_image();
+	echo esc_url( get_header_image() );
 }
 
 /**
@@ -993,8 +1022,10 @@ function get_uploaded_header_images() {
 		$header_images[$header_index]['attachment_id'] =  $header->ID;
 		$header_images[$header_index]['url'] =  $url;
 		$header_images[$header_index]['thumbnail_url'] =  $url;
-		$header_images[$header_index]['width'] = $header_data['width'];
-		$header_images[$header_index]['height'] = $header_data['height'];
+		if ( isset( $header_data['width'] ) )
+			$header_images[$header_index]['width'] = $header_data['width'];
+		if ( isset( $header_data['height'] ) )
+			$header_images[$header_index]['height'] = $header_data['height'];
 	}
 
 	return $header_images;
@@ -1008,7 +1039,30 @@ function get_uploaded_header_images() {
  * @return object
  */
 function get_custom_header() {
-	$data = is_random_header_image()? _get_random_header_data() : get_theme_mod( 'header_image_data' );
+	global $_wp_default_headers;
+
+	if ( is_random_header_image() ) {
+		$data = _get_random_header_data();
+	} else {
+		$data = get_theme_mod( 'header_image_data' );
+		if ( ! $data && current_theme_supports( 'custom-header', 'default-image' ) ) {
+			$directory_args = array( get_template_directory_uri(), get_stylesheet_directory_uri() );
+			$data = array();
+			$data['url'] = $data['thumbnail_url'] = vsprintf( get_theme_support( 'custom-header', 'default-image' ), $directory_args );
+			if ( ! empty( $_wp_default_headers ) ) {
+				foreach ( (array) $_wp_default_headers as $default_header ) {
+					$url = vsprintf( $default_header['url'], $directory_args );
+					if ( $data['url'] == $url ) {
+						$data = $default_header;
+						$data['url'] = $url;
+						$data['thumbnail_url'] = vsprintf( $data['thumbnail_url'], $directory_args );
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	$default = array(
 		'url'           => '',
 		'thumbnail_url' => '',
@@ -1102,8 +1156,13 @@ function background_color() {
  * @access protected
  */
 function _custom_background_cb() {
-	$background = get_background_image();
-	$color = get_background_color();
+	// $background is the saved custom image, or the default image.
+	$background = set_url_scheme( get_background_image() );
+
+	// $color is the saved custom color.
+	// A default has to be specified in style.css. It will not be printed here.
+	$color = get_theme_mod( 'background_color' );
+
 	if ( ! $background && ! $color )
 		return;
 
@@ -1130,7 +1189,7 @@ function _custom_background_cb() {
 		$style .= $image . $repeat . $position . $attachment;
 	}
 ?>
-<style type="text/css">
+<style type="text/css" id="custom-background-css">
 body.custom-background { <?php echo trim( $style ); ?> }
 </style>
 <?php
@@ -1212,6 +1271,20 @@ function add_theme_support( $feature ) {
 		case 'post-formats' :
 			if ( is_array( $args[0] ) )
 				$args[0] = array_intersect( $args[0], array_keys( get_post_format_slugs() ) );
+			break;
+
+		case 'html5' :
+			// You can't just pass 'html5', you need to pass an array of types.
+			if ( empty( $args[0] ) ) {
+				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
+			} elseif ( ! is_array( $args[0] ) ) {
+				_doing_it_wrong( "add_theme_support( 'html5' )", 'You need to pass an array of types.', '3.6.1' );
+				return false;
+			}
+
+			// Calling 'html5' again merges, rather than overwrites.
+			if ( isset( $_wp_theme_features['html5'] ) )
+				$args[0] = array_merge( $_wp_theme_features['html5'][0], $args[0] );
 			break;
 
 		case 'custom-header-uploads' :
@@ -1441,6 +1514,8 @@ function _remove_theme_support( $feature ) {
 
 	switch ( $feature ) {
 		case 'custom-header' :
+			if ( ! did_action( 'wp_loaded' ) )
+				break;
 			$support = get_theme_support( 'custom-header' );
 			if ( $support[0]['wp-head-callback'] )
 				remove_action( 'wp_head', $support[0]['wp-head-callback'] );
@@ -1449,6 +1524,8 @@ function _remove_theme_support( $feature ) {
 			break;
 
 		case 'custom-background' :
+			if ( ! did_action( 'wp_loaded' ) )
+				break;
 			$support = get_theme_support( 'custom-background' );
 			remove_action( 'wp_head', $support[0]['wp-head-callback'] );
 			remove_action( 'admin_menu', array( $GLOBALS['custom_background'], 'init' ) );
@@ -1493,15 +1570,20 @@ function current_theme_supports( $feature ) {
 			return in_array( $content_type, $_wp_theme_features[$feature][0] );
 			break;
 
+		case 'html5':
 		case 'post-formats':
 			// specific post formats can be registered by passing an array of types to
 			// add_theme_support()
-			$post_format = $args[0];
-			return in_array( $post_format, $_wp_theme_features[$feature][0] );
+
+			// Specific areas of HTML5 support *must* be passed via an array to add_theme_support()
+
+			$type = $args[0];
+			return in_array( $type, $_wp_theme_features[$feature][0] );
 			break;
 
 		case 'custom-header':
-			// specific custom header capabilities can be registered by passing
+		case 'custom-background' :
+			// specific custom header and background capabilities can be registered by passing
 			// an array to add_theme_support()
 			$header_support = $args[0];
 			return ( isset( $_wp_theme_features[$feature][0][$header_support] ) && $_wp_theme_features[$feature][0][$header_support] );
@@ -1566,41 +1648,106 @@ function check_theme_switched() {
 }
 
 /**
- * Includes and instantiates the WP_Customize class.
+ * Includes and instantiates the WP_Customize_Manager class.
  *
- * Fires when ?customize=on.
+ * Fires when ?wp_customize=on or on wp-admin/customize.php.
  *
  * @since 3.4.0
  */
 function _wp_customize_include() {
-	// Load on themes.php or ?customize=on
-	if ( ! ( isset( $_REQUEST['customize'] ) && 'on' == $_REQUEST['customize'] ) )
+	if ( ! ( ( isset( $_REQUEST['wp_customize'] ) && 'on' == $_REQUEST['wp_customize'] )
+		|| ( is_admin() && 'customize.php' == basename( $_SERVER['PHP_SELF'] ) )
+	) )
 		return;
 
-	require( ABSPATH . WPINC . '/class-wp-customize.php' );
+	require( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
 	// Init Customize class
-	$GLOBALS['wp_customize'] = new WP_Customize;
+	$GLOBALS['wp_customize'] = new WP_Customize_Manager;
 }
 add_action( 'plugins_loaded', '_wp_customize_include' );
 
 /**
- * Localizes the customize-loader script.
+ * Adds settings for the customize-loader script.
  *
  * @since 3.4.0
  */
-function _wp_customize_loader_localize() {
-	wp_localize_script( 'customize-loader', 'wpCustomizeLoaderL10n', array(
-		'back' => sprintf( __( '&larr; Return to %s' ), get_admin_page_title() ),
-		'url'  => admin_url( 'admin.php' ),
-	) );
+function _wp_customize_loader_settings() {
+	global $wp_scripts;
+
+	$admin_origin = parse_url( admin_url() );
+	$home_origin  = parse_url( home_url() );
+	$cross_domain = ( strtolower( $admin_origin[ 'host' ] ) != strtolower( $home_origin[ 'host' ] ) );
+
+	$browser = array(
+		'mobile' => wp_is_mobile(),
+		'ios'    => wp_is_mobile() && preg_match( '/iPad|iPod|iPhone/', $_SERVER['HTTP_USER_AGENT'] ),
+	);
+
+	$settings = array(
+		'url'           => esc_url( admin_url( 'customize.php' ) ),
+		'isCrossDomain' => $cross_domain,
+		'browser'       => $browser,
+	);
+
+	$script = 'var _wpCustomizeLoaderSettings = ' . json_encode( $settings ) . ';';
+
+	$data = $wp_scripts->get_data( 'customize-loader', 'data' );
+	if ( $data )
+		$script = "$data\n$script";
+
+	$wp_scripts->add_data( 'customize-loader', 'data', $script );
 }
-add_action( 'admin_enqueue_scripts', '_wp_customize_loader_localize' );
+add_action( 'admin_enqueue_scripts', '_wp_customize_loader_settings' );
 
 /**
  * Returns a URL to load the theme customizer.
  *
  * @since 3.4.0
+ *
+ * @param string $stylesheet Optional. Theme to customize. Defaults to current theme.
+ * 	The theme's stylesheet will be urlencoded if necessary.
  */
-function wp_customize_url( $stylesheet ) {
-	return esc_url( admin_url( 'admin.php' ) . '?customize=on&theme=' . $stylesheet );
+function wp_customize_url( $stylesheet = null ) {
+	$url = admin_url( 'customize.php' );
+	if ( $stylesheet )
+		$url .= '?theme=' . urlencode( $stylesheet );
+	return esc_url( $url );
+}
+
+/**
+ * Prints a script to check whether or not the customizer is supported,
+ * and apply either the no-customize-support or customize-support class
+ * to the body.
+ *
+ * This function MUST be called inside the body tag.
+ *
+ * Ideally, call this function immediately after the body tag is opened.
+ * This prevents a flash of unstyled content.
+ *
+ * It is also recommended that you add the "no-customize-support" class
+ * to the body tag by default.
+ *
+ * @since 3.4.0
+ */
+function wp_customize_support_script() {
+	$admin_origin = parse_url( admin_url() );
+	$home_origin  = parse_url( home_url() );
+	$cross_domain = ( strtolower( $admin_origin[ 'host' ] ) != strtolower( $home_origin[ 'host' ] ) );
+
+	?>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+<?php		if ( $cross_domain ): ?>
+			request = (function(){ var xhr = new XMLHttpRequest(); return ('withCredentials' in xhr); })();
+<?php		else: ?>
+			request = true;
+<?php		endif; ?>
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+	<?php
 }

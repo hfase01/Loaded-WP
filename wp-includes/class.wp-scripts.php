@@ -31,10 +31,8 @@ class WP_Scripts extends WP_Dependencies {
 	var $default_dirs;
 
 	function __construct() {
-		if ( ! function_exists( 'did_action' ) || did_action( 'init' ) )
-			$this->init();
-		else
-			add_action( 'init', array( $this, 'init' ), 0 );
+		$this->init();
+		add_action( 'init', array( $this, 'init' ), 0 );
 	}
 
 	function init() {
@@ -112,7 +110,7 @@ class WP_Scripts extends WP_Dependencies {
 		}
 
 		$this->print_extra_script( $handle );
-		if ( !preg_match('|^https?://|', $src) && ! ( $this->content_url && 0 === strpos($src, $this->content_url) ) ) {
+		if ( !preg_match('|^(https?:)?//|', $src) && ! ( $this->content_url && 0 === strpos($src, $this->content_url) ) ) {
 			$src = $this->base_url . $src;
 		}
 
@@ -120,6 +118,9 @@ class WP_Scripts extends WP_Dependencies {
 			$src = add_query_arg('ver', $ver, $src);
 
 		$src = esc_url( apply_filters( 'script_loader_src', $src, $handle ) );
+
+		if ( ! $src )
+			return true;
 
 		if ( $this->do_concat )
 			$this->print_html .= "<script type='text/javascript' src='$src'></script>\n";
@@ -135,6 +136,9 @@ class WP_Scripts extends WP_Dependencies {
 	 * Localizes only if the script has already been added
 	 */
 	function localize( $handle, $object_name, $l10n ) {
+		if ( $handle === 'jquery' )
+			$handle = 'jquery-core';
+
 		if ( is_array($l10n) && isset($l10n['l10n_print_after']) ) { // back compat, preserve the code in 'l10n_print_after' if present
 			$after = $l10n['l10n_print_after'];
 			unset($l10n['l10n_print_after']);
