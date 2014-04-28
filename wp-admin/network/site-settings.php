@@ -30,7 +30,7 @@ get_current_screen()->add_help_tab( array(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __('For more information:') . '</strong></p>' .
 	'<p>' . __('<a href="http://codex.wordpress.org/Network_Admin_Sites_Screen" target="_blank">Documentation on Site Management</a>') . '</p>' .
-	'<p>' . __('<a href="http://wordpress.org/support/forum/multisite/" target="_blank">Support Forums</a>') . '</p>'
+	'<p>' . __('<a href="https://wordpress.org/support/forum/multisite/" target="_blank">Support Forums</a>') . '</p>'
 );
 
 $id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
@@ -60,7 +60,7 @@ if ( isset($_REQUEST['action']) && 'update-site' == $_REQUEST['action'] && is_ar
 
 /**
  * Fires after the site options are updated.
- * 
+ *
  * @since 3.0.0
  */
 	do_action( 'wpmu_update_blog_options' );
@@ -87,7 +87,6 @@ require( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 
 <div class="wrap">
-<?php screen_icon('ms-admin'); ?>
 <h2 id="edit-site"><?php echo $title_site_url_linked ?></h2>
 <h3 class="nav-tab-wrapper">
 <?php
@@ -151,9 +150,9 @@ if ( ! empty( $messages ) ) {
 		} // End foreach
 		/**
 		 * Fires at the end of the Edit Site form, before the submit button.
-		 * 
+		 *
 		 * @since 3.0.0
-		 * 
+		 *
 		 * @param int $id Site ID.
 		 */
 		do_action( 'wpmueditblogaction', $id );

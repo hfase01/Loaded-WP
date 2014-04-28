@@ -127,7 +127,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',
 		'title'     => __('WordPress.org'),
-		'href'      => __('http://wordpress.org/'),
+		'href'      => __('https://wordpress.org/'),
 	) );
 
 	// Add codex link
@@ -143,7 +143,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'support-forums',
 		'title'     => __('Support Forums'),
-		'href'      => __('http://wordpress.org/support/'),
+		'href'      => __('https://wordpress.org/support/'),
 	) );
 
 	// Add feedback link
@@ -151,8 +151,25 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'feedback',
 		'title'     => __('Feedback'),
-		'href'      => __('http://wordpress.org/support/forum/requests-and-feedback'),
+		'href'      => __('https://wordpress.org/support/forum/requests-and-feedback'),
 	) );
+}
+
+/**
+ * Add the sidebar toggle button.
+ *
+ * @since 3.8.0
+ *
+ * @param WP_Admin_Bar $wp_admin_bar
+ */
+function wp_admin_bar_sidebar_toggle( $wp_admin_bar ) {
+	if ( is_admin() ) {
+		$wp_admin_bar->add_menu( array(
+			'id'    => 'menu-toggle',
+			'title' => '<span class="ab-icon"></span><span class="screen-reader-text">' . __( 'Menu' ) . '</span>',
+			'href'  => '#',
+		) );
+	}
 }
 
 /**
@@ -170,7 +187,7 @@ function wp_admin_bar_my_account_item( $wp_admin_bar ) {
 	if ( ! $user_id )
 		return;
 
-	$avatar = get_avatar( $user_id, 16 );
+	$avatar = get_avatar( $user_id, 26 );
 	$howdy  = sprintf( __('Howdy, %1$s'), $current_user->display_name );
 	$class  = empty( $avatar ) ? '' : 'with-avatar';
 
@@ -243,8 +260,6 @@ function wp_admin_bar_my_account_menu( $wp_admin_bar ) {
  * @param WP_Admin_Bar $wp_admin_bar
  */
 function wp_admin_bar_site_menu( $wp_admin_bar ) {
-	global $current_site;
-
 	// Don't show for logged out users.
 	if ( ! is_user_logged_in() )
 		return;
@@ -259,9 +274,9 @@ function wp_admin_bar_site_menu( $wp_admin_bar ) {
 		$blogname = preg_replace( '#^(https?://)?(www.)?#', '', get_home_url() );
 
 	if ( is_network_admin() ) {
-		$blogname = sprintf( __('Network Admin: %s'), esc_html( $current_site->site_name ) );
+		$blogname = sprintf( __('Network Admin: %s'), esc_html( get_current_site()->site_name ) );
 	} elseif ( is_user_admin() ) {
-		$blogname = sprintf( __('Global Dashboard: %s'), esc_html( $current_site->site_name ) );
+		$blogname = sprintf( __('Global Dashboard: %s'), esc_html( get_current_site()->site_name ) );
 	}
 
 	$title = wp_html_excerpt( $blogname, 40, '&hellip;' );
@@ -753,8 +768,12 @@ function wp_admin_bar_header() { ?>
  */
 function _admin_bar_bump_cb() { ?>
 <style type="text/css" media="screen">
-	html { margin-top: 28px !important; }
-	* html body { margin-top: 28px !important; }
+	html { margin-top: 32px !important; }
+	* html body { margin-top: 32px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 46px !important; }
+		* html body { margin-top: 46px !important; }
+	}
 </style>
 <?php
 }

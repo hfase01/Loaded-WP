@@ -18,9 +18,9 @@
 		<div class="entry-meta">
 			<span class="cat-links"><?php echo get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'twentyfourteen' ) ); ?></span>
 		</div>
-		<?php endif; ?>
-
 		<?php
+			endif;
+
 			if ( is_single() ) :
 				the_title( '<h1 class="entry-title">', '</h1>' );
 			else :
@@ -62,9 +62,5 @@
 	</div><!-- .entry-content -->
 	<?php endif; ?>
 
-	<?php if ( has_tag() ) : ?>
-	<footer class="entry-meta">
-		<span class="tag-links"><?php echo get_the_tag_list(); ?></span>
-	</footer><!-- .entry-meta -->
-	<?php endif; ?>
+	<?php the_tags( '<footer class="entry-meta"><span class="tag-links">', '', '</span></footer>' ); ?>
 </article><!-- #post-## -->
