@@ -135,7 +135,7 @@ function get_bookmarks($args = '') {
 	$cache = array();
 	$key = md5( serialize( $r ) );
 	if ( $cache = wp_cache_get( 'get_bookmarks', 'bookmark' ) ) {
-		if ( is_array($cache) && isset( $cache[ $key ] ) )
+		if ( is_array($cache) && isset( $cache[ $key ] ) ) {
 			$bookmarks = $cache[ $key ];
 			/**
 			 * Filter the returned list of bookmarks.
@@ -153,6 +153,7 @@ function get_bookmarks($args = '') {
 			 * @param array $r         An array of bookmark query arguments.
 			 */
 			return apply_filters( 'get_bookmarks', $bookmarks, $r );
+		}
 	}
 
 	if ( !is_array($cache) )
@@ -225,8 +226,8 @@ function get_bookmarks($args = '') {
 		$join = " INNER JOIN $wpdb->term_relationships AS tr ON ($wpdb->links.link_id = tr.object_id) INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
 	}
 
-	if ( $show_updated && get_option('links_recently_updated_time') ) {
-		$recently_updated_test = ", IF (DATE_ADD(link_updated, INTERVAL " . get_option('links_recently_updated_time') . " MINUTE) >= NOW(), 1,0) as recently_updated ";
+	if ( $show_updated ) {
+		$recently_updated_test = ", IF (DATE_ADD(link_updated, INTERVAL 120 MINUTE) >= NOW(), 1,0) as recently_updated ";
 	} else {
 		$recently_updated_test = '';
 	}
