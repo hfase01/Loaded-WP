@@ -14,3 +14,6 @@ readme.html
 license.txt
 wp-content/w3-total-cache-config.php
 wp-content/w3-total-cache-config-preview.php
+advanced-cache.php
+db.php w3-total-cache-config.php
+w3-total-cache-config.php
