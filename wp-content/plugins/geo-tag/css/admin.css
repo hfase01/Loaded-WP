@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+.bold {
+	font-weight: bold;	
+}
+
+.column1 {
+	float: left;	
+	width: 700px;
+}
+
+.column2 {
+	float: right;	
+	border:1px solid #CFCFCF;
+	margin-right: 40px;
+	padding: 10px;
+}
+
+fieldset {
+	border:1px solid #CFCFCF;
+	width:600px;
+	padding:20px;
+	margin-bottom:20px;
+}
+
+legend {
+	font-weight: bold;	
+}
+
+.divRow {
+	display:inline-block;	
+}
+
+.firstCell {
+	width:200px;
+	float:left;	
+}
+
+.secondCell {
+	width:300px;
+	float:left;
+}
+
+#geoJsonExample {
+	display: none;
+	border:1px solid #CFCFCF;
+	width: 500px;
+}
