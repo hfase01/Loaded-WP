@@ -8,7 +8,8 @@
 </div><!-- end wrap -->
 
 	<footer id="colophon" class="clearfix">
-	&nbsp;&nbsp;<a href="http://hfase.com">hfase.com</a>&nbsp;<a href="http://www.garagerepairphoenix.com/">www.garagerepairphoenix.com</a>&nbsp;<a href="http://www.gplforum.com">www.gplforum.com</a>&nbsp;<a href="http://mirror.hfase.com">mirror.hfase.com</a>
+		<p>Proudly powered by <a href="http://wordpress.org/">WordPress</a><span class="sep"> | </span><?php printf( __( 'Theme: %1$s by %2$s', 'yoko' ), 'Yoko', '<a href="http://www.elmastudio.de/en/themes/">Elmastudio</a>' ); ?></p>
+		<a href="#page" class="top"><?php _e( 'Top', 'yoko' ); ?></a>
 	</footer><!-- end colophon -->
 	
 </div><!-- end page -->

@@ -13,21 +13,15 @@ $j(document).ready(function() {
 	
 	$j('#current_location').click(function() {
 		if(navigator.geolocation) { 
+			console.log('nav');
 		    navigator.geolocation.getCurrentPosition(function(position) {
 		    	var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 				setMarker(latLng);
 				map.setZoom(12);
 				decodeLatLng(latLng);
 		    });
-		} else if (google.gears) {
-			var geo = google.gears.factory.create('beta.geolocation');
-			geo.getCurrentPosition(function(position) {
-				var latLng = new google.maps.LatLng(position.latitude, position.longitude); 
-				setMarker(latLng);
-				
-			});
 		} else {
-			alert("position could not be determined");
+			alert('position could not be determined');
 		}
 	});
 	
@@ -59,11 +53,11 @@ $j(document).ready(function() {
 		
 		marker = new google.maps.Marker({
 			position: latLng, 
-                        draggable: true, 
+            draggable: true, 
 			map: map
 		});	
 
-                google.maps.event.addListener(marker, 'dragend', function(event) {
+        google.maps.event.addListener(marker, 'dragend', function(event) {
 			setMarker(event.latLng);
 			decodeLatLng(event.latLng);
 		});
@@ -109,10 +103,10 @@ $j(document).ready(function() {
 				$j('#region').val(locationName);
 				$j('#country').val(country);
 	        } else {
-                    $j('#map_address').html('<span style="color:red">Map Address: no results</span>');	
-                    $j('#region').val("");
-                    $j('#country').val("");
-                }
+	        	$j('#map_address').html('<span style="color:red">Map Address: no results</span>');	
+                $j('#region').val("");
+                $j('#country').val("");
+        	}
 		});
 	}
 	
@@ -178,8 +172,8 @@ $j(document).ready(function() {
 		return Math.round(coord*Math.pow(10,6))/Math.pow(10,6);
 	}
 
-        function isNumeric(input) {
-                return (input - 0) == input && input.length > 0;
-        }
+	function isNumeric(input) {
+		return (input - 0) == input && input.length > 0;
+	}
 		
 });

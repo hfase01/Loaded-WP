@@ -67,4 +67,14 @@ delete_option('mwpl_custom_message_alert');
 delete_option('mwpl_admin_notice_00000001');
 //Version 2.0.1
 delete_option('mwpl_upload_error');
+//Version 2.2
+delete_option('mwpl_bgimage_left');
+delete_option('mwpl_bgimage_top');
+//Version 2.2.4
+delete_option('mwpl_upgrade_224');
+delete_option('mwpl_upgrade_224');
+//Version 2.2.5
+delete_option('mwpl_upgrade_225');
+//Version 2.2.8
+delete_option('mwpl_font-size');
 ?>

@@ -14,13 +14,25 @@ ModuleClassName: blcHttpChecker
 ModulePriority: -1
 */
 
+require_once BLC_DIRECTORY . '/includes/token-bucket.php';
+
 //TODO: Rewrite sub-classes as transports, not stand-alone checkers
 class blcHttpChecker extends blcChecker {
 	/* @var blcChecker */
 	var $implementation = null;
+
+	/** @var  blcTokenBucketList */
+	private $token_bucket_list;
 	
 	function init(){
 		parent::init();
+
+		$conf = blc_get_configuration();
+		$this->token_bucket_list = new blcTokenBucketList(
+			$conf->get('http_throttle_rate', 3),
+			$conf->get('http_throttle_period', 15),
+			$conf->get('http_throttle_min_interval', 2)
+		);
 		
 		if ( function_exists('curl_init') || is_callable('curl_init') ) {
 			$this->implementation = new blcCurlHttp(
@@ -59,6 +71,15 @@ class blcHttpChecker extends blcChecker {
 	}
 	
 	function check($url, $use_get = false){
+		global $blclog;
+
+		//Throttle requests based on the domain name.
+		$domain = @parse_url($url, PHP_URL_HOST);
+		if ( $domain ) {
+			$this->token_bucket_list->takeToken($domain);
+		}
+
+		$blclog->info('HTTP module checking "' . $url . '"');
 		return $this->implementation->check($url, $use_get);
 	}
 }
@@ -132,10 +153,14 @@ class blcCurlHttp extends blcHttpCheckerBase {
 	var $last_headers = '';
 	
 	function check($url, $use_get = false){
+		global $blclog;
+		$blclog->info(__CLASS__ . ' Checking link', $url);
+
 		$this->last_headers = '';
-		
+
 		$url = $this->clean_url($url);
-		
+		$blclog->debug(__CLASS__ . ' Clean URL:', $url);
+
 		$result = array(
 			'broken' => false,
 		);
@@ -149,9 +174,8 @@ class blcCurlHttp extends blcHttpCheckerBase {
         curl_setopt($ch, CURLOPT_URL, $this->urlencodefix($url));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
-        //Masquerade as Internet explorer
-        //$ua = 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)';
-        $ua = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)';
+        //Masquerade as Internet Explorer
+		$ua = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)';
         curl_setopt($ch, CURLOPT_USERAGENT, $ua);
         
         //Add a semi-plausible referer header to avoid tripping up some bot traps 
@@ -212,6 +236,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		$start_time = microtime_float();
         curl_exec($ch);
         $measured_request_duration = microtime_float() - $start_time;
+		$blclog->debug(sprintf('HTTP request took %.3f seconds', $measured_request_duration));
         
 		$info = curl_getinfo($ch);
 		
@@ -220,7 +245,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
         $result['final_url'] = $info['url'];
         $result['request_duration'] = $info['total_time'];
         $result['redirect_count'] = $info['redirect_count'];
-        
+
         //CURL doesn't return a request duration when a timeout happens, so we measure it ourselves.
         //It is useful to see how long the plugin waited for the server to respond before assuming it timed out.        
         if( empty($result['request_duration']) ){
@@ -315,7 +340,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
         return $result;
 	}
 	
-	function read_header($ch, $header){
+	function read_header(/** @noinspection PhpUnusedParameterInspection */ $ch, $header){
 		$this->last_headers .= $header;
 		return strlen($header);
 	}
@@ -403,5 +428,3 @@ class blcSnoopyHttp extends blcHttpCheckerBase {
 	}
 	
 }
-
-?>

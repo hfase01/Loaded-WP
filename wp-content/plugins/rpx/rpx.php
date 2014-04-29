@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright 2011  Janrain  (email : info@janrain.com)
+Copyright 2013  Janrain  (email : info@janrain.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,13 +20,14 @@ Copyright 2011  Janrain  (email : info@janrain.com)
 Plugin Name: Janrain Engage
 Plugin URI: https://support.janrain.com/
 Description: Plugin to add authentication via the Janrain Engage service.
-Version: 1.0.9
-Author: forestb
+Version: 1.1.2
+Author: Janrain
 Author URI: http://janrain.com/
 License: GPL2
 */
+
 define('RPX_PLUGIN_NAME',                  'Janrain Engage for Wordpress');
-define('RPX_PLUGIN_VERSION',               '1.0.9');
+define('RPX_PLUGIN_VERSION',               '1.1.2');
 
 /*catch the current setting and disable display errors for security*/
 if (ob_start()){
@@ -53,13 +54,14 @@ function rpx_activate() {
     update_option(RPX_REALM_SCHEME,     $rpx_rp['realmScheme']);
     update_option(RPX_APP_ID_OPTION,    $rpx_rp['appId']);
     update_option(RPX_ADMIN_URL_OPTION, $rpx_rp['adminUrl']);
-    update_option(RPX_SOCIAL_PUB,       $rpx_rp['socialPub']);   
+    //update_option(RPX_SOCIAL_PUB,       $rpx_rp['socialPub']);
+    update_option(RPX_SOCIAL_PUB,       $rpx_rp['shareProviders']);
     update_option(RPX_SOCIAL_OPTION,    RPX_SOCIAL_OPTION_DEFAULT);
     update_option(RPX_VEMAIL_OPTION,    RPX_VEMAIL_OPTION_DEFAULT);
     update_option(RPX_AUTOREG_OPTION,   RPX_AUTOREG_OPTION_DEFAULT);
     update_option(RPX_VERIFYNAME_OPTION,RPX_VERIFYNAME_OPTION_DEFAULT);
     update_option(RPX_AVATAR_OPTION,    RPX_AVATAR_OPTION_DEFAULT);
-    update_option(RPX_S_STYLE_OPTION,   RPX_S_STYLE_OPTION_DEFAULT);   
+    update_option(RPX_S_STYLE_OPTION,   RPX_S_STYLE_OPTION_DEFAULT);
     update_option(RPX_S_TXT_OPTION,     RPX_S_TXT_OPTION_DEFAULT);
     update_option(RPX_PARAMS_OPTION,    RPX_PARAMS_OPTION_DEFAULT);
     update_option(RPX_REMOVABLE_OPTION, RPX_REMOVABLE_OPTION_DEFAULT);
@@ -67,6 +69,9 @@ function rpx_activate() {
     update_option(RPX_SIGNIN_OPTION,    RPX_SIGNIN_OPTION_DEFAULT);
     update_option(RPX_WPLOGIN_OPTION,   RPX_WPLOGIN_OPTION_DEFAULT);
     update_option(RPX_NEW_WIDGET_OPTION, RPX_NEW_WIDGET_OPTION_DEFAULT);
+    update_option(RPX_NEW_SHARE_OPTION, RPX_NEW_SHARE_OPTION_DEFAULT);
+    update_option(RPX_SHARE_AUTH_OPTION, RPX_SHARE_AUTH_OPTION_DEFAULT);
+    update_option(RPX_SHARE_REG_OPTION, RPX_SHARE_REG_OPTION_DEFAULT);
   }
 }
 
@@ -99,6 +104,9 @@ function rpx_uninstall() {
   delete_option(RPX_SIGNIN_OPTION);
   delete_option(RPX_WPLOGIN_OPTION);
   delete_option(RPX_NEW_WIDGET_OPTION);
+  delete_option(RPX_NEW_SHARE_OPTION);
+  delete_option(RPX_SHARE_AUTH_OPTION);
+  delete_option(RPX_SHARE_REG_OPTION);
 }
 
 register_activation_hook(__FILE__, 'rpx_activate');

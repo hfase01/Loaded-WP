@@ -1,10 +1,10 @@
-=== Memphis Wordpress Custom Login ===
-Contributors: bhaldie
+=== Memphis Custom Login ===
+Contributors: Ian Howatson
 Donate link: http://www.kingofnothing.net/
 Tags: plugin,google,javascript,memphis,bhaldie, css, wordpress login,wp-login, customize
 Requires at least: 3.0.4
-Tested up to: 3.3.2
-Stable tag: 2.1.1
+Tested up to: 3.8.1
+Stable tag: 3.0.4
 
 A simple way to control your WordPress Login Page.
 
@@ -48,6 +48,62 @@ Once uploaded the configuration menu is located in the "Tools" menu with the hea
 4. screenshot-4.png
 
 == Changelog ==
+= 3.0.4 =
+* Hot fix for admin head problem.
+= 3.0.3 =
+* Changed the width of the login message 
+= 3.0.2 =
+* Removed debugging text.
+= 3.0.1 =
+* attempt to remove white space from files, to stop activation warning.
+= 3.0 =
+* Memphis Documents Library integration.
+= 2.2.9 =
+* Tested and works with new version of WordPress version 3.6.
+* Small bug fixes.
+= 2.2.8 =
+* added the ability to change the font size of the input text.
+* added height to input text, theme styles where conflicting with height specifications
+= 2.2.7 =
+* removed http https conversion, causing issues with image loading.
+= 2.2.6 =
+* links are now visible in custom message input box.
+* fixed issue with https and background image.
+= 2.2.5 =
+* Bug fixed that didn't show the logo on a non ssl website.
+* made some changes to the way file path works, added the sub dir to the filename.
+= 2.2.4 =
+* Converted saved background image data from a hardcoded path and url to an relative url.  Based on the current wp_upload_dir().
+* Added a new file called mwlp-upgrade.php which handle changes from one version to another.
+= 2.2.3 =
+* Changed the way background image serialized data was handle (Credit to ITGabs for the fix)
+= 2.2.2 =
+* CSS bug fixed, causing background color not to show up.
+= 2.2.1 =
+* Removed form position top, causing issues with mobile devices
+* adjusted logo position information.
+* width of login form now a pixel value not a %.
+= 2.2.0 =
+* fixed another ssl bug.
+* fixed href normal color bug
+* added the ability to move custom logo around the login page.
+= 2.1.9 =
+* fixed ssl bug.
+= 2.1.8 =
+* Tested login screen on all current browser on both Windows and Mac no issues reported.
+* Added the ability to change vertical location of login window.
+* Added the ablility to change the tooltip of the logo.
+* Minor bug fixes and testing.
+= 2.1.7 =
+* Compatibility issues with logo scale and safari browser.
+= 2.1.5 =
+* Fixed bug with logo scale.
+= 2.1.4 =
+* Fixed custom message bug.
+= 2.1.3 =
+* Fixed bug with logo scale.
+= 2.1.2 =
+* SSL configuration changes to allow for force admin and force login.
 = 2.1.1 =
 * SSL Enabled
 * Redirect loop fixed, error occuring with redirect causing enless loop with email links fixed

@@ -1,69 +1,112 @@
-=== Zemanta ===
+=== Editorial Assistant by Zemanta ===
 Contributors: zemanta
-Tags: images, links, tags, keywords, articles, seo, embed, enrich, media, semantic web, multimedia, video, youtube, maps, wikipedia, google maps, related, related content, books, zemanta, widget
+Tags: related posts, posts, thumbnails, images, post, seo, related content, widget, plugin, popular posts, similar posts, related, nrelate, outbrain
 Requires at least: 2.8
-Tested up to: 3.3.1
-Stable Tag: 1.1.2
+Tested up to: 3.9
+Stable Tag: 1.2.4
 
-Zemanta finds related content while you write your post, so you can add pictures, links and widgets with a single click.
+This plugin finds related posts and related images while you write your post. Pick related posts manually!
 
 == Description ==
 
-Zemanta **recommends content** while you write your post. It helps you enhance it with images, videos, links, and SEO optimized tags. It's blogging on steroids!
+Add **related posts** and related images to your blog. You save time, increase your SEO, and become a member of our network of over 120,000 bloggers!
 
-Zemanta brings you:
+* **Related posts** from your own blogs and the network. Related posts can have thumbnails too!
+* **Increase your authority** by linking to the most authoritative related posts (good for SEO).
+* **Related Images** added with a single click. Proper credits are added by default!
+* **Link Love** by linking to other bloggers' related posts. In turn, we'll recommend your posts to other bloggers. Then find out how much love (links, tweets, likes) your posts received via Zemanta Dashboard.
 
-* **Links**: Wikipedia, Amazon, IMDB, YouTube, Google Maps, CrunchBase, RottenTomatoes, MusicBrainz, MySpace, Last.fm, Snooth, Hulu, Wikinvest, Uptake, Muzu.tv,
-* **Images**: Getty, Flickr, Wikipedia
-* **Articles**: Major news sources like BBC and CNN and over 30,000 blogs
+After Zemanta analyzes your post, a point and click interface allows you to insert related posts and related images. By not having to search for related posts, you will save time and be more efficient.
 
-A simple point and click interface allows you to add only recommendations that you like. Recommended content is blogger friendly with clearly marked licenses (Creative Commons or similar).
+**Share the Link Love**
 
-Not having to search for related content saves you time and increases the efficiency of your editorial process. You can specify your own blog(s) and Zemanta will recommend links to your related posts!
+[vimeo http://vimeo.com/46745200]
 
-Amazon affiliate support allows you to quickly link to books, music CD's and DVD's and earn money in the process.
+**Link Love** is easy with Zemanta. We recommend related posts from other bloggers, you decide which ones you want to link to. We then let them know that you gave them some love. And of course, other bloggers can and will do that for you as well!
 
-You can try it out without installing the plug-in through [Firefox or Internet Explorer extension](http://www.zemanta.com/download "Zemanta download").
-Get to know [more about Zemanta](http://www.zemanta.com).
+
+**Get to know more at [Zemanta website](http://www.zemanta.com).**
 
 == Installation ==
 
-1. There's a download button on the right side of this text, download the file.
-2. Unzip the file, copy `zemanta` directory to `wp-content/plugins` on your server.
-3. Inside WordPress dasboard there's the `Plugins` menu, click on it. Then click on `Activate` link under Zemanta plug-in.
-4. Start writing a new post. See the suggested content after you write a few sentences!
+1. Unzip to `wp-content/plugins` on your server.
+2. Activate through the 'Plugins' menu in WordPress
+3. Start writing a new post! Zemanta will suggest related posts, related images and related tags after you write a few sentences!
 
 == Frequently Asked Questions ==
 
-= What languages do you support? =
+= Can Zemanta recommend me my own related posts? =
 
-Right now we support only English, but if you blog in other languages about trademarks and buzzwords Zemanta might still be useful.
+Yes! See tutorial on [How to: Use Zemanta to recommend related posts from your own blog(s)](http://www.zemanta.com/blog/how-to-use-zemanta-to-recommend-articles-from-your-own-blogs/)
 
-= Can Zemanta recommend me my own photos? =
+= Can Zemanta recommend me my own related photos? =
 
-Yes. You can setup Flickr account in Preferences and we'll recommend pictures from your account.
+Yes! You can connect your Instagram and Flickr account in Preferences and we'll recommend related photos from your account.
 
-= Can Zemanta recommend me my own blog posts? =
+= Do you care about copyright? =
 
-Yes, see tutorial on [How to: Use Zemanta to recommend articles from your own blog(s)](http://www.zemanta.com/blog/how-to-use-zemanta-to-recommend-articles-from-your-own-blogs/)
+Yes, very much. Images that we are recommending are copyright cleared - either Creative Commons and similar or approved by stock photo providers. However we can only inform you about the license and it's your decision to use it or not.
 
-= Do you care about copyright at all? =
+= How does Zemanta compare to nRelate, OutBrain, YARPP and Wordnik related content plugins? =
 
-Yes, very much. Content that we are recommending is copyright cleared - either licenced as Creative Commons and similar or approved by stock photo providers. However we can only inform you about the license and it is your decision wheter it is acceptable to you.
+We let you explicitly pick related posts whereas nRelate, Outbrain, YARPP (Yet Another Related Posts Plugin) and Wordnik offer less control over picking related posts.
 
-= I have another question =
+= How do I get my blog posts linked by other bloggers in your network? =
 
-Please take a look at [Zemanta Official FAQ](http://www.zemanta.com/faq/ "Zemanta FAQ").
+Add your blog to our index ([requirements of approval](http://support.zemanta.com/customer/portal/articles/674805-how-to-become-part-of-zemanta-s-related-posts-pool-)). We will index your posts and when another blogger writes a post about similar topic, we will recommend your related posts. You can find out who has linked to your posts through your Zemanta dashboard.
+
+= Do I have to create account with Zemanta? =
+
+You don't need an account. However if you log-in to Zemanta Dashboard, you will see who else has used your posts as related posts and get notification emails.
+
+= What other users say? = 
+
+"Zemanta, in my opinion, is probably the most powerful and useful tool in my personal blogging toolbox." - [Blacknight](http://blog.blacknight.com/use-zemanta-to-improve-your-blogging.html)
+
+"One of the best free content curation tools available today." - [Content Curation Desktop](http://www.contentcurationdesktop.com/featured-2/zemanta-a-free-customizable-curation-tool/)
+
+= More questions? =
+
+Take a look at [Zemanta Official FAQ](http://support.zemanta.com "Zemanta Support")!
 
 == Screenshots ==
 
-1. Zemanta sidebar
-2. Post write page with Zemanta, some sample content and suggestions present.
+1. Related posts with thumbnails when the post is published
+2. Widget - Related Images, Related Posts and the powerful search bar
+3. WordPress admin new post page where Zemanta is suggesting relevant related images and related posts for the post you are writing.
+4. List of related posts and a neat preview of the post you're about to link to
+5. The email you receive when another Zemanta user uses your post as a related post
 
 == Changelog ==
 
+= 1.2.4 =
+* Fixed a bug related to uploading images with strange characters in URL
+
+= 1.2.3 =
+* Code clean-up, remove unused functions
+* Changed default image size from 300 to 350 pixels (resolutions are increasing)
+* Tested with 3.8
+
+= 1.2.2 =
+* Dropped custom path support for uploader
+
+= 1.2.1 =
+* Tested with WordPress 3.5 beta 2
+* Fixed a bug concerning the sign-in button
+
+= 1.2 =
+* Related posts now feature thumbnails (if a related post does not have a thumbnail, an abstract one is shown)
+* Added Instagram integration (for related images)
+* Added support for Fashion Traffic affiliate program (for related images)
+* Ability to share recommended related posts via Facebook or Twitter
+* Better settings page: now with a link to Register / Sign-in into Zemanta service
+* Related posts with thumbnails are now on by default
+
+= 1.1.3 =
+* Better errors indication in settings
+
 = 1.1.2 =
-* Fixed duplicating images bug in uploader
+* Fixed duplicating related images bug in uploader
 * Minor changes
 
 = 1.1.0 =
@@ -95,61 +138,7 @@ Please take a look at [Zemanta Official FAQ](http://www.zemanta.com/faq/ "Zemant
 
 = 1.0.0 =
 
-* Added Settings API and fix for WP < 2.9
+* Added Settings API and fix for WordPress < 2.9
 * Re-factor Settings Page
 * Media Updates
-
-= 0.8.2 =
-
-* Report a missing API key and retry fetch until we can obtain one
-* Update oldest supported version to 2.7
-
-= 0.8.1 =
-
-* Added missing views
-
-= 0.8 =
-
-* Complete code refactoring
-* Image uploading using WP filesystem
-
-= 0.7.3 =
-
-* Supress errors on chmod calls to prevent cryptic "unexpected output" warnings
-* Reworked hooks changed in 0.7.2
-
-= 0.7.2 =
-
-* Changed hooks to prevent javascript trying to load twice
-
-= 0.7.1 =
-
-* Fixed bug with WP running on php4
-
-= 0.7.0 =
-
-* Fixed bug with publishing scheduled posts
-* Fixed image downloader
-* Fixed sidebar positioning
-
-= 0.6.6 =
-
-* Compatibility check with WP 3.0
-* Loader location changed
-
-= 0.6.5 =
-
-* Fixed short form php open tags
-
-= 0.6.4 =
-
-* Fixed sidebar positioning problems for the new Zemanta widget
-
-= 0.6.3 =
-
-* Fixed bug with image downloader - problems with downloading images with whitespace in image name
-
-= 0.6.2 =
-
-* Speed up of widget loading (using Amazon CloudFront instead of Amazon S3)
-* readme.txt and INSTALL text review
+* Historical changelog before 1.0 removed

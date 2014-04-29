@@ -3,49 +3,69 @@ require_once ('global.php');
 require_once (CRAYON_RESOURCE_PHP);
 
 class CrayonLangsResourceType {
-    const EXTENSION = 0;
+	const EXTENSION = 0;
 	const ALIAS = 1;
 	const DELIMITER = 2;
 }
 
 /* Manages languages once they are loaded. The parser directly loads them, saves them here. */
-class CrayonLangs extends CrayonResourceCollection {
+class CrayonLangs extends CrayonUserResourceCollection {
 	// Properties and Constants ===============================================
 	// CSS classes for known elements
-	private static $known_elements = array('COMMENT' => 'c', 'PREPROCESSOR' => 'p', 'STRING' => 's', 'KEYWORD' => 'k', 
-			'STATEMENT' => 'st', 'RESERVED' => 'r', 'TYPE' => 't', 'TAG' => 'ta', 'MODIFIER' => 'm', 'IDENTIFIER' => 'i', 
-			'ENTITY' => 'e', 'VARIABLE' => 'v', 'CONSTANT' => 'cn', 'OPERATOR' => 'o', 'SYMBOL' => 'sy', 
+	private static $known_elements = array('COMMENT' => 'c', 'PREPROCESSOR' => 'p', 'STRING' => 's', 'KEYWORD' => 'k',
+			'STATEMENT' => 'st', 'RESERVED' => 'r', 'TYPE' => 't', 'TAG' => 'ta', 'MODIFIER' => 'm', 'IDENTIFIER' => 'i',
+			'ENTITY' => 'e', 'VARIABLE' => 'v', 'CONSTANT' => 'cn', 'OPERATOR' => 'o', 'SYMBOL' => 'sy',
 			'NOTATION' => 'n', 'FADED' => 'f', CrayonParser::HTML_CHAR => 'h', CrayonParser::CRAYON_ELEMENT => 'crayon-internal-element');
 	const DEFAULT_LANG = 'default';
 	const DEFAULT_LANG_NAME = 'Default';
-	
+
 	const RESOURCE_TYPE = 'CrayonLangsResourceType';
-	
+
 	// Used to cache the objects, since they are unlikely to change during a single run
 	private static $resource_cache = array();
-	
+
 	// Methods ================================================================
 	public function __construct() {
 		$this->set_default(self::DEFAULT_LANG, self::DEFAULT_LANG_NAME);
 		$this->directory(CRAYON_LANG_PATH);
+        $this->relative_directory(CRAYON_LANG_DIR);
+        $this->extension('txt');
+
+        CrayonLog::debug("Setting lang directories");
+        $upload = CrayonGlobalSettings::upload_path();
+        if ($upload) {
+            $this->user_directory($upload . CRAYON_LANG_DIR);
+            if (!is_dir($this->user_directory())) {
+                CrayonGlobalSettings::mkdir($this->user_directory());
+                CrayonLog::debug($this->user_directory(), "LANG USER DIR");
+            }
+        } else {
+            CrayonLog::syslog("Upload directory is empty: " . $upload);
+        }
+        CrayonLog::debug($this->directory());
+        CrayonLog::debug($this->user_directory());
 	}
 
-	// XXX Override
-	public function path($id) {
-		return CRAYON_LANG_PATH . $id . "/$id.txt";
-	}
+    public function filename($id, $user = NULL) {
+        return $id."/$id.".$this->extension();
+    }
 
 	// XXX Override
 	public function load_process() {
 		parent::load_process();
 		$this->load_exts();
 		$this->load_aliases();
-		$this->load_delimiters(); // TODO check for setting? 
+		$this->load_delimiters(); // TODO check for setting?
 	}
 
+    public function load_resources($dir = NULL) {
+        parent::load_resources($dir);
+
+    }
+
 	// XXX Override
-	public function resource_instance($id, $name = NULL) {
-		return new CrayonLang($id, $name);
+	public function create_user_resource_instance($id, $name = NULL) {
+        return new CrayonLang($id, $name);
 	}
 
 	// XXX Override
@@ -62,7 +82,7 @@ class CrayonLangs extends CrayonResourceCollection {
 	public function detect($path, $fallback_id = NULL) {
 		$this->load();
 		extract(pathinfo($path));
-		
+
 		// If fallback id if given
 		if ($fallback_id == NULL) {
 			// Otherwise use global fallback
@@ -72,7 +92,7 @@ class CrayonLangs extends CrayonResourceCollection {
 		$fallback = $this->get($fallback_id);
 		// Use extension before trying fallback
 		$extension = isset($extension) ? $extension : '';
-		
+
 		if ( !empty($extension) && ($lang = $this->ext($extension)) || ($lang = $this->get($extension)) ) {
 			// If extension is found, attempt to find a language for it.
 			// If that fails, attempt to load a language with the same id as the extension.
@@ -99,10 +119,10 @@ class CrayonLangs extends CrayonResourceCollection {
 			}
 		}
 	}
-	
+
 	/* Load all extensions and add them into each language. */
 	private function load_aliases() {
-	// Load only once
+		// Load only once
 		if (!$this->is_state_loading()) {
 			return;
 		}
@@ -113,10 +133,10 @@ class CrayonLangs extends CrayonResourceCollection {
 			}
 		}
 	}
-	
+
 	/* Load all extensions and add them into each language. */
 	private function load_delimiters() {
-	// Load only once
+		// Load only once
 		if (!$this->is_state_loading()) {
 			return;
 		}
@@ -127,7 +147,7 @@ class CrayonLangs extends CrayonResourceCollection {
 			}
 		}
 	}
-	
+
 	// Used to load aliases and extensions to languages
 	private function load_attr_file($path) {
 		if ( ($lines = CrayonUtil::lines($path, 'lwc')) !== FALSE) {
@@ -157,7 +177,7 @@ class CrayonLangs extends CrayonResourceCollection {
 		}
 		return FALSE;
 	}
-	
+
 	/* Returns the CrayonLang for the given alias */
 	public function alias($alias) {
 		$this->load();
@@ -168,15 +188,15 @@ class CrayonLangs extends CrayonResourceCollection {
 		}
 		return FALSE;
 	}
-	
+
 	/* Fetches a resource. Type is an int from CrayonLangsResourceType. */
 	public function fetch($type, $reload = FALSE, $keep_empty_fetches = FALSE) {
 		$this->load();
-		
+
 		if (!array_key_exists($type, self::$resource_cache) || $reload) {
 			$fetches = array();
 			foreach ($this->get() as $lang) {
-				
+
 				switch ($type) {
 					case CrayonLangsResourceType::EXTENSION:
 						$fetch = $lang->ext();
@@ -190,7 +210,7 @@ class CrayonLangs extends CrayonResourceCollection {
 					default:
 						return FALSE;
 				}
-				
+
 				if ( !empty($fetch) || $keep_empty_fetches ) {
 					$fetches[$lang->id()] = $fetch;
 				}
@@ -199,19 +219,30 @@ class CrayonLangs extends CrayonResourceCollection {
 		}
 		return self::$resource_cache[$type];
 	}
-	
+
 	public function extensions($reload = FALSE) {
 		return $this->fetch(CrayonLangsResourceType::EXTENSION, $reload);
 	}
-	
+
 	public function aliases($reload = FALSE) {
 		return $this->fetch(CrayonLangsResourceType::ALIAS, $reload);
 	}
-	
+
 	public function delimiters($reload = FALSE) {
 		return $this->fetch(CrayonLangsResourceType::DELIMITER, $reload);
 	}
-	
+
+	public function extensions_inverted($reload = FALSE) {
+		$extensions = $this->extensions($reload);
+		$inverted = array();
+		foreach ($extensions as $lang=>$exts) {
+			foreach ($exts as $ext) {
+				$inverted[$ext] = $lang;
+			}
+		}
+		return $inverted;
+	}
+
 	public function ids_and_aliases($reload = FALSE) {
 		$fetch = $this->fetch(CrayonLangsResourceType::ALIAS, $reload, TRUE);
 		foreach ($fetch as $id=>$alias_array) {
@@ -219,8 +250,8 @@ class CrayonLangs extends CrayonResourceCollection {
 			foreach ($alias_array as $alias) {
 				$ids_and_aliases[] = $alias;
 			}
-		} 
-		return $ids_and_aliases; 
+		}
+		return $ids_and_aliases;
 	}
 
 	/* Return the array of valid elements or a particular element value */
@@ -239,11 +270,25 @@ class CrayonLangs extends CrayonResourceCollection {
 		return self::known_elements($name) !== FALSE;
 	}
 
-	public function is_loaded($id) {
-		if (is_string($id)) {
-			return array_key_exists($id, $this->get());
+	/* Compare two languages by name */
+	public static function langcmp($a, $b) {
+		$a = strtolower($a->name());
+		$b = strtolower($b->name());
+		if ($a == $b) {
+			return 0;
+		} else {
+			return ($a < $b) ? -1 : 1;
 		}
-		return FALSE;
+	}
+
+	public static function sort_by_name($langs) {
+		// Sort by name
+		usort($langs, 'CrayonLangs::langcmp');
+		$sorted_lags = array();
+		foreach ($langs as $lang) {
+			$sorted_lags[$lang->id()] = $lang;
+		}
+		return $sorted_lags;
 	}
 
 	public function is_parsed($id = NULL) {
@@ -289,6 +334,12 @@ class CrayonLang extends CrayonVersionResource {
 		$this->modes = CrayonParser::modes();
 	}
 
+	// Override
+	function clean_id($id) {
+        $id = CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+        return preg_replace('/[^\w-+#]/msi', '', $id);
+	}
+
 	function ext($ext = NULL) {
 		if ($ext === NULL) {
 			return $this->ext;
@@ -302,11 +353,11 @@ class CrayonLang extends CrayonVersionResource {
 			$this->ext[] = $ext;
 		}
 	}
-	
+
 	function has_ext($ext) {
 		return is_string($ext) && in_array($ext, $this->ext);
 	}
-	
+
 	function alias($alias = NULL) {
 		if ($alias === NULL) {
 			return $this->aliases;
@@ -319,22 +370,22 @@ class CrayonLang extends CrayonVersionResource {
 			$this->aliases[] = $alias;
 		}
 	}
-	
+
 	function has_alias($alias) {
 		return is_string($alias) && in_array($alias, $this->aliases);
 	}
-	
+
 	function delimiter($delim = NULL) {
 		if ($delim === NULL) {
 			return $this->delimiters;
-		// Convert to regex for capturing delimiters
+			// Convert to regex for capturing delimiters
 		} else if (is_string($delim) && !empty($delim)) {
 			$this->delimiters = '(?:'.$delim.')';
 		} else if (is_array($delim) && !empty($delim)) {
 			for ($i = 0; $i < count($delim); $i++) {
 				$delim[$i] = CrayonUtil::esc_atomic($delim[$i]);
 			}
-			
+
 			$this->delimiters = '(?:'.implode(')|(?:', $delim).')';
 		}
 	}
@@ -346,9 +397,9 @@ class CrayonLang extends CrayonVersionResource {
 				$regexes[] = $element->regex();
 			}
 			return '#' . '(?:('. implode(')|(', array_values($regexes)) . '))' . '#' .
-					 ($this->mode(CrayonParser::CASE_INSENSITIVE) ? 'i' : '') .
-					 ($this->mode(CrayonParser::MULTI_LINE) ? 'm' : '') .
-					 ($this->mode(CrayonParser::SINGLE_LINE) ? 's' : '');
+					($this->mode(CrayonParser::CASE_INSENSITIVE) ? 'i' : '') .
+					($this->mode(CrayonParser::MULTI_LINE) ? 'm' : '') .
+					($this->mode(CrayonParser::SINGLE_LINE) ? 's' : '');
 		} else if (is_string($element) && array_key_exists($element, $this->elements)) {
 			return $this->elements[$element]->regex();
 		}

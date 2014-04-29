@@ -1,6 +1,9 @@
 .svn
-.project
+# .project
 Thumbs.db
 .DS_Store*
-.settings
-.buildpath
+# .settings
+# .buildpath
+*.pyc
+.idea/
+/log.txt

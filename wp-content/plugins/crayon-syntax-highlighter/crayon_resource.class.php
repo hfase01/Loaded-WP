@@ -11,30 +11,24 @@ class CrayonResources {
 
 	private function __construct() {}
 
-	private static function init() {
-		if (self::$langs == NULL) {
-			self::$langs = new CrayonLangs();
-		}
-		if (self::$themes == NULL) {
-			self::$themes = new CrayonThemes();
-		}
-		if (self::$fonts == NULL) {
-			self::$fonts = new CrayonFonts();
-		}
-	}
-
 	public static function langs() {
-		self::init();
+        if (self::$langs == NULL) {
+            self::$langs = new CrayonLangs();
+        }
 		return self::$langs;
 	}
 
 	public static function themes() {
-		self::init();
+        if (self::$themes == NULL) {
+            self::$themes = new CrayonThemes();
+        }
 		return self::$themes;
 	}
 
 	public static function fonts() {
-		self::init();
+        if (self::$fonts == NULL) {
+            self::$fonts = new CrayonFonts();
+        }
 		return self::$fonts;
 	}
 }
@@ -64,7 +58,7 @@ class CrayonResourceCollection {
 		return '';
 	}
 
-	/* Verifies a language exists. */
+	/* Verifies a resource exists. */
 	public function exists($id) {
 		return file_exists($this->path($id));
 	}
@@ -81,25 +75,27 @@ class CrayonResourceCollection {
 		$this->state = self::LOADED;
 	}
 
-	public function load_resources() {
-		// Load only once
+	public function load_resources($dir = NULL) {
+        if ($dir === NULL) {
+            $dir = $this->dir;
+        }
 
 		if (!$this->is_state_loading()) {
+            // Load only once
 			return;
 		}
 		try {
 			// Look in directory for resources
 
-			if (!file_exists($this->dir)) {
-				CrayonLog::syslog('The resource directory is missing, should be at \'' . $this->dir . '\'.');
-			} else if (($handle = @opendir($this->dir)) != FALSE) {
+			if (!is_dir($dir)) {
+				CrayonLog::syslog('The resource directory is missing, should be at \'' . $dir . '\'.');
+			} else if (($handle = @opendir($dir)) != FALSE) {
 				// Loop over directory contents
-
 				while (($file = readdir($handle)) !== FALSE) {
 					if ($file != "." && $file != "..") {
 						// Check if $file is directory, remove extension when checking for existence.
 
-						if (!is_dir($this->dir . $file)) {
+						if (!is_dir($dir . $file)) {
 							$file = CrayonUtil::path_rem_ext($file);
 						}
 						if ($this->exists($file)) {
@@ -153,11 +149,6 @@ class CrayonResourceCollection {
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonResource($id, $name);
 	}
-	
-//	/* Override in subclasses to clean differently */
-//	public function clean_id($id) {
-//		return CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
-//	}
 
 	public function add($id, $resource) {
 		if (is_string($id) && !empty($id)) {
@@ -223,19 +214,20 @@ class CrayonResourceCollection {
 	}
 
 	public function directory($dir = NULL) {
-		$dir = CrayonUtil::path_slash($dir);
-		if (!CrayonUtil::str($this->dir, $dir, FALSE)) {
-			return $this->dir;
-		}
+        if ($dir === NULL) {
+            return $this->dir;
+        } else {
+            $this->dir = CrayonUtil::path_slash($dir);
+        }
 	}
 	
-	public function get_url($id) {
+	public function url($id) {
 		return '';
 	}
 	
-	public function get_css($id) {
+	public function get_css($id, $ver = NULL) {
 		$resource = $this->get($id);
-		return '<link rel="stylesheet" type="text/css" href="' . $this->get_url($resource->id()) . '" />' . CRAYON_NL;
+		return '<link rel="stylesheet" type="text/css" href="' . $this->url($resource->id()) . ($ver ? "?ver=$ver" : '') . '" />' . CRAYON_NL;
 	}
 }
 
@@ -283,16 +275,119 @@ class CrayonUsedResourceCollection extends CrayonResourceCollection {
 	public function resource_instance($id, $name = NULL) {
 		return new CrayonUsedResource($id, $name);
 	}
-	
+
 	public function get_used_css() {
 		$used = $this->get_used();
 		$css = array();
 		foreach ($used as $resource) {
-			$url = $this->get_url($resource->id());
+			$url = $this->url($resource->id());
 			$css[$resource->id()] = $url;
 		}
 		return $css;
 	}
+}
+
+class CrayonUserResourceCollection extends CrayonUsedResourceCollection {
+    private $user_dir = '';
+    private $curr_dir = NULL;
+    // TODO better to use a base dir and relative
+    private $relative_directory = NULL;
+    // TODO move this higher up inheritance
+    private $extension = '';
+
+    // XXX Override
+    public function resource_instance($id, $name = NULL) {
+        $resource = $this->create_user_resource_instance($id, $name);
+        $resource->user($this->curr_dir == $this->user_directory());
+        return $resource;
+    }
+
+    public function create_user_resource_instance($id, $name = NULL) {
+        return new CrayonUserResource($id, $name);
+    }
+
+    public function user_directory($dir = NULL) {
+        if ($dir === NULL) {
+            return $this->user_dir;
+        } else {
+            $this->user_dir = CrayonUtil::path_slash($dir);
+        }
+    }
+
+    public function relative_directory($relative_directory = NULL) {
+        if ($relative_directory == NULL) {
+            return $this->relative_directory;
+        }
+        $this->relative_directory = $relative_directory;
+    }
+
+    public function extension($extension = NULL) {
+        if ($extension == NULL) {
+            return $this->extension;
+        }
+        $this->extension = $extension;
+    }
+
+    public function load_resources($dir = NULL) {
+        $this->curr_dir = $this->directory();
+        parent::load_resources($this->curr_dir);
+        $this->curr_dir = $this->user_directory();
+        parent::load_resources($this->curr_dir);
+        $this->curr_dir = NULL;
+    }
+
+    public function current_directory() {
+        return $this->curr_dir;
+    }
+
+    public function dir_is_user($id, $user = NULL) {
+        if ($user === NULL) {
+            if ($this->is_state_loading()) {
+                // We seem to be loading resources - use current directory
+                $user = $this->current_directory() == $this->user_directory();
+            } else {
+                $theme = $this->get($id);
+                if ($theme) {
+                    $user = $theme->user();
+                } else {
+                    $user = FALSE;
+                }
+            }
+        }
+        return $user;
+    }
+
+    public function dirpath($user = NULL) {
+        $path = $user ? $this->user_directory() : $this->directory();
+        return CrayonUtil::path_slash($path);
+    }
+
+    public function dirpath_for_id($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirpath($user) . $id;
+    }
+
+    public function dirurl($user = NULL) {
+        $path = $user ? CrayonGlobalSettings::upload_url() : CrayonGlobalSettings::plugin_path();
+        return CrayonUtil::path_slash($path . $this->relative_directory());
+    }
+
+    // XXX Override
+    public function path($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirpath($user) . $this->filename($id, $user);
+    }
+
+    // XXX Override
+    public function url($id, $user = NULL) {
+        $user = $this->dir_is_user($id, $user);
+        return $this->dirurl($user) . $this->filename($id, $user);
+    }
+
+    public function filename($id, $user = NULL) {
+        return "$id.$this->extension";
+    }
+
 }
 
 class CrayonResource {
@@ -321,12 +416,11 @@ class CrayonResource {
 		}
 	}
 	
-	// Override
 	function clean_id($id) {
-		return CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+        $id = CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+        return preg_replace('#[^\w-]#msi', '', $id);
 	}
 	
-	// Override
 	function clean_name($id) {
 		$id = CrayonUtil::hyphen_to_space( strtolower(trim($id)) );
 		return CrayonUtil::ucwords($id);
@@ -334,13 +428,9 @@ class CrayonResource {
 
 }
 
-/* Keeps track of usage */
 class CrayonUsedResource extends CrayonResource {
+    // Keeps track of usage
 	private $used = FALSE;
-
-	function __construct($id, $name = NULL) {
-		parent::__construct($id, $name);
-	}
 
 	function used($used = NULL) {
 		if ($used === NULL) {
@@ -351,8 +441,21 @@ class CrayonUsedResource extends CrayonResource {
 	}
 }
 
-/* Adds version */
-class CrayonVersionResource extends CrayonResource {
+class CrayonUserResource extends CrayonUsedResource {
+    // Keeps track of user modifications
+    private $user = FALSE;
+
+    function user($user = NULL) {
+        if ($user === NULL) {
+            return $this->user;
+        } else {
+            $this->user = ($user ? TRUE : FALSE);
+        }
+    }
+}
+
+class CrayonVersionResource extends CrayonUserResource {
+    // Adds version
 	private $version = '';
 
 	function __construct($id, $name = NULL, $version = NULL) {

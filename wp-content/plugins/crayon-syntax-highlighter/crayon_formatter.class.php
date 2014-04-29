@@ -24,9 +24,10 @@ class CrayonFormatter {
 	private function __construct() {}
 
 	/* Formats the code using the parsed language elements. */
-	public static function format_code($code, $language, $hl = NULL, $highlight = TRUE) {
+	public static function format_code($code, $language, $hl = NULL) {
 		// Ensure the language is defined
-		if ($language != NULL && $highlight) {
+		if ($language != NULL && $hl->is_highlighted()) {
+			$code = self::clean_code($code, FALSE, FALSE, FALSE, TRUE);
 			/* Perform the replace on the code using the regex, pass the captured matches for
 			 formatting before they are replaced */
 			try {
@@ -43,10 +44,9 @@ class CrayonFormatter {
 				$error = 'An error occured when formatting: ' . $e->message();
 				$hl ? $hl->log($error) : CrayonLog::syslog($error);
 			}
-			
 			return $code;
 		} else {
-			return self::clean_code($code);
+			return self::clean_code($code, TRUE, TRUE, TRUE, TRUE);
 		}
 	}
 
@@ -103,44 +103,35 @@ class CrayonFormatter {
 		// Inline margin
 		if ($hl->is_inline()) {
 			$inline_margin = $hl->setting_val(CrayonSettings::INLINE_MARGIN) . 'px !important;';
-			//$output .= '<style type="text/css" media="all">' . "#$uid { margin: 0 {$inline_margin} }</style>";
 		}
 		
 		// Determine font size
 		// TODO improve logic
 		if ($hl->setting_val(CrayonSettings::FONT_SIZE_ENABLE)) {
-			$font_size = $hl->setting_val(CrayonSettings::FONT_SIZE) . 'px !important;';
-			$font_height = $font_size * 1.25 . 'px !important;';
+            $_font_size = $hl->setting_val(CrayonSettings::FONT_SIZE);
+			$font_size = $_font_size . 'px !important;';
+            $_line_height = $hl->setting_val(CrayonSettings::LINE_HEIGHT);
+            // Don't allow line height to be less than font size
+            $line_height = ($_line_height > $_font_size ? $_line_height : $_font_size) . 'px !important;';
 			$toolbar_height = $font_size * 1.5 . 'px !important;';
-			$info_height = $font_size * 1.25 . 'px !important;';
-			//$font_style .= "#$uid * { font-size: $font_size line-height: $font_height }";
+			$info_height = $font_size * 1.4 . 'px !important;';
 			
-			$font_style .= "font-size: $font_size line-height: $font_height";
-//			$inline_font_style .= "font-size: $font_size line-height: $font_height";
-			$line_style .= "height: $font_height";
+			$font_style .= "font-size: $font_size line-height: $line_height";
+            $toolbar_style .= "font-size: $font_size";
+			$line_style .= "height: $line_height";
 			
 			if ($hl->is_inline()) {
-				//$font_style .= "#$uid { font-size: $font_size }\n";
 				$font_style .= "font-size: $font_size";
 			} else {
-				//$font_style .= "#$uid .crayon-toolbar, #$uid .crayon-toolbar * { height: $toolbar_height line-height: $toolbar_height }\n";
 				$toolbar_style .= "height: $toolbar_height line-height: $toolbar_height";
 				$info_style .= "min-height: $info_height line-height: $info_height";
-//				$font_style .= "#$uid .crayon-num, #$uid .crayon-line, #$uid .crayon-toolbar a.crayon-button { height: $font_height }\n";
+
 			}
 		} else if (!$hl->is_inline()) {
 			if (($font_size = CrayonGlobalSettings::get(CrayonSettings::FONT_SIZE)) !== FALSE) {
 				$font_size = $font_size->def() . 'px !important;';
-				$font_height = ($font_size + 4) . 'px !important;';
-				// Correct font CSS for WP 3.3
-//				$font_style .= "#$uid .crayon-plain { font-size: $font_size line-height: $font_height }";
+                $line_height = ($font_size * 1.4) . 'px !important;';
 			}
-		}
-		
-		// Produce style for individual crayon
-		// TODO
-		if (!empty($font_style)) {
-			//$output .= '<style type="text/css" media="all">'.$font_style.'</style>';
 		}
 		
 		// This will return from function with inline print
@@ -148,7 +139,7 @@ class CrayonFormatter {
 			$wrap = !$hl->setting_val(CrayonSettings::INLINE_WRAP) ? 'crayon-syntax-inline-nowrap' : '';
 			$output .= '
 			<span id="'.$uid.'" class="crayon-syntax crayon-syntax-inline '.$wrap.' crayon-theme-'.$theme_id_dashed.' crayon-theme-'.$theme_id_dashed.'-inline crayon-font-'.$font_id_dashed.'" style="'.$font_style.'">' .
-				'<span class="crayon-pre" style="'.$font_style.'">' . $code . '</span>' . 
+				'<span class="crayon-pre crayon-code" style="'.$font_style.'">' . $code . '</span>' . 
 			'</span>';
 			return $output;
 		}
@@ -158,14 +149,29 @@ class CrayonFormatter {
 		// Generate the code lines and separate each line as a div
 		$print_code = '';
 		$print_nums = '';
-		$hl->line_count(preg_match_all("|^.*$|m", $code, $code_lines));
+		$hl->line_count(preg_match_all("#(?:^|(?<=\r\n|\n))[^\r\n]*#", $code, $code_lines));
 		
 		// The line number to start from
 		$start_line = $hl->setting_val(CrayonSettings::START_LINE);
 		$marking = $hl->setting_val(CrayonSettings::MARKING);
 		$striped = $hl->setting_val(CrayonSettings::STRIPED);
+		$range = $hl->setting_val(CrayonSettings::RANGES) ? $hl->range() : FALSE;
 		for ($i = 1; $i <= $hl->line_count(); $i++) {
+			// Check if the current line is in the range of code to display
+			if ($range){
+				if ($i < $range[0]) {
+					continue;
+				} else if ($i > $range[1]) {
+					break;
+				}
+			}
 			$code_line = $code_lines[0][$i - 1];
+			
+			// If line is blank, add a space so the div has the correct height
+			if ($code_line == '') {
+				$code_line = '&nbsp;';
+			}
+			
 			// Check if the current line has been selected
 			$marked_lines = $hl->marked();
 			// Check if lines need to be marked as important
@@ -194,9 +200,10 @@ class CrayonFormatter {
 			}
 			// Generate the lines
 			$line_num = $start_line + $i - 1;
-			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="'. $uid .'-' . $line_num . '" style="'.$line_style.'">' . $code_line . '</div>';
+			$line_id = $uid.'-' . $line_num;
+			$print_code .= '<div class="crayon-line' . $marked_line . $striped_line . '" id="'.$line_id.'">' . $code_line . '</div>';
 			if (!is_string($line_numbers)) {
-				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '" style="'.$line_style.'">' . $line_num . '</div>';
+				$print_nums .= '<div class="crayon-num' . $marked_num . $striped_num . '" data-line="'.$line_id.'">' . $line_num . '</div>';
 			}
 		}
 		// If $line_numbers is a string, display it
@@ -211,11 +218,10 @@ class CrayonFormatter {
 		if ($hl->setting_val(CrayonSettings::DECODE_ATTRIBUTES)) {
 			$title = CrayonUtil::html_entity_decode($title);
 		}
-		$print_title = ($hl->setting_val(CrayonSettings::SHOW_TITLE) && $title ? '<span class="crayon-title">' . $title . '</span>' : '');
+		$print_title = '<span class="crayon-title">' . $title . '</span>';
 		// Determine whether to print language
 		$print_lang = '';
 		// XXX Use for printing the regex
-//		var_dump($hl->language()->regex()); exit;
 		if ($hl->language()) {
 			$lang = $hl->language()->name();
 			switch ($hl->setting_index(CrayonSettings::SHOW_LANG)) {
@@ -240,11 +246,22 @@ class CrayonFormatter {
 			$code_settings .= ' touchscreen';
 		}
 		
+		// Disabling Popup
+		if (!$hl->setting_val(CrayonSettings::POPUP)) {
+			$code_settings .= ' no-popup';
+		}
+
+        // Minimize
+        if (!$hl->setting_val(CrayonSettings::MINIMIZE)) {
+            $code_settings .= ' minimize';
+        }
+		
 		// Draw the plain code and toolbar
 		$toolbar_settings = $print_plain_button = $print_copy_button = '';
-		if (empty($error) && $hl->setting_index(CrayonSettings::TOOLBAR) != 2) {
+        $toolbar_index = $hl->setting_index(CrayonSettings::TOOLBAR);
+		if (empty($error) && ($toolbar_index != 2 || $hl->setting_val(CrayonSettings::MINIMIZE))) {
 			// Enable mouseover setting for toolbar
-			if ($hl->setting_index(CrayonSettings::TOOLBAR) == 0 && !$touch) {
+			if ($toolbar_index == 0 && !$touch) {
 				// No touchscreen detected
 				$toolbar_settings .= ' mouseover';
 				if ($hl->setting_val(CrayonSettings::TOOLBAR_OVERLAY)) {
@@ -256,31 +273,58 @@ class CrayonFormatter {
 				if ($hl->setting_val(CrayonSettings::TOOLBAR_DELAY)) {
 					$toolbar_settings .= ' delay';
 				}
-			} else if ($hl->setting_index(CrayonSettings::TOOLBAR) == 1) {
+			} else if ($toolbar_index == 1) {
 				// Always display the toolbar
 				$toolbar_settings .= ' show';
-			} else {
-				$toolbar_settings .= '';
+			} else if ($toolbar_index == 2) {
+				$toolbar_settings .= ' never-show';
 			}
-			
-			$print_plain_button = $hl->setting_val(CrayonSettings::PLAIN_TOGGLE) ? '<a class="crayon-plain-button crayon-button" title="'.crayon__('Toggle Plain Code').'"></a>' : '';
-			$print_copy_button = !$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY) ?
-				'<a class="crayon-copy-button crayon-button" data-text="'.crayon__('Press %s to Copy, %s to Paste').'" title="'.crayon__('Copy Plain Code').'"></a>' : '';
-			$print_popup_button = $hl->setting_val(CrayonSettings::POPUP) ?
-				'<a class="crayon-popup-button crayon-button" title="'.crayon__('Open Code In New Window').'" onclick="return false;"></a>' : '';
+
+			$buttons = array();
 			
 			if ($hl->setting_val(CrayonSettings::NUMS_TOGGLE)) {
-				$print_nums_button = '<a class="crayon-nums-button crayon-button" title="'.crayon__('Toggle Line Numbers').'"></a>';
-			} else {
-				$print_nums_button = '';
+				$buttons['nums'] = crayon__('Toggle Line Numbers');
 			}
+
+			if ($hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::PLAIN_TOGGLE)) {
+				$buttons['plain'] = crayon__('Toggle Plain Code');
+			}
+
+			if ($hl->setting_val(CrayonSettings::WRAP_TOGGLE)) {
+				$buttons['wrap'] = crayon__('Toggle Line Wrap');
+			}
+
+			if ($hl->setting_val(CrayonSettings::EXPAND_TOGGLE)) {
+				$buttons['expand'] = crayon__('Expand Code');	
+			}
+
+			if (!$touch && $hl->setting_val(CrayonSettings::PLAIN) && $hl->setting_val(CrayonSettings::COPY)) {
+				$buttons['copy'] = crayon__('Copy');
+			}
+
+			if ($hl->setting_val(CrayonSettings::POPUP)) {
+				$buttons['popup'] = crayon__('Open Code In New Window');
+			}
+
+			$buttons_str = '';
+			foreach ($buttons as $button=>$value) {
+				$buttons_str .= '<div class="crayon-button crayon-' . $button . '-button"';
+				if (!is_array($value)) {
+					$value = array('title' => $value);
+				}
+				foreach ($value as $k=>$v) {
+					$buttons_str .= ' ' . $k . '="' . $v . '"';
+				}
+				$buttons_str .= '><div class="crayon-button-icon"></div></div>';
+			}
+
 			/*	The table is rendered invisible by CSS and enabled with JS when asked to. If JS
 			 is not enabled or fails, the toolbar won't work so there is no point to display it. */
-			$print_plus = $hl->setting_val(CrayonSettings::MIXED) && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
-			$buttons = $print_plus.$print_nums_button.$print_copy_button.$print_popup_button.$print_plain_button.$print_lang;
+			$print_plus = $hl->is_mixed() && $hl->setting_val(CrayonSettings::SHOW_MIXED) ? '<span class="crayon-mixed-highlight" title="'.crayon__('Contains Mixed Languages').'"></span>' : '';
+			$buttons = $print_plus.$buttons_str.$print_lang;
 			$toolbar = '
 			<div class="crayon-toolbar" data-settings="'.$toolbar_settings.'" style="'.$toolbar_style.'">'.$print_title.'
-			<div class="crayon-tools">'.$buttons.'</div></div>
+			<div class="crayon-tools" style="'.$toolbar_style.'">'.$buttons.'</div></div>
 			<div class="crayon-info" style="'.$info_style.'"></div>';
 
 		} else {
@@ -310,8 +354,8 @@ class CrayonFormatter {
 			$plain_style = "-moz-tab-size:$tab; -o-tab-size:$tab; -webkit-tab-size:$tab; tab-size:$tab;";
 			$readonly = $touch ? '' : 'readonly';
 			$print_plain = $print_plain_button = '';
-			// TODO remove wrap
-			$print_plain = '<textarea wrap="off" class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . self::clean_code($hl->code()) . '</textarea>';
+			$textwrap = !$hl->setting_val(CrayonSettings::WRAP) ? 'wrap="soft"' : '';
+			$print_plain = '<textarea '.$textwrap.' class="crayon-plain print-no" data-settings="' . $plain_settings . '" '. $readonly .' style="' . $plain_style .' '. $font_style . '">' . "\n" . self::clean_code($hl->code()) . '</textarea>';
 		} else {
 			$print_plain = $plain_settings = $plain_settings = '';
 		}
@@ -330,6 +374,16 @@ class CrayonFormatter {
 		// Disable animations
 		if ($hl->setting_val(CrayonSettings::DISABLE_ANIM)) {
 			$code_settings .= ' disable-anim';
+		}
+		
+		// Wrap
+		if ($hl->setting_val(CrayonSettings::WRAP)) {
+			$code_settings .= ' wrap';
+		}
+		
+		// Expand
+		if ($hl->setting_val(CrayonSettings::EXPAND)) {
+			$code_settings .= ' expand';
 		}
 		
 		// Determine dimensions
@@ -390,7 +444,7 @@ class CrayonFormatter {
 		
 		// Produce output
 		$output .= '
-		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.' print-yes" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
+		<div id="'.$uid.'" class="crayon-syntax crayon-theme-'.$theme_id_dashed.' crayon-font-'.$font_id_dashed.' crayon-os-'.$crayon_os.' print-yes notranslate" data-settings="'.$code_settings.'" style="'.$code_style.' '.$font_style.'">
 		'.$toolbar.'
 			<div class="crayon-plain-wrap">'.$print_plain.'</div>'.'
 			<div class="crayon-main" style="'.$main_style.'">
@@ -399,8 +453,8 @@ class CrayonFormatter {
 
 		if ($print_nums !== FALSE) {
 		$output .= '
-				<td class="crayon-nums '.$num_vis.'" data-settings="'.$num_settings.'" style="'.$font_style.'">
-					<div class="crayon-nums-content">'.$print_nums.'</div>
+				<td class="crayon-nums '.$num_vis.'" data-settings="'.$num_settings.'">
+					<div class="crayon-nums-content" style="'.$font_style.'">'.$print_nums.'</div>
 				</td>';
 		}
 		// XXX
@@ -442,7 +496,7 @@ class CrayonFormatter {
 
 	// Delimiters =============================================================
 	
-	public static function format_mixed_code($code, $language, $hl, $highlight = TRUE) {
+	public static function format_mixed_code($code, $language, $hl) {
 		self::$curr = $hl;
 		self::$delim_pieces = array();
 		// Remove crayon internal element from INPUT code
@@ -461,7 +515,7 @@ class CrayonFormatter {
 		$internal_code = preg_replace_callback(self::$delim_regex, 'CrayonFormatter::delim_to_internal', $code);
 		
 		// Format with given language
-		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl, $highlight);
+		$formatted_code = CrayonFormatter::format_code($internal_code, $language, $hl);
 		
 		// Replace internal elements with delimited pieces
 		$formatted_code = preg_replace_callback('#\{\{crayon-internal:(\d+)\}\}#', 'CrayonFormatter::internal_to_code', $formatted_code);
@@ -479,7 +533,8 @@ class CrayonFormatter {
 			return $matches[0];
 		}
 		$internal = sprintf('{{crayon-internal:%d}}', count(self::$delim_pieces));
-		self::$delim_pieces[] = CrayonFormatter::format_code($matches[0], $lang, TRUE, self::$curr);
+		// TODO fix
+		self::$delim_pieces[] = CrayonFormatter::format_code($matches[0], $lang, self::$curr);
 		return $internal;
 	}
 	
@@ -489,26 +544,37 @@ class CrayonFormatter {
 	
 	// Auxiliary Methods ======================================================
 	/* Prepares code for formatting. */
-	public static function clean_code($code) {
+	public static function clean_code($code, $escape = TRUE, $spaces = FALSE, $tabs = FALSE, $lines = FALSE) {
 		if (empty($code)) {
 			return $code;
 		}
 		/* Convert <, > and & characters to entities, as these can appear as HTML tags and entities. */
-		$code = CrayonUtil::htmlspecialchars($code);
-		// Replace 2 spaces with html escaped characters
-		$code = preg_replace('#[ ]{2}#msi', '&nbsp;&nbsp;', $code);
-		// Replace tabs with 4 spaces
-		$code = preg_replace('#\t#', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
+		if ($escape) {
+			$code = CrayonUtil::htmlspecialchars($code);
+		}
+		if ($spaces) {
+			// Replace 2 spaces with html escaped characters
+			$code = preg_replace('#[ ]{2}#msi', '&nbsp;&nbsp;', $code);
+		}
+		if ($tabs) {
+			// Replace tabs with 4 spaces
+			$code = preg_replace('#\t#', str_repeat('&nbsp;', CrayonGlobalSettings::val(CrayonSettings::TAB_SIZE)), $code);
+		}
+		if ($lines) {
+			$code = preg_replace('#(\r\n)|\r|\n#msi', "\r\n", $code);
+		}
 		return $code;
 	}
 	
 	/* Converts the code to entities and wraps in a <pre><code></code></pre> */
-	public static function plain_code($code) {
+	public static function plain_code($code, $encoded = TRUE) {
 		if (is_array($code)) {
 			// When used as a preg_replace_callback
 			$code = $code[1];
 		}
-		$code = CrayonUtil::htmlentities($code);
+		if (!$encoded) {
+			$code = CrayonUtil::htmlentities($code);
+		}
 		if (CrayonGlobalSettings::val(CrayonSettings::TRIM_WHITESPACE)) {
 			$code = trim($code);
 		}
@@ -516,13 +582,9 @@ class CrayonFormatter {
 	}
 
 	public static function split_lines($code, $class) {
-// 		var_dump($code);
-		$code = self::clean_code($code);
-// 		var_dump($code);
-// 		var_dump($class);
-// 		echo "\n";
-		$code = preg_replace('|^|m', '<span class="'.$class.'">', $code);
-		$code = preg_replace('|$|m', '</span>', $code);
+		$code = self::clean_code($code, TRUE, TRUE, TRUE, FALSE);
+        $class = preg_replace('#(\w+)#m', 'crayon-$1', $class);
+		$code = preg_replace('#^([^\r\n]+)(?=\r\n|\r|\n|$)#m', '<span class="'.$class.'">$1</span>', $code);
 		return $code;
 	}
 

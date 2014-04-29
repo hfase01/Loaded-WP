@@ -1,18 +1,17 @@
 <?php
 /*
- 
-Plugin Name: Memphis Custom WordPress Login
-Plugin URI: http://www.kingofnothing.net/memphis-wp-login/
+Plugin Name: Memphis Custom Login
+Plugin URI: http://www.kingofnothing.net
 Description: A simple way to control your WordPress Login Page, features include Password Protected Blog, Custom Redirect after login, Changing the look of the Login Screen.
 Author: Ian Howatson
-Version: 2.1.1
+Version: 3.0.4
 Author URI: http://www.kingofnothing.net/
-Date: 05/09/2012
+Date: 2/27/2014
 
-Copyright 2012 Ian Howatson  (email : ian.howatson@kingofnothing.net)
+Copyright 2013 Ian Howatson  (email : ian@howatson.net)
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as 
+it under the terms of the GNU General Public License, version 2, as
 published by the Free Software Foundation.
 
 This program is distributed in the hope that it will be useful,
@@ -29,6 +28,7 @@ include 'libs/localization.php';
 include 'libs/mwpl.dashboard.menu.php';
 include 'libs/mwpl.custom.login.functions.php';
 include 'libs/mwpl.functions.php';
+include 'libs/mwpl-upgrade.php';
 //////////
 // FOR TESTING PURPOSES DOES NOTHING NORMALLY
 register_deactivation_hook(__FILE__, 'mwpl_deactive');
@@ -42,44 +42,51 @@ add_action('login_head', 'mwpl_custom_login_page');
 // REDIRECT AFTER LOGIN TO DIFFERENT PAGE
 function mwpl_change_login_redirect() {
 	global $redirect_to;
-	
-       if(is_ssl()) $site_url = preg_replace('/http/','https',get_option('siteurl'));
-       else $site_url == get_option('siteurl');
-       		
+       //if(is_ssl()) $site_url = preg_replace('/http/','https',get_option('siteurl'));
+       //else $site_url == get_option('siteurl');
+
 	$redirect = get_option('mwpl_redirect_login');
 	$custom_page = get_option('mwpl_custom_redirect_page');
+	//echo $custom_page;
+
 	switch($redirect) {
 		case 'dashboard':
 			break;
 		case 'home':
-			if ($redirect_to == $site_url.'/wp-admin/') { $redirect_to = MWPL_HOME_PAGE; }
+			if(!FORCE_SSL_LOGIN || FORCE_SSL_LOGIN == null) $site_url = preg_replace('/https/','http',MWPL_HOME_PAGE);
+			else $site_url = MWPL_HOME_PAGE;
+			if ($redirect_to == $site_url.'/wp-admin/') { $redirect_to = $site_url; }
 			break;
 		case 'profile':
 			if ($redirect_to == $site_url.'/wp-admin/') { $redirect_to = MWPL_PROFILE_PAGE; }
 			break;
 		case 'custom':
-			//echo 'custom: '.get_option('siteurl').'/'.$custom_page;
-			if ($redirect_to == $site_url.'/wp-admin/' && $custom_page != '') { $redirect_to = ($site_url.'/'.$custom_page); }
-			//$redirect_to = (get_option('siteurl').'/'.$custom_page);
+			if(!FORCE_SSL_LOGIN && !preg_match('/wp-admin/',$custom_page)) $site_url = preg_replace('/https/','http',$site_url);
+			if(!FORCE_SSL_ADMIN) $site_url = preg_replace('/https/','http',$site_url);
+			if ($custom_page != '') { $redirect_to = ($site_url.'/'.$custom_page); }
+
+			//echo $redirect_to;
+
 			break;
 		default:
 			break;
 	}
-	
+
 }
 add_action('login_form','mwpl_change_login_redirect');
 //////////
 //PASSWORD PROTECT SITE//
 function mwpl_password_protected() {
 	//Password Protected Blog
-	$mwpl_password_protected = get_option('mwpl_password_protected',null);	
+	$mwpl_password_protected = get_option('mwpl_password_protected',null);
 	if(is_ssl()) $site_url = preg_replace('/http/','https',get_option('siteurl'));
 	else $site_url == get_option('siteurl');
     if($mwpl_password_protected) {
 	if (!is_user_logged_in() && $_SERVER['REQUEST_URI'] != "/") {
+
 		wp_safe_redirect(get_bloginfo('wpurl').'/wp-login.php?redirect_to='.urlencode($_SERVER['REQUEST_URI']));
 	} else if (!is_user_logged_in()) {
-		wp_safe_redirect($site_url .'/wp-login.php');		
+		wp_safe_redirect($site_url .'/wp-login.php');
 	}
     }
 }

@@ -30,14 +30,8 @@ class CrayonLog {
 					}
 				}
 				// Capture variable dump
-				ob_start();
-				var_dump($var);
-				$buffer = trim(strip_tags(ob_get_clean()));
-				
-				// Remove stupid formatting from wampserver
-				$buffer = str_replace('&apos;', '"', $buffer);
-				$buffer = preg_replace('#^string\([^\)]*\)#mi', 'str', $buffer);
-				$title = (!empty($title) && is_string($title) ? " [$title]" : '');
+                $buffer = trim(strip_tags(var_export($var, true)));
+				$title = (!empty($title) ? " [$title]" : '');
 
 				// Remove absolute path to plugin directory from buffer
 				if ($trim_url) {
@@ -54,8 +48,7 @@ class CrayonLog {
 				clearstatcache();
 				fwrite(self::$file, $write, CRAYON_LOG_MAX_SIZE);
 			} catch (Exception $e) {
-				// Ignore fatal errors
-
+				// Ignore fatal errors during logging
 			}
 		}
 	}
@@ -64,7 +57,7 @@ class CrayonLog {
 
 	public static function syslog($var = NULL, $title = '', $trim_url = TRUE) {
 		if (CrayonGlobalSettings::val(CrayonSettings::ERROR_LOG_SYS)) {
-			$title = (empty($title)) ? 'SYSTEM ERROR' : $title;
+			$title = (empty($title)) ? 'SYSTEM LOG' : $title;
 			self::log($var, $title, $trim_url);
 		}
 	}

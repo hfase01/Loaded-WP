@@ -17,6 +17,7 @@ class CrayonHighlighter {
 	private $title = '';
 	private $line_count = 0;
 	private $marked_lines = array();
+	private $range = NULL;
 	private $error = '';
 	// Determine whether the code needs to be loaded, parsed or formatted
 	private $needs_load = FALSE;
@@ -40,6 +41,7 @@ class CrayonHighlighter {
 		if ($url !== NULL) {
 			$this->url($url);
 		}
+		
 		if ($language !== NULL) {
 			$this->language($language);
 		}
@@ -62,7 +64,7 @@ class CrayonHighlighter {
 		}
 		$url = CrayonUtil::pathf($url);
 		$local = FALSE; // Whether to read locally
-		$site_http = CrayonGlobalSettings::site_http();
+		$site_http = CrayonGlobalSettings::site_url();
 		$site_path = CrayonGlobalSettings::site_path();
 		$scheme = parse_url($url, PHP_URL_SCHEME);
 		
@@ -154,7 +156,7 @@ class CrayonHighlighter {
 		}
 		
 		if ($this->language === NULL) {
-			$this->language($this->setting_val(CrayonSettings::FALLBACK_LANG));
+			$this->language_detect();
 		}
 		if ($this->needs_format) {
 			$tmr->start();
@@ -174,13 +176,15 @@ class CrayonHighlighter {
 				}
 				// Save code so output is plain output is the same
 				$this->code = $code;
+				
 				// Allow mixed if langauge supports it and setting is set
+				CrayonParser::parse($this->language->id());
 				if (!$this->setting_val(CrayonSettings::MIXED) || !$this->language->mode(CrayonParser::ALLOW_MIXED)) {
 					// Format the code with the generated regex and elements
-					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this, $this->is_highlighted);
+					$this->formatted_code = CrayonFormatter::format_code($code, $this->language, $this);
 				} else {
 					// Format the code with Mixed Highlighting
-					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this, $this->is_highlighted);					
+					$this->formatted_code = CrayonFormatter::format_mixed_code($code, $this->language, $this);
 				}
 			} catch (Exception $e) {
 				$this->error($e->message());
@@ -194,7 +198,7 @@ class CrayonHighlighter {
 	/* Used to format the glue in between code when finding mixed languages */
 	private function format_glue($glue, $highlight = TRUE) {
 		// TODO $highlight
-		return CrayonFormatter::format_code($glue, $this->language, $highlight, $this);
+		return CrayonFormatter::format_code($glue, $this->language, $this, $highlight);
 	}
 
 	/* Sends the code to the formatter for printing. Apart from the getters and setters, this is
@@ -222,9 +226,23 @@ class CrayonHighlighter {
 			if ($this->setting_val(CrayonSettings::TRIM_WHITESPACE)) {
 				$code = preg_replace("#(?:^\\s*\\r?\\n)|(?:\\r?\\n\\s*$)#", '', $code);
 			}
+
+            if ($this->setting_val(CrayonSettings::TRIM_CODE_TAG)) {
+                $code = preg_replace('#^\s*<\s*code[^>]*>#msi', '', $code);
+                $code = preg_replace('#</\s*code[^>]*>\s*$#msi', '', $code);
+            }
+
+			$before = $this->setting_val(CrayonSettings::WHITESPACE_BEFORE);
+			if ($before > 0) {
+				$code = str_repeat("\n", $before) . $code;
+			}
+			$after = $this->setting_val(CrayonSettings::WHITESPACE_AFTER);
+			if ($after > 0) {
+				$code = $code . str_repeat("\n", $after);
+			}
+			
 			if (!empty($code)) {
 				$this->code = $code;
-// 				$this->needs_load = FALSE; // No need to load, code provided
 				$this->needs_format = TRUE;
 			}
 		}
@@ -239,15 +257,19 @@ class CrayonHighlighter {
 			// Set the language if it exists or look for an alias
 			$this->language = $lang;
 		} else {
-			// Attempt to detect the language
-			if (!empty($id)) {
-				$this->log("The language '$id' could not be loaded.");
-			}
-			$this->language = CrayonResources::langs()->detect($this->url, $this->setting_val(CrayonSettings::FALLBACK_LANG));
+			$this->language_detect();
 		}
 		
 		// Prepare the language for use, even if we have no code, we need the name
 		CrayonParser::parse($this->language->id());
+	}
+	
+	function language_detect() {
+		// Attempt to detect the language
+		if (!empty($id)) {
+			$this->log("The language '$id' could not be loaded.");
+		}
+		$this->language = CrayonResources::langs()->detect($this->url, $this->setting_val(CrayonSettings::FALLBACK_LANG));
 	}
 
 	function url($url = NULL) {
@@ -257,12 +279,6 @@ class CrayonHighlighter {
 			$this->url = $url;
 			$this->needs_load = TRUE;
 		}
-		
-//		if (CrayonUtil::str($this->url, $url)) {
-//			$this->needs_load = TRUE;
-//		} else {
-//			return $this->url;
-//		}
 	}
 
 	function title($title = NULL) {
@@ -292,18 +308,30 @@ class CrayonHighlighter {
 		$lines = array();
 		foreach ($array as $line) {
 			// Check for ranges
-			if (strpos($line, '-')) {
-				$ranges = CrayonUtil::range_str($str);
+			if (strpos($line, '-') !== FALSE) {
+				$ranges = CrayonUtil::range_str($line);
 				$lines = array_merge($lines, $ranges);
 			} else {
 				// Otherwise check the string for a number
-				$line = CrayonUtil::clean_int($line);
-				if ($line !== FALSE) {
+				$line = intval($line);
+				if ($line !== 0) {
 					$lines[] = $line;
 				}
 			}
 		}
 		return CrayonUtil::arr($this->marked_lines, $lines);
+	}
+	
+	function range($str = NULL) {
+		if ($str === NULL) {
+			return $this->range;
+		} else {
+			$range = CrayonUtil::range_str_single($str);
+			if ($range) {
+				$this->range = $range;
+			}
+		}
+		return FALSE;
 	}
 
 	function log($var) {

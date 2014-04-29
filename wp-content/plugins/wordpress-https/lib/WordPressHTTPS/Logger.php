@@ -7,9 +7,7 @@
  *
  */
 
-require_once('Logger/Interface.php');
-
-class WordPressHTTPS_Logger implements WordPressHTTPS_Logger_Interface {
+class WordPressHTTPS_Logger implements Mvied_Logger_Interface {
 
 	/**
 	 * Instance
@@ -51,7 +49,7 @@ class WordPressHTTPS_Logger implements WordPressHTTPS_Logger_Interface {
 	/**
 	 * Adds a string to an array of log entries
 	 *
-	 * @param none
+	 * @param string $string
 	 * @return $this
 	 */
 	public function log( $string ) {

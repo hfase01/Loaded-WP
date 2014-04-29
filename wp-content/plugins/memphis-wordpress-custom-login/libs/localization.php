@@ -1,14 +1,11 @@
 <?php
-if(is_ssl()) {
-	$site_url = preg_replace('/http/','https',get_option('siteurl'));
-	$plug_url = preg_replace('/http/','https',WP_PLUGIN_URL);
-	$plug_url_dashboard = preg_replace('/http/','https',WP_CONTENT_DIR);
-} else {
-	$site_url = get_option('siteurl');
-	$plug_url = WP_PLUGIN_URL;
-	$plug_url_dashboard = WP_CONTENT_DIR;
-}
 
+//$site_url = get_option('siteurl');
+if(is_ssl()) $site_url = preg_replace('/http/','https',get_option('siteurl'));
+else $site_url == get_option('siteurl');
+$site_url = site_url();
+$plug_url = plugins_url();
+$plug_url_dashboard = WP_CONTENT_DIR;
 define('MWPL_NAME', __('Memphis Custom WordPress Login'));
 define('MWPL_HOME_PAGE', $site_url);
 define('MWPL_PROFILE_PAGE', $site_url.'/wp-admin/profile.php');

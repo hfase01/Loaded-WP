@@ -4,24 +4,28 @@ $configuration = blc_get_configuration();
 if ( !function_exists('fetch_feed') ){
 	include_once(ABSPATH . WPINC . '/feed.php');
 }
-if ( !$configuration->get('user_has_donated', false) && function_exists('fetch_feed') ):
+
+$show_plugin_feed = false;
+if ( !$configuration->get('user_has_donated', false) ) {
+	$show_plugin_feed = true;
+}
+?>
+
+<!-- "More plugins" RSS feed -->
+<?php
+if ( $show_plugin_feed ):
 	$feed_url = 'http://w-shadow.com/files/blc-plugin-links.rss';
 	$num_items = 3;
 
 	$feed = fetch_feed($feed_url);
 	if ( !is_wp_error($feed) ):
 ?>
-<style type="text/css">
-#advertising .inside {
-	text-align: left;
-}
-</style>
 <div id="advertising" class="postbox">
 	<h3 class="hndle"><?php _e('More plugins by Janis Elsts', 'broken-link-checker'); ?></h3>
 	<div class="inside">
 		<ul>
 		<?php
-		foreach($feed->get_items(0, $num_items) as $item) {
+		foreach($feed->get_items(0, $num_items) as $item) { /** @var SimplePie_Item $item */
 			printf(
 				'<li><a href="%1$s" title="%2$s">%3$s</a></li>',
 				esc_url( $item->get_link() ),
@@ -38,6 +42,7 @@ if ( !$configuration->get('user_has_donated', false) && function_exists('fetch_f
 endif;
 ?>
 
+<!-- Donation button -->
 <div id="donate" class="postbox">
 	<h3 class="hndle"><?php _e('Donate $10, $20 or $50!', 'broken-link-checker'); ?></h3>
 	<div class="inside">
@@ -66,25 +71,21 @@ endif;
 				echo esc_attr(admin_url('options-general.php?page=link-checker-settings&donation_canceled=1')); 
 			?>" />
 			
-			<input type="image" src="https://www.sandbox.paypal.com/en_US/GB/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." style="max-width:170px;height:47px;">
+			<input type="image" src="https://www.sandbox.paypal.com/en_US/GB/i/btn/btn_donateCC_LG.gif" name="submit" alt="PayPal - The safer, easier way to pay online." style="max-width:170px;height:47px;border:0;">
 		</form>
 	</div>					
 </div>
 
-<?php if ( !$configuration->get('user_has_donated') ): ?>
-<style type="text/css">
-#themefuse-ad .inside {
-	padding: 2px 0 0 0;
-	margin: 0;
-	text-align: center;
-}
-</style>
-<div id="themefuse-ad" class="postbox">
-	<!--<h3 class="hndle">ThemeFuse</h3> -->
-	<div class="inside">
-		<a href="http://themefuse.com/wp-themes-shop/?plugin=broken-link-checker" title="ThemeFuse themes">
-			<img src="<?php echo plugins_url('images/themefuse-250x250.jpg', BLC_PLUGIN_FILE) ?>" width="250" height="250" alt="ThemeFuse">
-		</a>
+<!-- Other advertising -->
+<?php
+if ( !$configuration->get('user_has_donated') ):
+?>
+	<div id="managewp-ad" class="postbox">
+		<div class="inside">
+			<a href="http://managewp.com/?utm_source=broken_link_checker&utm_medium=Banner&utm_content=mwp250_2&utm_campaign=Plugins" title="ManageWP">
+				<img src="<?php echo plugins_url('images/mwp250_2.png', BLC_PLUGIN_FILE) ?>" width="250" height="250" alt="ManageWP">
+			</a>
+		</div>
 	</div>
-</div>
-<?php endif; ?>
+<?php
+endif; ?>

@@ -7,6 +7,7 @@ boolean
 integer
 package
 double
+struct
 string
 signed
 object
@@ -18,7 +19,7 @@ false
 char
 long
 void
-long
+word
 byte
 bool
 null

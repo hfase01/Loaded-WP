@@ -45,8 +45,8 @@
 		$strCounter = substr($strCounter, 0, -1);
 
 /***************************************************************************/ ?>
-<div class="wp-piwik-graph-wide">
-	<div id="wp-piwik_stats_vistors_graph" style="height:220px;<?php if (!isset($aryConf['inline']) || $aryConf['inline'] != true) { ?>width:490px<?php } ?>"></div>
+<div class="wp-piwik-graph-wide" title="<?php _e('The graph contains the values shown in the table below (visitors / unique / bounces). The red line show a linear trendline (unique).', 'wp-piwik'); ?>">
+	<div id="wp-piwik_stats_vistors_graph" style="height:220px;<?php if (!isset($aryConf['inline']) || $aryConf['inline'] != true) { ?>width:100%<?php } ?>"></div>
 </div>
 <?php if (!isset($aryConf['inline']) || $aryConf['inline'] != true) { ?>
 <div class="table">
@@ -79,7 +79,7 @@
 </div>
 <?php } ?>
 <script type="text/javascript">
-$j.jqplot('wp-piwik_stats_vistors_graph', [[<?php echo $strValues; ?>],[<?php echo $strValuesU; ?>],[<?php echo $strBounced;?>]],
+$plotVisitors = $j.jqplot('wp-piwik_stats_vistors_graph', [[<?php echo $strValues; ?>],[<?php echo $strValuesU; ?>],[<?php echo $strBounced;?>]],
 {
 	axes:{yaxis:{min:0, tickOptions:{formatString:'%.0f'}},xaxis:{min:1,max:30,ticks:[<?php echo $strLabels; ?>]}},
 	seriesDefaults:{showMarker:false,lineWidth:1,fill:true,fillAndStroke:true,fillAlpha:0.9,trendline:{show:false,color:'#C00',lineWidth:1.5,type:'exp'}},

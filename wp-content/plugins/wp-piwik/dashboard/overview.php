@@ -27,14 +27,15 @@
 	else {
 		if ($aryConf['params']['date'] == 'last30') {
 			$intValCnt = 0;
-			foreach ($aryConf['data'] as $aryDay) 
-				foreach ($aryDay as $strKey => $strValue) {
-					$intValCnt++;
-					if (!in_array($strKey, array('max_actions','bounce_rate','nb_actions_per_visit','avg_time_on_site')))
-						$aryTmp[$strKey] += $strValue;
-					elseif ($aryTmp[$strKey] < $strValue)
-						$aryTmp[$strKey] = $strValue;
-				}
+			if (is_array($aryConf['data']))
+				foreach ($aryConf['data'] as $aryDay) 
+					foreach ($aryDay as $strKey => $strValue) {
+						$intValCnt++;
+						if (!in_array($strKey, array('max_actions','bounce_rate','nb_actions_per_visit','avg_time_on_site')))
+							$aryTmp[$strKey] += $strValue;
+						elseif ($aryTmp[$strKey] < $strValue)
+							$aryTmp[$strKey] = $strValue;
+					}
 			$aryConf['data'] = $aryTmp;
 			if ($intValCnt > 1 && $aryConf['data']['nb_visits'] >0) $aryConf['data']['bounce_rate'] = round($aryConf['data']['bounce_count']/$aryConf['data']['nb_visits']*100).'%';
 		}
@@ -59,8 +60,8 @@
 		echo '<tr><td>'.__('Total time spent', 'wp-piwik').':</td><td>'.$strTime.'</td></tr>';
 		echo '<tr><td>'.__('Time/visit', 'wp-piwik').':</td><td>'.$strAvgTime.'</td></tr>';
 		echo '<tr><td>'.__('Bounce count', 'wp-piwik').':</td><td>'.$aryConf['data']['bounce_count'].' ('.$aryConf['data']['bounce_rate'].')</td></tr>';
-		if (self::$aryGlobalSettings['piwik_shortcut']) 
-			echo '<tr><td>'.__('Shortcut', 'wp-piwik').':</td><td><a href="'.self::$aryGlobalSettings['piwik_url'].'">Piwik</a>'.(isset($aryConf['inline']) && $aryConf['inline']?' - <a href="?page=wp-piwik_stats">WP-Piwik</a>':'').'</td></tr>';
+		if (self::$settings->getGlobalOption('piwik_shortcut')) 
+			echo '<tr><td>'.__('Shortcut', 'wp-piwik').':</td><td><a href="'.self::$settings->getGlobalOption('piwik_url').'">Piwik</a>'.(isset($aryConf['inline']) && $aryConf['inline']?' - <a href="?page=wp-piwik_stats">WP-Piwik</a>':'').'</td></tr>';
 /***************************************************************************/ ?>
 		</tbody>
 	</table>

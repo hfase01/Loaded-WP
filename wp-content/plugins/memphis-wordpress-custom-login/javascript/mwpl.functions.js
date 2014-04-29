@@ -1,7 +1,8 @@
-function mwpl_Edit_Login($custom_link, $custom_message, custom_message_type) {
-    if($custom_link != '') {
+function mwpl_Edit_Login($custom_link, $custom_title, $custom_message, custom_message_type) {
+	if($custom_link != '') {
 	$custom_link = $custom_link.replace(/http:\/\//g, '');
 	jQuery("#login h1 a").attr("href", "http://"+$custom_link);
+	jQuery("#login h1 a").attr("title", $custom_title);
     }
 
     if($custom_message != '') {

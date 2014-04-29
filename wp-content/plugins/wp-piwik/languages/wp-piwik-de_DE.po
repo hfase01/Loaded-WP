@@ -191,7 +191,7 @@ msgstr "Piwik URL"
 
 #: wp-piwik.php:461 wp-piwik.php:623
 msgid "Auth token"
-msgstr "Auth token"
+msgstr "Auth Token"
 
 #: wp-piwik.php:467 wp-piwik.php:628
 msgid "To enable Piwik statistics, please enter your Piwik"
@@ -244,7 +244,7 @@ msgstr "404-Tracking"
 
 #: wp-piwik.php:532
 msgid "WP-Piwik can automatically add a 404-category to track 404-page-visits."
-msgstr "kann WP-Piwik automatisch eine eigene Kategorie f&uuml;r 404-Seiten hinzuf&uuml;gen."
+msgstr "WP-Piwik kann automatisch eine eigene Kategorie f&uuml;r 404-Seiten hinzuf&uuml;gen."
 
 #: wp-piwik.php:536 wp-piwik.php:644
 msgid "Tracking filter"
@@ -401,10 +401,10 @@ msgid "If you add the Piwik javascript code by wp_footer(),"
 msgstr "Wenn Du den Piwik-Code per wp_footer() in Dein Blog einbindest,"
 
 msgid "WP-Piwik can automatically use js/index.php instead of piwik.js. See"
-msgstr "kann WP-Piwik automatisch js/index.php statt piwik.js verwenden. Siehe"
+msgstr "WP-Piwik kann automatisch js/index.php statt piwik.js verwenden. Siehe"
 
 msgid "WP-Piwik can automatically force the Tracking Code to sent data in POST. See"
-msgstr "kann WP-Piwik automatisch den Tracking Code zwingen, die Daten via POST zu senden. Siehe"
+msgstr "WP-Piwik kann automatisch den Tracking Code zwingen, die Daten via POST zu senden. Siehe"
 
 msgid "Avoid mod_security"
 msgstr "Umgehe mod_security"
@@ -468,3 +468,291 @@ msgstr "Piwik-Fehler"
 
 msgid "Important"
 msgstr "Wichtig"
+
+msgid "Thanks for using WP-Piwik!"
+msgstr "Vielen Dank f&uuml;r die Verwendung von WP-Piwik!"
+
+msgid "Auto site configuration is"
+msgstr "Die Auto-Konfiguration ist"
+
+msgid "Tracking code insertion is"
+msgstr "Das Einf&uuml;gen des Tracking-Codes ist"
+
+msgid "enabled"
+msgstr "aktiviert"
+
+msgid "disabled"
+msgstr "deaktiviert"
+
+msgid "You are using Piwik"
+msgstr "Du verwendest Piwik"
+
+msgid "and"
+msgstr "und"
+
+msgid "Error: cURL is not enabled and fopen is not allowed to open URLs. WP-Piwik won't be able to connect to Piwik."
+msgstr "Fehler: cURL ist nicht aktiviert und fopen darf keine URLs &ouml;ffnen. WP-Piwik kann so keine Verbindung zu Piwik aufbauen."
+
+msgid "<strong>Important note:</strong> If you do not host this blog on your own, your site admin is able to get your auth token from the database."
+msgstr "<strong>Wichtiger Hinweis:</strong> Wenn Du dieses Blog nicht selber hostest, kann Dein Site Admin Deinen Auth Token aus der Datenbank auslesen."
+
+msgid "Add tracking code"
+msgstr "Tracking-Code einf&uuml;gen"
+
+msgid "Tracking code preview"
+msgstr "Tracking-Code Vorschau"
+
+msgid "Piwik Settings"
+msgstr "Piwik Einstellungen"
+
+msgid "Statistics"
+msgstr "Statistiken"
+
+msgid "Either allow_url_fopen has to be enabled <em>or</em> cURL has to be available:"
+msgstr "Entweder allow_url_fopen muss aktiviert <em>oder</em> cURL muss verf&uuml;gbar sein:"
+
+msgid "cURL is"
+msgstr "cURL ist"
+
+msgid "allow_url_fopen is"
+msgstr "allow_url_fopen ist"
+
+msgid "not"
+msgstr "nicht"
+
+msgid "available"
+msgstr "verf&uuml;gbar"
+
+msgid "Test script result"
+msgstr "Ergebnis des Testskripts"
+
+msgid "Please confirm your reset request"
+msgstr "Bitte best&auml;tige Deine Reset-Anweisung"
+
+msgid "YES, please reset <strong>all</strong> WP-Piwik settings <strong>except</strong> auth token and Piwi URL."
+msgstr "JA, bitte setze <strong>alle</strong> WP-Piwik Einstellung au&szlig;er Auth Token und Piwik URL zur&uuml;ck."
+
+msgid "WP-Piwik reset done"
+msgstr "WP-Piwik wurde zur&uuml;ckgesetzt"
+
+msgid "Get more debug information"
+msgstr "Erhalte weitere Debug-Informationen"
+
+msgid "Run test script"
+msgstr "Starte Testskript"
+
+msgid "Get site configuration details"
+msgstr "Ermittle Detailinformationen zur Seitenkonfiguration"
+
+msgid "Reset WP-Piwik settings except auth token and Piwik URL"
+msgstr "Setzte die Einstellungen von WP-Piwik mit Ausnahme von Auth Token und Piwik URL zur&uuml;ck."
+
+msgid "You have to enter your auth token and the Piwik URL before you can access more debug functions."
+msgstr "Du musst Deinen Auth Token und die Piwik URL eingeben, bevor Du auf weitere Debug-Funktionen zugreifen kannst."
+
+msgid "Latest support threads on WordPress.org"
+msgstr "Die letzten Support-Beitr&auml;ge auf WordPress.org"
+
+msgid "This will not affect Piwik itself. Resetting large networks may take some minutes."
+msgstr "Dies hat keinen Einfluss auf Piwik selbst. Das Zur&uuml;cksetzen gro&szlig;er Netzwerke kann einige Minuten dauern."
+
+msgid ", and all people flattering this"
+msgstr " und allen, die WP-Piwik flattrn"
+
+msgid "Disable time limit"
+msgstr "Zeitlimit deaktivieren"
+
+msgid "Use set_time_limit(0) if stats page causes a time out."
+msgstr "Verwende set_time_limit(0) falls die Statistik-Seite einen Timeout erzeugt."
+
+msgid "in network mode"
+msgstr "im Netzwerk-Modus"
+
+msgid "To enable Piwik statistics, please enter"
+msgstr "Um die Piwik-Statistiken zu aktivieren, gibt bitte die folgenden Daten ein:"
+
+msgid "your Piwik base URL (like http://mydomain.com/piwik) or your Piwik server path (like /var/www/mydomain.com/httpdocs/piwik/)"
+msgstr "Die URL Deiner Piwik-Installation (z.B. http://mydomain.com/piwik) oder den Serverpfad zu Deiner Piwik-Installation (z.B. /var/www/mydomain.com/httpdocs/piwik/)"
+
+msgid "your personal Piwik authentification token. You can get the token on the API page inside your Piwik interface. It looks like &quot;1234a5cd6789e0a12345b678cd9012ef&quot;."
+msgstr "Deinen pers&ouml;nlichen Piwik Authentifikations-Token. Du findest ihn auf der API-Seite des Piwik-Interfaces. Er sieht z.B. so aus: &quot;1234a5cd6789e0a12345b678cd9012ef&quot;."
+
+msgid "No idea what I'm talking about?"
+msgstr "Keine Idee, wovon ich rede?"
+
+msgid "Get help."
+msgstr "Hier gibt es Hilfe."
+
+msgid "Piwik path"
+msgstr "Piwik Pfad"
+
+msgid "Disable cookies"
+msgstr "Cookies deaktivieren"
+
+msgid "Disable all tracking cookies for a visitor."
+msgstr "Schalte alle Tracking-Cookies f&uuml;r Besucher ab."
+
+msgid "Show graph on WordPress Toolbar"
+msgstr "Zeige einen Graphen in der WordPress Toolbar"
+
+msgid "Display the last 30 days visitor stats on WordPress Toolbar."
+msgstr "Zeige die Besucherstatistik der letzten 30 Tage in der WordPress Toolbar an."
+
+msgid "Graphs powered by <a href=\"http://www.jqplot.com/\">jqPlot</a> (License: GPL 2.0 and MIT) and <a href=\"http://omnipotent.net/jquery.sparkline/\">jQuery Sparklines</a> (License: New BSD License)."
+msgstr "Die Graphen werden mit <a href=\"http://www.jqplot.com/\">jqPlot</a> (Lizenz: GPL 2.0 and MIT) und <a href=\"http://omnipotent.net/jquery.sparkline/\">jQuery Sparklines</a> (Lizenz: New BSD License) erstellt."
+
+msgid "Tabbed settings page suggested by the"
+msgstr "Die Tabs f&uuml;r die Einstellungen wurden inspiriert von einem Artikel im"
+
+msgid "If you like to use the PHP API and also to enable tracking by WP-Piwik, please enter your Piwik URL, too. Otherwise your tracking code may be erroneous."
+msgstr "Falls Du die PHP API verwenden und das Tracking per WP-Piwik aktivieren willst, gib bitte auch Deine Piwik URL an. Andernfalls k&ouml;nnte Dein Tracking Code fehlerhaft sein." 
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Site ID (Piwik)"
+msgstr "Seiten-ID (Piwik)"
+
+msgid "Expert Settings"
+msgstr "Expertenkonfiguration"
+
+msgid "Disable SSL peer verification"
+msgstr "SSL Peer-Verifikation deaktivieren"
+
+msgid "not recommended"
+msgstr "Nicht empfohlen"
+
+msgid "Invalid path. Please enter the file path to Piwik."
+msgstr "Ung&uuml;ltiger Pfad. Bitte gib den Dateipfad von Piwik an."
+
+msgid "Enable shortcodes in post or page content."
+msgstr "Aktiviere Shortcodes innerhalb von Artikeln und Seiten."
+
+msgid "Connection timeout"
+msgstr "Verbindungs-Timeout"
+
+msgid "User agent"
+msgstr "User Agent"
+
+msgid "Default tracking"
+msgstr "Standard-Tracking"
+
+msgid "Use proxy script"
+msgstr "Verwende Proxy-Skript"
+
+msgid "WP-Piwik uses the Piwik default tracking code."
+msgstr "WP-Piwik verwendet den normalen Tracking Code."
+
+msgid "WP-Piwik can automatically use js/index.php instead of piwik.js and piwik.php. See"
+msgstr "WP-Piwik kann automatisch js/index.php statt piwik.js und piwik.php verwenden. Siehe"
+
+msgid "WP-Piwik will use the piwik.php proxy script. See"
+msgstr "WP-Piwik benutzt das piwik.php-Proxy-Skript, siehe"
+
+msgid "Enable shortcodes"
+msgstr "Aktiviere Shortcodes"
+
+msgid "Requests"
+msgstr "Anfragen"
+
+msgid "Site Search Keywords"
+msgstr "Suchanfragen"
+
+msgid "Site Search without Results"
+msgstr "Suchanfragen ohne Ergebnisse"
+
+msgid "Disabled in proxy mode."
+msgstr "Im Proxy-Modus deaktiviert."
+
+msgid "Leave blank if you do not want to define a CDN URL or you do not know what this is."
+msgstr "Einfach freilassen, falls Du keine CDN URL definieren m&ouml;chtest oder nicht wei&szlig;t, worum es geht."
+
+msgid "Adds the &lt;noscript&gt; code to your footer."
+msgstr "F&uuml;gt den &lt;noscript&gt;-Code im Footer ein."
+
+msgid "Use Piwik's advanced Site Search Analytics feature. See"
+msgstr "Benutze Piwiks erweiterte Site Search Analyse. Siehe"
+
+msgid "Enable tracking for visitors without JavaScript (not recommended). See"
+msgstr "Aktiviere das Tracking von Besuchern ohne JavaScript (nicht empfohlen). Siehe"
+
+msgid "Add rec parameter to noscript code"
+msgstr "F&uuml;ge rec-Parameter zum noscript Code hinzu"
+
+msgid "Add &lt;noscript&gt;"
+msgstr "F&uuml;ge &lt;noscript&gt; hinzu"
+
+msgid "Cache API calls, which not contain today's values, for a week"
+msgstr "Cache alle API-Aufrufe, die keine heutigen Daten enthalten, f&uuml;r eine Woche"
+
+msgid "Enable cache"
+msgstr "Cache einschalten"
+
+msgid "This will add Piwik campaign parameters to the RSS feed links."
+msgstr "Dadurch werden Piwik Kampagnen-Parameter an die Links des RSS-Feeds angehangen."
+
+msgid "Campaign"
+msgstr "Kampagne"
+
+msgid "Keyword: post name."
+msgstr "Schl&uuml;sselwort: Name des Beitrags."
+
+msgid "Enable to track posts in feeds via tracking pixel."
+msgstr "Aktivieren, um Beir&auml;ge im Feed via Tracking-Pixel zu z&auml;hlen."
+
+msgid "Enable to track users on admin pages (remember to configure the tracking filter appropriately)."
+msgstr "Aktivieren, um Nutzer auf Admin-Seiten zu z&auml;hlen (bitte den Tracking Filter entsprechend konfigurieren)."
+
+msgid "Track RSS feed links as campaign"
+msgstr "Links in RSS-Feeds als Kampagne tracken"
+
+msgid "Show stats about single posts at the post edit admin page."
+msgstr "Zeige Statistiken zu einzelnen Beitr&auml;gen auf der Bearbeiten-Seite."
+
+msgid "Show per post stats"
+msgstr "Zeige Beitrags-Statistiken"
+
+msgid "Add data-cfasync=false"
+msgstr "data-cfasync=false einf&uuml;gen"
+
+msgid "Track admin pages"
+msgstr "Admin-Seiten tracken"
+
+msgid "Adds data-cfasync=false to the script tag, e.g., to ask Rocket Loader to ignore the script."
+msgstr "Fügt data-cfasync=false zum Script-Tag hinzu, z.B. damit Rocket Loader das Skript ignoriert."
+
+msgid "Add annotation on new post"
+msgstr "Notiz bei neuem Post"
+
+msgid "Add a Piwik annotation on each new post, see"
+msgstr "F&uuml;gt in Piwik f&uuml;r jeden neuen Post eine Notiz hinzu, siehe"
+
+msgid "JavaScript code position"
+msgstr "Position des JavaScript-Codes"
+
+msgid "Choose whether the JavaScript code is added to the footer or the header."
+msgstr "W&auml;hle, ob der JavaScript-Code im Footer oder im Header eingef&uuml;gt werden soll."
+
+msgid "Show custom variables box"
+msgstr "Zeige Custom-Variables-Box"
+
+msgid "Show a custom vars edit box on post edit page."
+msgstr "Zeige eine Custom-Variables-Eingabebox auf den Edit-Post-Seiten."
+
+msgid "Limit cookie lifetime"
+msgstr "Cookie-Lebensdauer beschr&auml;nken"
+
+msgid "Limit cookie lifetime as follows"
+msgstr "Beschr&auml;nke die Cookie-Lebensdauer wie folgt"
+
+msgid "Session timeout (seconds)"
+msgstr "Session-Timeout (Sekunden)"
+
+msgid "Visitor timeout (seconds)"
+msgstr "Besucher-Timeout (Sekunden)"
+
+msgid "Track visitors across all subdomains"
+msgstr "Besucher &uuml;ber alle Subdomains aufzeichnen"
+
+msgid "Adds *.-prefix to cookie domain."
+msgstr "F&uuml;gt ein *.-Pr&auml;fix zur Cookie Domain hinzu."
